@@ -1,44 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About Us</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Us</title>
+    <link rel="stylesheet" href="/src/styles/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <header>
-        <div class="container">
-            <div id="branding">
-                <h1><span>Virgin Islands Travel</span></h1>
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="homepage.html">Home</a></li>
-                    <li><a href="#packages">Packages</a></li>
-                    <li><a href="#groups">Groups</a></li>
-                    <li ><a href="accomodations.html">Accommodations</a></li>
-                    <li><a href="virginsislands.html">Virgin Islands</a></li>
-                    <li class="current"><a href="about.html">About</a></li>
-                    <li><a href="#login">Login</a></li>
-                </ul>
-            </nav>
+      <div class="container">
+        <div id="branding">
+          <h1>Virgin Islands Travel</h1>
         </div>
-        
+        <nav>
+          <!-- Add this inside the nav element, before the ul -->
+          <div class="hamburger">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </div>
+          <ul>
+            <li class="current"><a href="/public/homepage.html">Home</a></li>
+            <li><a href="#packages">Packages</a></li>
+            <li><a href="#groups">Groups</a></li>
+            <li><a href="accomodations.html">Accommodations</a></li>
+            <li><a href="virginsislands.html">Virgin Islands</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="#login">Login</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-  <section id="about">
-    <div class="container">
-      <h2>About Us</h2>
-      <p>Discover the beauty and charm of the Virgin Islands, a tropical paradise where crystal-clear waters, pristine beaches, and lush landscapes come together to create an unforgettable experience.</p>
-      <p>Our travel website offers a comprehensive guide to exploring the Virgin Islands, from popular attractions and hidden gems to local culture, cuisine, and accommodations.</p>
-      <p>Whether you're seeking adventure, relaxation, or a cultural immersion, we're here to help you plan the perfect Virgin Islands getaway.</p>
-    </div>
-  </section>
+    <section id="about">
+      <div class="container">
+        <h2>About Us</h2>
+        <p>
+          Discover the beauty and charm of the Virgin Islands, a tropical
+          paradise where crystal-clear waters, pristine beaches, and lush
+          landscapes come together to create an unforgettable experience.
+        </p>
+        <p>
+          Our travel website offers a comprehensive guide to exploring the
+          Virgin Islands, from popular attractions and hidden gems to local
+          culture, cuisine, and accommodations.
+        </p>
+        <p>
+          Whether you're seeking adventure, relaxation, or a cultural immersion,
+          we're here to help you plan the perfect Virgin Islands getaway.
+        </p>
+      </div>
+    </section>
 
-  <footer>
-    <P>Virgin Islands site, Copyright &copy; 2024</P>
-</footer>
-</body>
+    <footer>
+      <p>Virgin Islands site, Copyright &copy; 2024</p>
+    </footer>
+  </body>
+  <script src="/src/components/index.js"></script>
 </html>

@@ -1,181 +1,135 @@
-import React, { useState, useEffect } from 'react';
-import { ShoppingCart, Trash2, Plus, Minus } from 'lucide-react';
+class ShoppingCart {
+    constructor() {
+        this.items = [];
 
-// Sample travel packages data
-const TRAVEL_PACKAGES = [
-    {
-        id: 'friends-pkg',
-        name: 'Friends Package',
-        description: 'Perfect for group getaways',
-        price: 599.99,
-        image: 'Pictures/beaches/beach 1.jpg'
-    },
-    {
-        id: 'sun-pkg',
-        name: 'Sun Package',
-        description: 'Ultimate relaxation',
-        price: 499.99,
-        image: 'Pictures/beaches/beach 2.jpg'
-    },
-    {
-        id: 'fun-pkg',
-        name: 'Fun Package',
-        description: 'Adventure awaits',
-        price: 649.99,
-        image: 'Pictures/beaches/beach 3.jpg'
+        // Get DOM elements using functions
+        this.cart = this.getCartElement();
+        this.cartItems = this.getCartItemsElement();
+        this.cartCount = this.getCartCountElement();
+        this.totalAmount = this.getTotalAmountElement();
+        this.checkoutBtn = this.getCheckoutBtnElement();
+
+        this.initialize();
     }
-];
 
-const ShoppingCartComponent = () => {
-    const [cartItems, setCartItems] = useState([]);
-    const [isCartOpen, setIsCartOpen] = useState(false);
+    // Function to get the cart element
+    getCartElement() {
+        return document.querySelector('.floating-cart');
+    }
 
-    // Calculate total cart value
-    const cartTotal = cartItems.reduce((total, item) => 
-        total + (item.price * item.quantity), 0);
+    // Function to get the cart items element
+    getCartItemsElement() {
+        return this.cart.querySelector('.cart-items');
+    }
 
-    // Add item to cart
-    const addToCart = (package) => {
-        setCartItems(prevItems => {
-            const existingItem = prevItems.find(item => item.id === package.id);
-            if (existingItem) {
-                return prevItems.map(item => 
-                    item.id === package.id 
-                    ? { ...item, quantity: item.quantity + 1 }
-                    : item
-                );
-            }
-            return [...prevItems, { ...package, quantity: 1 }];
+    // Function to get the cart count element
+    getCartCountElement() {
+        return this.cart.querySelector('.cart-count');
+    }
+
+    // Function to get the total amount element
+    getTotalAmountElement() {
+        return this.cart.querySelector('.total-amount');
+    }
+
+    // Function to get the checkout button element
+    getCheckoutBtnElement() {
+        return this.cart.querySelector('.checkout-btn');
+    }
+
+    
+  
+    initialize() {
+        // Add click handlers to all "Add to cart" buttons
+        document.querySelectorAll('.btn-AddToCart').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const packageBox = e.target.closest('.package-box');
+                const packageName = packageBox.querySelector('h3').textContent;
+                const packagePrice = packageBox.querySelector('strong').textContent;
+                this.addItem(packageName, packagePrice);
+            });
         });
-    };
-
-    // Remove item from cart
-    const removeFromCart = (packageId) => {
-        setCartItems(prevItems => 
-            prevItems.filter(item => item.id !== packageId)
-        );
-    };
-
-    // Update item quantity
-    const updateQuantity = (packageId, newQuantity) => {
-        if (newQuantity < 1) {
-            removeFromCart(packageId);
-            return;
-        }
-        
-        setCartItems(prevItems => 
-            prevItems.map(item => 
-                item.id === packageId 
-                ? { ...item, quantity: newQuantity }
-                : item
-            )
-        );
-    };
-
-    // Checkout function (placeholder)
-    const handleCheckout = () => {
-        alert(`Checkout Total: $${cartTotal.toFixed(2)}`);
-        // In a real app, this would integrate with payment processing
-        setCartItems([]);
-        setIsCartOpen(false);
-    };
-
-    return (
-        <div className="shopping-cart-container">
-            {/* Cart Toggle Button */}
-            <button 
-                onClick={() => setIsCartOpen(!isCartOpen)}
-                className="cart-toggle-btn"
-            >
-                <ShoppingCart size={24} />
-                {cartItems.length > 0 && (
-                    <span className="cart-badge">{cartItems.length}</span>
-                )}
-            </button>
-
-            {isCartOpen && (
-                <div className="cart-modal">
-                    <div className="cart-header">
-                        <h2>Your Travel Cart</h2>
-                        <button 
-                            onClick={() => setIsCartOpen(false)}
-                            className="close-btn"
-                        >
-                            &times;
-                        </button>
-                    </div>
-
-                    {cartItems.length === 0 ? (
-                        <div className="empty-cart">
-                            <p>Your cart is empty</p>
-                        </div>
-                    ) : (
-                        <>
-                            <div className="cart-items">
-                                {cartItems.map(item => (
-                                    <div key={item.id} className="cart-item">
-                                        <img 
-                                            src={item.image} 
-                                            alt={item.name} 
-                                            className="cart-item-image"
-                                        />
-                                        <div className="cart-item-details">
-                                            <h3>{item.name}</h3>
-                                            <p>${item.price.toFixed(2)}</p>
-                                            <div className="quantity-controls">
-                                                <button 
-                                                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                                >
-                                                    <Minus size={16} />
-                                                </button>
-                                                <span>{item.quantity}</span>
-                                                <button 
-                                                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                                >
-                                                    <Plus size={16} />
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <button 
-                                            onClick={() => removeFromCart(item.id)}
-                                            className="remove-item-btn"
-                                        >
-                                            <Trash2 size={16} />
-                                        </button>
-                                    </div>
-                                ))}
-                            </div>
-                            <div className="cart-summary">
-                                <div className="cart-total">
-                                    <strong>Total:</strong> 
-                                    ${cartTotal.toFixed(2)}
-                                </div>
-                                <button 
-                                    onClick={handleCheckout}
-                                    className="checkout-btn"
-                                >
-                                    Checkout
-                                </button>
-                            </div>
-                        </>
-                    )}
-                </div>
-            )}
-
-            {/* Add to Cart Buttons for Packages */}
-            <div className="package-cart-actions">
-                {TRAVEL_PACKAGES.map(pkg => (
-                    <button 
-                        key={pkg.id}
-                        onClick={() => addToCart(pkg)}
-                        className="add-to-cart-btn"
-                    >
-                        Add {pkg.name} to Cart
-                    </button>
-                ))}
+  
+        // Initialize cart visibility
+        this.updateCartVisibility();
+  
+        // Add checkout button handler
+        this.checkoutBtn.addEventListener('click', () => {
+            if (this.items.length > 0) {
+                alert('Proceeding to checkout with total: $' + this.calculateTotal());
+                // Add actual checkout logic here
+            }
+        });
+    }
+    
+  
+    addItem(name, price) {
+        const priceValue = parseFloat(price.replace(/[^0-9.]/g, ''));
+        const item = {
+            id: Date.now(), // Unique ID for each item
+            name: name,
+            price: priceValue
+        };
+  
+        this.items.push(item);
+        this.renderCartItem(item);
+        this.updateCart();
+    }
+  
+    removeItem(id) {
+        this.items = this.items.filter(item => item.id !== id);
+        this.updateCart();
+    }
+  
+    renderCartItem(item) {
+        const itemElement = document.createElement('div');
+        itemElement.className = 'cart-item';
+        itemElement.innerHTML = `
+            <div class="cart-item-details">
+                <div>${item.name}</div>
+                <div>$${item.price}</div>
             </div>
-        </div>
-    );
-};
+            <span class="remove-item" data-id="${item.id}">×</span>
+        `;
+  
+        itemElement.querySelector('.remove-item').addEventListener('click', () => {
+            this.removeItem(item.id);
+        });
+  
+        this.cartItems.appendChild(itemElement);
+    }
+  
+    calculateTotal() {
+        return this.items.reduce((total, item) => total + item.price, 0).toFixed(2);
+    }
+  
+    updateCart() {
+        // Update cart count
+        this.cartCount.textContent = this.items.length;
+        
+        // Update total amount
+        this.totalAmount.textContent = this.calculateTotal();
+        
+        // Clear and re-render all items
+        this.cartItems.innerHTML = '';
+        this.items.forEach(item => this.renderCartItem(item));
+        
+        // Update cart visibility
+        this.updateCartVisibility();
+    }
+  
+    updateCartVisibility() {
+        if (this.items.length === 0) {
+            this.cart.classList.add('empty');
+        } else {
+            this.cart.classList.remove('empty');
+        }
+    }
+  }
+  // Initialize the shopping cart when the DOM is loaded
+const cart = new ShoppingCart(); // Create the ShoppingCart instance
 
-export default ShoppingCartComponent;
+document.addEventListener('DOMContentLoaded', () => {
+  cart.initialize(); // Call initialize after DOM is loaded
+});
+

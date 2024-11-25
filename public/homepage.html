@@ -14,6 +14,12 @@
                 <h1>Virgin Islands Travel</h1>
             </div>
             <nav>
+                <!-- Add this inside the nav element, before the ul -->
+<div class="hamburger">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+</div>
                 <ul>
                     <li class="current"><a href="#home">Home</a></li>
                     <li><a href="#packages">Packages</a></li>
@@ -57,14 +63,15 @@
         <button class="btn btn-info" data-toggle="collapse" data-target="#package1-flavor">More Info</button>
         <div id="package1-flavor" class="collapse">
             <p>Unwind with a complimentary couples' massage, followed by a sunset cocktail party.</p>
-            <ul>
+            <ul class="flavor-textList">
                 <li>Exclusive access to the beachside yoga pavilion for private sessions</li>
                 <li>Personalized concierge service to plan your perfect getaway</li>
                 <li>Special discounts on spa treatments and water sports</li>
             </ul>
+            <button class="btn btn-AddToCart">Add to cart</button>
+
         </div>
 
-        <button class="btn btn-success">Add to cart</button>
      </div>
 
     <!-- Repeat the above code for each package -->
@@ -80,14 +87,15 @@
         <button class="btn btn-info" data-toggle="collapse" data-target="#package2-flavor">More Info</button>
         <div id="package2-flavor" class="collapse">
             <p>Indulge in a rejuvenating breakfast buffet, featuring fresh fruit and artisanal pastries.</p>
-            <ul>
+            <ul class="flavor-textList">
                 <li>Private access to the resort's infinity pool for ultimate relaxation</li>
                 <li>Complimentary daily yoga sessions on the beach</li>
                 <li>Special discounts on gourmet dining experiences</li>
             </ul>
+            <button class="btn btn-AddToCart">Add to cart</button>
+
         </div>
 
-        <button class="btn btn-success">Add to cart</button>
     </div>
 
     <!-- Package 3: Fun Package -->
@@ -105,14 +113,15 @@
         <button class="btn btn-info" data-toggle="collapse" data-target="#package3-flavor">More Info</button>
         <div id="package3-flavor" class="collapse">
             <p>Get your adrenaline pumping with a complimentary water sports session.</p>
-            <ul>
+            <ul class="flavor-textList">
                 <li>Priority access to the resort's adventure center for snorkeling and kayaking</li>
                 <li>Exclusive discounts on local excursions and activities</li>
                 <li>Special perks at the resort's beachside bar and grill</li>
             </ul>
+            <button class="btn btn-AddToCart">Add to cart</button>
+
         </div>
 
-        <button class="btn btn-success">Add to cart</button>
     </div>
 
     <!-- Package 4: ??? -->
@@ -141,6 +150,20 @@
     <footer>
         <p>Virgin Islands site, Copyright &copy; 2024</p>
     </footer>
+    <div class="floating-cart">
+        <div class="cart-header">
+            <h3>Shopping Cart</h3>
+            <span class="cart-count">0</span>
+        </div>
+        <div class="cart-items">
+            <!-- Cart items will be added here dynamically -->
+        </div>
+        <div class="cart-total">
+            <span>Total: $</span>
+            <span class="total-amount">0</span>
+        </div>
+        <button class="checkout-btn">Checkout</button>
+    </div>
 </body>
 <script src="/src/components/index.js"></script>
 </html>
