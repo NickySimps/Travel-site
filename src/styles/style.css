@@ -208,10 +208,12 @@ nav a:hover {
   overflow: hidden;
   box-shadow: 0 4px 6px var(--soft-shadow);
   transition: transform 0.3s ease;
+  outline: var(--white) 2px solid;
 }
 
 .package-box:hover {
-  transform: translateY(-10px) scale(1.05);
+  transform: translateY(-10px);
+  outline: var(--soft-shadow) 10px solid;
 }
 
 .package-box img {
