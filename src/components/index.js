@@ -97,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
       navMenu.classList.remove('active');
   };
 
+  
   // Function to toggle menu
   const toggleMenu = () => {
       hamburger.classList.toggle('active');
