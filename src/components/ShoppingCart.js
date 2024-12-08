@@ -128,7 +128,7 @@ class ShoppingCart {
   }
   // Initialize the shopping cart when the DOM is loaded
 const cart = new ShoppingCart(); // Create the ShoppingCart instance
-
+window.ShoppingCart = ShoppingCart;
 document.addEventListener('DOMContentLoaded', () => {
   cart.initialize(); // Call initialize after DOM is loaded
 });
