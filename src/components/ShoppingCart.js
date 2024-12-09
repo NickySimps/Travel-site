@@ -1,43 +1,14 @@
 class ShoppingCart {
     constructor() {
         this.items = [];
-
-        // Get DOM elements using functions
-        this.cart = this.getCartElement();
-        this.cartItems = this.getCartItemsElement();
-        this.cartCount = this.getCartCountElement();
-        this.totalAmount = this.getTotalAmountElement();
-        this.checkoutBtn = this.getCheckoutBtnElement();
-
+        this.cart = document.querySelector('.floating-cart');
+        this.cartItems = this.cart.querySelector('.cart-items');
+        this.cartCount = this.cart.querySelector('.cart-count');
+        this.totalAmount = this.cart.querySelector('.total-amount');
+        this.checkoutBtn = this.cart.querySelector('.checkout-btn');
+        
         this.initialize();
     }
-
-    // Function to get the cart element
-    getCartElement() {
-        return document.querySelector('.floating-cart');
-    }
-
-    // Function to get the cart items element
-    getCartItemsElement() {
-        return this.cart.querySelector('.cart-items');
-    }
-
-    // Function to get the cart count element
-    getCartCountElement() {
-        return this.cart.querySelector('.cart-count');
-    }
-
-    // Function to get the total amount element
-    getTotalAmountElement() {
-        return this.cart.querySelector('.total-amount');
-    }
-
-    // Function to get the checkout button element
-    getCheckoutBtnElement() {
-        return this.cart.querySelector('.checkout-btn');
-    }
-
-    
   
     initialize() {
         // Add click handlers to all "Add to cart" buttons
@@ -61,7 +32,6 @@ class ShoppingCart {
             }
         });
     }
-    
   
     addItem(name, price) {
         const priceValue = parseFloat(price.replace(/[^0-9.]/g, ''));
@@ -126,10 +96,8 @@ class ShoppingCart {
         }
     }
   }
+  
   // Initialize the shopping cart when the DOM is loaded
-const cart = new ShoppingCart(); // Create the ShoppingCart instance
-
-document.addEventListener('DOMContentLoaded', () => {
-  cart.initialize(); // Call initialize after DOM is loaded
-});
-
+  document.addEventListener('DOMContentLoaded', () => {
+    const cart = new ShoppingCart();
+  });
