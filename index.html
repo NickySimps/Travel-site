@@ -7,6 +7,7 @@
     <title>Virgin Island site</title>
     <link rel="stylesheet" href="src/styles/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+    <script src="path/to/snipcart.js" async></script>
 </head>
 
 <body>
@@ -33,6 +34,8 @@
                 </ul>
             </nav>
         </div>
+        <button class="snipcart-checkout">Open Cart</button>
+
     </header>
 
     <main>
@@ -74,12 +77,13 @@
                                 <li>Special discounts on spa treatments and water sports</li>
                             </ul>
                             <button 
-                            class="btn btn-AddToCart" 
-                            class="snipcart-add-item" 
-                            data-item-name="Friends-Package"
+                            class="btn btn-AddToCart snipcart-add-item"
+                            data-item-id="friends-package"
+                            data-item-name="Friends Package"
                             data-item-price="500"
-                            data-item-image="/public/Pictures/beaches/beach_1.jpg"
-                            data-item-name="Friends Package">Add to cart
+                            data-item-url="/packages"
+                            data-item-image="./public/Pictures/beaches/beach_1.jpg">
+                            Add to cart
                           </button>
                         </div>
 
@@ -108,12 +112,13 @@
                                 <li>Special discounts on gourmet dining experiences</li>
                             </ul>
                             <button 
-                            class="btn btn-AddToCart" 
-                            class="snipcart-add-item" 
-                            data-item-name="Sun-Package"
+                            class="btn btn-AddToCart snipcart-add-item"
+                            data-item-id="sun-package"
+                            data-item-name="Sun Package"
                             data-item-price="800"
-                            data-item-image="/public/Pictures/beaches/beach_2.jpg"
-                            data-item-name="Sun Package">Add to cart
+                            data-item-url="/packages"
+                            data-item-image="./public/Pictures/beaches/beach_2.jpg"
+                            >Add to cart
                           </button>
                         </div>
 
@@ -143,14 +148,13 @@
                                 <li>Special perks at the resort's beachside bar and grill</li>
                             </ul>
                             <button 
-                              class="btn btn-AddToCart" 
-                              class="snipcart-add-item" 
-                              data-item-name="Fun-Package"
-                              data-item-price="700"
-                              data-item-image="/public/Pictures/beaches/beach_3.jpg"
-                              data-item-name="Fun Package">Add to cart
+                            class="btn btn-AddToCart snipcart-add-item"
+                            data-item-id="fun-package"
+                            data-item-name="Fun-Package"
+                            data-item-price="700"
+                            data-item-image="./public/Pictures/beaches/beach_3.jpg"
+                            data-item-name="Fun Package">Add to cart
                             </button>
-
                         </div>
 
                     </div>
@@ -178,28 +182,27 @@
             </div>
         </section>
     </main>
-
     <footer>
         <p>Virgin Islands site, Copyright &copy; 2024</p>
     </footer>
-    <div class="floating-cart">
+    <!-- <div class="floating-cart">
         <div class="cart-header">
             <h3>Shopping Cart</h3>
             <span class="cart-count">0</span>
         </div>
         <div class="cart-items">
-            <!-- Cart items will be added here dynamically -->
+             Cart items will be added here dynamically 
         </div>
         <div class="cart-total">
             <span>Total: $</span>
             <span class="total-amount">0</span>
         </div>
         <button class="checkout-btn">Checkout</button>
-    </div>
+    </div> -->
 </body>
 <script>
     window.SnipcartSettings = {
-        publicApiKey: 'ZjFmOWZjNDUtM2VmMC00ZmExLTkzMTctMjExM2UzZDcwZjI3NjM4Njg4Nzc3OTMyNzM5MTQ3',
+        publicApiKey: 'YTM3OWQ3Y2EtOWIxYS00NWQ2LThkYTUtY2FlM2E0NmMwZjQ1NjM4Njk1NzM1OTMwNjE0ODkx',
         loadStrategy: 'on-user-interaction',
         modalStyle: "side",
         
@@ -207,6 +210,6 @@
 
     (()=>{var c,d;(d=(c=window.SnipcartSettings).version)!=null||(c.version="3.0");var s,S;(S=(s=window.SnipcartSettings).timeoutDuration)!=null||(s.timeoutDuration=2750);var l,p;(p=(l=window.SnipcartSettings).domain)!=null||(l.domain="cdn.snipcart.com");var w,u;(u=(w=window.SnipcartSettings).protocol)!=null||(w.protocol="https");var f=window.SnipcartSettings.version.includes("v3.0.0-ci")||window.SnipcartSettings.version!="3.0"&&window.SnipcartSettings.version.localeCompare("3.4.0",void 0,{numeric:!0,sensitivity:"base"})===-1,m=["focus","mouseover","touchmove","scroll","keydown"];window.LoadSnipcart=o;document.readyState==="loading"?document.addEventListener("DOMContentLoaded",r):r();function r(){window.SnipcartSettings.loadStrategy?window.SnipcartSettings.loadStrategy==="on-user-interaction"&&(m.forEach(t=>document.addEventListener(t,o)),setTimeout(o,window.SnipcartSettings.timeoutDuration)):o()}var a=!1;function o(){if(a)return;a=!0;let t=document.getElementsByTagName("head")[0],e=document.querySelector("#snipcart"),i=document.querySelector(`src[src^="${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}"][src$="snipcart.js"]`),n=document.querySelector(`link[href^="${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}"][href$="snipcart.css"]`);e||(e=document.createElement("div"),e.id="snipcart",e.setAttribute("hidden","true"),document.body.appendChild(e)),v(e),i||(i=document.createElement("script"),i.src=`${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.js`,i.async=!0,t.appendChild(i)),n||(n=document.createElement("link"),n.rel="stylesheet",n.type="text/css",n.href=`${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.css`,t.prepend(n)),m.forEach(g=>document.removeEventListener(g,o))}function v(t){!f||(t.dataset.apiKey=window.SnipcartSettings.publicApiKey,window.SnipcartSettings.addProductBehavior&&(t.dataset.configAddProductBehavior=window.SnipcartSettings.addProductBehavior),window.SnipcartSettings.modalStyle&&(t.dataset.configModalStyle=window.SnipcartSettings.modalStyle),window.SnipcartSettings.currency&&(t.dataset.currency=window.SnipcartSettings.currency),window.SnipcartSettings.templatesUrl&&(t.dataset.templatesUrl=window.SnipcartSettings.templatesUrl))}})();
 </script>
-<script src="src/components/index.js"></script>
+<script type="module" src="./src/components/index.js"></script>
 
 </html>

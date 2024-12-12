@@ -1,4 +1,4 @@
-import { all } from "ShoppingCart";
+//simport ShoppingCart from './ShoppingCart.js';
 
 // Constants
 const brandingText = 'Virgin Islands Travel';
@@ -122,4 +122,18 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+Snipcart.api.cart.open();
 
+
+// After the Snipcart script loading code
+window.addEventListener('snipcart.ready', () => {
+  // Now Snipcart is guaranteed to be loaded
+  const cartButton = document.createElement('button');
+  cartButton.classList.add('snipcart-checkout');
+  cartButton.textContent = 'Cart';
+  document.querySelector('header').appendChild(cartButton);
+});
+
+// document.addEventListener("DOMContentLoaded", ()=>{
+//   const cart = new ShoppingCart();
+// });
