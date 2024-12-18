@@ -122,16 +122,24 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-Snipcart.api.cart.open();
+// Snipcart.api.cart.open();
+
+
+
 
 
 // After the Snipcart script loading code
 window.addEventListener('snipcart.ready', () => {
   // Now Snipcart is guaranteed to be loaded
   const cartButton = document.createElement('button');
+  const openCartButton = document.getElementById('open-cart-btn');
   cartButton.classList.add('snipcart-checkout');
   cartButton.textContent = 'Cart';
   document.querySelector('header').appendChild(cartButton);
+  if (cartButton.hasChildNodes()) 
+  {
+  openCartButton.style.display = cartButton.hasChildNodes() ? 'block' : 'none';
+  }
 });
 
 // document.addEventListener("DOMContentLoaded", ()=>{
