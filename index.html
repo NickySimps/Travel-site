@@ -7,7 +7,6 @@
     <title>Virgin Island site</title>
     <link rel="stylesheet" href="src/styles/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
-    <script src="path/to/snipcart.js" async></script>
 </head>
 
 <body>
@@ -81,7 +80,7 @@
                             data-item-id="friends-package"
                             data-item-name="Friends Package"
                             data-item-price="500"
-                            data-item-url="/"
+                            data-item-url="/packages/friends-package"
                             data-item-image="./public/Pictures/beaches/beach_1.jpg">
                             Add to cart
                           </button>
@@ -116,7 +115,7 @@
                             data-item-id="sun-package"
                             data-item-name="Sun Package"
                             data-item-price="800"
-                            data-item-url="/"
+                            data-item-url="/package/sun-package"
                             data-item-image="./public/Pictures/beaches/beach_2.jpg"
                             >Add to cart
                           </button>
@@ -152,7 +151,7 @@
                             data-item-id="fun-package"
                             data-item-name="Fun-Package"
                             data-item-price="700"
-                            data-item-url="/"
+                            data-item-url="/package/fun-package"
                             data-item-image="./public/Pictures/beaches/beach_3.jpg"
                             data-item-name="Fun Package">Add to cart
                             </button>
@@ -201,9 +200,12 @@
         <button class="checkout-btn">Checkout</button>
     </div> -->
 </body>
+<div hidden id="snipcart" data-api-keys="ZjFmOWZjNDUtM2VmMC00ZmExLTkzMTctMjExM2UzZDcwZjI3NjM4Njg4Nzc3OTMyNzM5MTQ3">
+
+</div>
 <script>
     window.SnipcartSettings = {
-        publicApiKey: 'YTM3OWQ3Y2EtOWIxYS00NWQ2LThkYTUtY2FlM2E0NmMwZjQ1NjM4Njk1NzM1OTMwNjE0ODkx',
+        publicApiKey: 'ZjFmOWZjNDUtM2VmMC00ZmExLTkzMTctMjExM2UzZDcwZjI3NjM4Njg4Nzc3OTMyNzM5MTQ3',
         loadStrategy: 'on-user-interaction',
         modalStyle: "side",
         

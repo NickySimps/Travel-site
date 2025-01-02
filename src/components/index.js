@@ -122,7 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// Snipcart.api.cart.open();
 
 
 
@@ -136,6 +135,19 @@ window.addEventListener('snipcart.ready', () => {
   cartButton.classList.add('snipcart-checkout');
   cartButton.textContent = 'Cart';
   document.querySelector('header').appendChild(cartButton);
+  
+  console.log('Snipcart ready');
+  Snipcart.events.on('item.adding', (item) => {
+    console.log('Adding item:', item);
+  });
+  Snipcart.events.on('item.added', (item) => {
+    console.log('Item added:', item);
+  });
+  Snipcart.events.on('cart.ready', (cart) => {
+    console.log('Cart ready:', cart);
+  });
+  
+
   if (cartButton.hasChildNodes()) 
   {
   openCartButton.style.display = cartButton.hasChildNodes() ? 'block' : 'none';
