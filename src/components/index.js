@@ -157,24 +157,3 @@ window.addEventListener('snipcart.ready', () => {
 // document.addEventListener("DOMContentLoaded", ()=>{
 //   const cart = new ShoppingCart();
 // });
-
-
-document.addEventListener('DOMContentLoaded', () => {
-  const moreInfoButtons = document.querySelectorAll('.btn-info');
-  
-  moreInfoButtons.forEach(button => {
-      button.addEventListener('click', () => {
-          const flavorSection = button.nextElementSibling;
-          
-          if (flavorSection.classList.contains('collapse')) {
-              flavorSection.classList.remove('collapse');
-              flavorSection.classList.add('show');
-              button.textContent = 'Show Less';
-          } else {
-              flavorSection.classList.remove('show');
-              flavorSection.classList.add('collapse');
-              button.textContent = 'More Info';
-          }
-      });
-  });
-});
