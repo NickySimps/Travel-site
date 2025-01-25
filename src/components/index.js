@@ -1,180 +1,207 @@
-//simport ShoppingCart from './ShoppingCart.js';
-
 // Constants
-const brandingText = 'Virgin Islands Travel';
-const showcaseHeader = 'Visit Paradise';
-const showcaseParagraph = 'Explore new adventures';
-const missionStatement = 'Find your own little slice of paradise in our tropical haven, where lush green hills meet turquoise waters, and the scent of blooming flowers fills the air with promise.';
-const newsletterForm = {
-  firstName: { placeholder: 'First Name', required: true },
-  lastName: { placeholder: 'Last Name', required: true },
-  phone: { placeholder: 'Phone Number', required: true },
-  email: { placeholder: 'Enter email', required: true }
+const UI_ELEMENTS = {
+  hamburger: '.hamburger',
+  navMenu: 'nav ul',
+  moreInfoBtns: '.btn-info',
+  authToggle: '#auth-toggle',
+  authForm: '#auth-form',
+  authFormContent: '#auth-form-content',
+  openCartBtn: '#open-cart-btn'
 };
-const footerText = 'Virgin Islands site, Copyright &copy; 2024';
 
-// Let declarations
-let navLinks = [
-  { name: 'Home', href: '#home' },
-  { name: 'Packages', href: '#packages' },
-  { name: 'Groups', href: '#groups' },
-  { name: 'Accommodations', href: 'accomodations.html' },
-  { name: 'Virgin Islands', href: 'virginsislands.html' },
-  { name: 'About', href: 'about.html' },
-  { name: 'Login', href: '#login' }
-];
-let packages = [
-  {
-    name: 'Friends Package',
-    description: 'Perfect for group getaways',
-    price: '$500 per person',
-    buttonLabel: 'Add to cart',
-    flavorTitle: 'More Info',
-    flavorDescription: 'Unwind with a complimentary couples\' massage, followed by a sunset cocktail party.',
-    flavorList: [
-      'Exclusive access to the beachside yoga pavilion for private sessions',
-      'Personalized concierge service to plan your perfect getaway',
-      'Special discounts on spa treatments and water sports'
-    ]
-  },
-  {
-    name: 'Sun Package',
-    description: 'Ultimate relaxation',
-    price: '$800 per person',
-    buttonLabel: 'Add to cart',
-    flavorTitle: 'More Info',
-    flavorDescription: 'Indulge in a rejuvenating breakfast buffet, featuring fresh fruit and artisanal pastries.',
-    flavorList: [
-      'Private access to the resort\'s infinity pool for ultimate relaxation',
-      'Complimentary daily yoga sessions on the beach',
-      'Special discounts on gourmet dining experiences'
-    ]
-  },
-  {
-    name: 'Fun Package',
-    description: 'Adventure awaits',
-    price: '$700 per person',
-    buttonLabel: 'Add to cart',
-    flavorTitle: 'More Info',
-    flavorDescription: 'Get your adrenaline pumping with a complimentary water sports session.',
-    flavorList: [
-      'Priority access to the resort\'s adventure center for snorkeling and kayaking',
-      'Exclusive discounts on local excursions and activities',
-      'Special perks at the resort\'s beachside bar and grill'
-    ]
-  }
-];
-
-// Get all the "More Info" buttons
-const moreInfoButtons = document.querySelectorAll('.btn-info');
-
-// Add a click event listener to each button
-moreInfoButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    const flavorSection = button.nextElementSibling;
-    
-    
-
-    if (flavorSection.classList.contains('collapse')) {
-      flavorSection.classList.remove('collapse');
-      flavorSection.classList.add('show');
-
-      button.textContent = 'Show Less';
-  } else {
-      flavorSection.classList.remove('show');
-      flavorSection.classList.add('collapse');
-
-      button.textContent = 'More Info';
-  }
-  });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-  const hamburger = document.querySelector('.hamburger');
-  const navMenu = document.querySelector('nav ul');
-
-  // Function to close menu
-  const closeMenu = () => {
-      hamburger.classList.remove('active');
-      navMenu.classList.remove('active');
-  };
-
+// Event Handlers
+const toggleMoreInfo = (button) => {
+  const flavorSection = button.nextElementSibling;
+  const isCollapsed = flavorSection.classList.contains('collapse');
   
-  // Function to toggle menu
-  const toggleMenu = () => {
-      hamburger.classList.toggle('active');
-      navMenu.classList.toggle('active');
+  flavorSection.classList.toggle('collapse', !isCollapsed);
+  flavorSection.classList.toggle('show', isCollapsed);
+  button.textContent = isCollapsed ? 'Show Less' : 'More Info';
+};
+
+const handleAuth = async (e) => {
+  e.preventDefault();
+  const isLogin = e.submitter.id === 'login-btn';
+  const formData = new FormData(e.target);
+  
+  try {
+    const response = await fetch(isLogin ? '/login' : '/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(Object.fromEntries(formData))
+    });
+    
+    const data = await response.json();
+    if (response.ok) window.location.href = '/';
+    else alert(data.error);
+  } catch (err) {
+    console.error('Auth error:', err);
+    alert('Authentication failed');
+  }
+};
+
+const initializeNavigation = () => {
+  const hamburger = document.querySelector(UI_ELEMENTS.hamburger);
+  const navMenu = document.querySelector(UI_ELEMENTS.navMenu);
+  
+  const closeMenu = () => {
+    hamburger.classList.remove('active');
+    navMenu.classList.remove('active');
   };
 
-  // Hamburger click event
-  hamburger.addEventListener('click', toggleMenu);
-
-  // Close menu when clicking a nav link
-  document.querySelectorAll('nav a').forEach(link => {
-      link.addEventListener('click', closeMenu);
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    navMenu.classList.toggle('active');
   });
 
-  // Close menu when clicking outside
+  document.querySelectorAll('nav a').forEach(link => 
+    link.addEventListener('click', closeMenu)
+  );
+
   document.addEventListener('click', (e) => {
-      if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
-          closeMenu();
-      }
+    if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+      closeMenu();
+    }
   });
-});
+};
 
-
-
-
-
-
-// After the Snipcart script loading code
-window.addEventListener('snipcart.ready', () => {
-  // Now Snipcart is guaranteed to be loaded
+const initializeSnipcart = () => {
   const cartButton = document.createElement('button');
-  const openCartButton = document.getElementById('open-cart-btn');
+  const openCartButton = document.querySelector(UI_ELEMENTS.openCartBtn);
+  
   cartButton.classList.add('snipcart-checkout');
   cartButton.textContent = 'Cart';
   document.querySelector('header').appendChild(cartButton);
   
-  console.log('Snipcart ready');
-  Snipcart.events.on('item.adding', (item) => {
-    console.log('Adding item:', item);
+  ['item.adding', 'item.added', 'cart.ready'].forEach(event => {
+    Snipcart.events.on(event, (data) => console.log(event, data));
   });
-  Snipcart.events.on('item.added', (item) => {
-    console.log('Item added:', item);
-  });
-  Snipcart.events.on('cart.ready', (cart) => {
-    console.log('Cart ready:', cart);
-  });
-  
 
-  if (cartButton.hasChildNodes()) 
-  {
   openCartButton.style.display = cartButton.hasChildNodes() ? 'block' : 'none';
-  }
-});
+};
 
-// document.addEventListener("DOMContentLoaded", ()=>{
-//   const cart = new ShoppingCart();
-// });
-
-
+// Initialize App
 document.addEventListener('DOMContentLoaded', () => {
-  const moreInfoButtons = document.querySelectorAll('.btn-info');
+  // Navigation
+  initializeNavigation();
   
-  moreInfoButtons.forEach(button => {
-      button.addEventListener('click', () => {
-          const flavorSection = button.nextElementSibling;
-          
-          if (flavorSection.classList.contains('collapse')) {
-              flavorSection.classList.remove('collapse');
-              flavorSection.classList.add('show');
-              button.textContent = 'Show Less';
-          } else {
-              flavorSection.classList.remove('show');
-              flavorSection.classList.add('collapse');
-              button.textContent = 'More Info';
-          }
-      });
+  // More Info buttons
+  document.querySelectorAll(UI_ELEMENTS.moreInfoBtns)
+    .forEach(btn => btn.addEventListener('click', () => toggleMoreInfo(btn)));
+  
+  // Auth functionality
+  const authToggle = document.querySelector(UI_ELEMENTS.authToggle);
+  const authForm = document.querySelector(UI_ELEMENTS.authForm);
+  const authFormContent = document.querySelector(UI_ELEMENTS.authFormContent);
+  
+  authToggle?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    authForm?.classList.toggle('active');
   });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.auth-container')) {
+      authForm?.classList.remove('active');
+    }
+  });
+
+  authFormContent?.addEventListener('submit', handleAuth);
 });
+
+// Form Validation
+const newsletterForm = document.querySelector('.newsletter-form');
+
+newsletterForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById('email');
+    const phone = document.getElementById('phone');
+
+    if (!validateEmail(email.value)) {
+        alert('Please enter a valid email address.');
+        return;
+    }
+
+    if (!validatePhone(phone.value)) {
+        alert('Please enter a valid phone number.');
+        return;
+    }
+
+    alert('Thank you for subscribing!');
+});
+
+function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function validatePhone(phone) {
+    return /^\d{10}$/.test(phone); // Example: 1234567890
+}
+
+// Initialize Snipcart
+window.addEventListener('snipcart.ready', initializeSnipcart);
+
+//Styling
+const navLinks = document.querySelectorAll('nav ul li a');
+navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        navLinks.forEach(nav => nav.classList.remove('active'));
+        link.classList.add('active');
+    });
+});
+
+
+const backToTop = document.getElementById('backToTop');
+
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+        backToTop.classList.add('show');
+    } else {
+        backToTop.classList.remove('show');
+    }
+});
+
+backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+
+let lastScrollTop = 0;
+const header = document.querySelector('header');
+
+window.addEventListener('scroll', () => {
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  
+  if (scrollTop > lastScrollTop && scrollTop > 200) {
+    header.style.transform = 'translateY(-100%)';
+    header.style.transition = 'transform 0.3s ease-in-out';
+  } else {
+    header.style.transform = 'translateY(0)';
+  }
+  
+  lastScrollTop = scrollTop;
+});
+
+//Firebase
+
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAvKfaFzdlTzodxD2jQSLExl2haQSxvkiw",
+  authDomain: "travel-site-c65a7.firebaseapp.com",
+  projectId: "travel-site-c65a7",
+  storageBucket: "travel-site-c65a7.firebasestorage.app",
+  messagingSenderId: "515419394066",
+  appId: "1:515419394066:web:26dfc4f17f41bf205e08cb",
+  measurementId: "G-5DDFZ0MXTP"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
