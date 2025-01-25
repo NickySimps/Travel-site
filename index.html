@@ -50,24 +50,24 @@
                     <li class="auth-container">
                         <button id="auth-toggle" class="auth-toggle">Login</button>
                         <div id="auth-form" class="auth-form">
-                          <form id="auth-form-content">
-                            <input type="email" name="email" placeholder="Email" required>
-                            <input type="password" name="password" placeholder="Password" required>
-                            <div class="auth-buttons">
-                              <button type="submit" id="login-btn">Login</button>
-                              <button type="button" id="signup-btn">Sign Up</button>
-                            </div>
-                          </form>
+                            <form id="auth-form-content">
+                                <input type="email" name="email" placeholder="Email" required>
+                                <input type="password" name="password" placeholder="Password" required>
+                                <div class="auth-buttons">
+                                    <button type="submit" id="login-btn">Login</button>
+                                    <button type="button" id="signup-btn">Sign Up</button>
+                                </div>
+                            </form>
                         </div>
-                      </li>
+                    </li>
                 </ul>
-               
+
             </nav>
         </div>
         <button class="snipcart-checkout" id="open-cart-btn" style="display:none;">Open Cart</button>
 
     </header>
-    
+
     <main>
         <section id="showcase">
             <div class="container">
@@ -92,12 +92,13 @@
                 <div class="package-grid">
 
                     <div class="package-box">
-                        <img src="./public/Pictures/beaches/beach 1.jpg" alt="Friends enjoying the beach">
+                        <img src="./public/Pictures/beaches/beach_1.jpg" alt="Friends enjoying the beach">
                         <h3>Friends Package</h3>
                         <p>Perfect for group getaways</p>
                         <p><strong>$500 per person</strong></p>
 
-                        <button class="btn btn-info" data-toggle="collapse" data-target="#package1-flavor">More Info</button>
+                        <button class="btn btn-info" data-toggle="flavor-content" data-target="#package1-flavor">More
+                            Info</button>
 
                         <div id="package1-flavor" class="flavor-content">
                             <p>Unwind with a complimentary couples' massage, followed by a sunset cocktail party.</p>
@@ -106,10 +107,8 @@
                                 <li>Personalized concierge service to plan your perfect getaway</li>
                                 <li>Special discounts on spa treatments and water sports</li>
                             </ul>
-                            <button class="btn btn-AddToCart snipcart-add-item"
-                                    data-item-id="friends-package"
-                                data-item-name="Friends Package" 
-                                data-item-price="500.00"
+                            <button class="btn btn-AddToCart snipcart-add-item" data-item-id="friends-package"
+                                data-item-name="Friends Package" data-item-price="500.00"
                                 data-item-description="Perfect for group getaways"
                                 data-item-image="./public/Pictures/beaches/beach_1.jpg">
                                 Add to cart
@@ -124,14 +123,14 @@
                         unfolds before you.</div>
 
                     <div class="package-box">
-                        <img src="public/Pictures/beaches/beach 2.jpg" alt="Sunny beach view">
+                        <img src="public/Pictures/beaches/beach_2.jpg" alt="Sunny beach view">
                         <h3>Sun Package</h3>
                         <p>Ultimate relaxation</p>
                         <p><strong>$800 per person</strong></p>
 
-                        <button class="btn btn-info" data-toggle="collapse" data-target="#package2-flavor">More
+                        <button class="btn btn-info" data-toggle="flavor-content" data-target="#package2-flavor">More
                             Info</button>
-                        <div id="package2-flavor" class="collapse">
+                        <div id="package2-flavor" class="flavor-content">
                             <p>Indulge in a rejuvenating breakfast buffet, featuring fresh fruit and artisanal pastries.
                             </p>
                             <ul class="flavor-textList">
@@ -157,14 +156,14 @@
 
 
                     <div class="package-box">
-                        <img src="public/Pictures/beaches/beach 3.jpg" alt="Fun beach activities">
+                        <img src="public/Pictures/beaches/beach_3.jpg" alt="Fun beach activities">
                         <h3>Fun Package</h3>
                         <p>Adventure awaits</p>
                         <p><strong>$700 per person</strong></p>
 
-                        <button class="btn btn-info" data-toggle="collapse" data-target="#package3-flavor">More
+                        <button class="btn btn-info" data-toggle="flavor-content" data-target="#package3-flavor">More
                             Info</button>
-                        <div id="package3-flavor" class="collapse">
+                        <div id="package3-flavor" class="flavor-content">
                             <p>Get your adrenaline pumping with a complimentary water sports session.</p>
                             <ul class="flavor-textList">
                                 <li>Priority access to the resort's adventure center for snorkeling and kayaking</li>
@@ -189,6 +188,57 @@
                     white sand beaches harmonize with your soul.</div>
 
         </section>
+        <section id="retreats">
+            <div class="container">
+                <h2>Host Your Own Retreat</h2>
+                <p class="retreat-intro">Are you looking to host your own retreat?</p>
+                <form id="retreat-form" class="retreat-form">
+                    <div class="date-inputs">
+                        <input type="date" id="startDate" name="startDate" required>
+                        <span>to</span>
+                        <input type="date" id="endDate" name="endDate" required>
+                    </div>
+                    <input type="number" name="guests" min="1" placeholder="Number of Guests" required>
+                    <input type="number" name="rooms" min="1" placeholder="Number of Rooms" required>
+                    <div class="catering-option">
+                        <label>Catering Required:</label>
+                        <input type="radio" name="catering" value="yes" id="cateringYes">
+                        <label for="cateringYes">Yes</label>
+                        <input type="radio" name="catering" value="no" id="cateringNo">
+                        <label for="cateringNo">No</label>
+                    </div>
+                    <button type="submit">Submit Inquiry</button>
+                </form>
+            </div>
+        </section>
+        <section id="services">
+            <div class="container">
+              <h2>Our Services</h2>
+              <div class="services-grid">
+                <div class="service-card">
+                  <h3>Yacht Retreats</h3>
+                  <p>Luxurious yacht experiences tailored to your group size and preferences.</p>
+                </div>
+                <div class="service-card">
+                  <h3>On-Island Retreat</h3>
+                  <p>Curated island stays with exclusive access to private venues and activities.</p>
+                </div>
+                <div class="service-card">
+                  <h3>Airport Shuttle</h3>
+                  <p>Seamless transportation from arrival to departure.</p>
+                </div>
+                <div class="service-card">
+                  <h3>Full Catering</h3>
+                  <p>Local cuisine and personalized meal planning throughout your stay.</p>
+                </div>
+              </div>
+              <div class="quote-cta">
+                <h3>Request a Custom Quote</h3>
+                <p>Tell us about your group size and preferred islands for a personalized experience.</p>
+                <a href="mailto:quotes@virginislandstravel.com" class="btn-quote">Get Quote</a>
+              </div>
+            </div>
+          </section>
 
         <section id="newsletter">
             <div class="container">
@@ -222,20 +272,20 @@
     </div> -->
     <button id="backToTop" title="Go to top">↑</button>
 
+    <div hidden id="snipcart" data-api-key="ZjFmOWZjNDUtM2VmMC00ZmExLTkzMTctMjExM2UzZDcwZjI3NjM4Njg4Nzc3OTMyNzM5MTQ3">
+
+    </div>
+    <script>
+        window.SnipcartSettings = {
+            publicApiKey: 'ZjFmOWZjNDUtM2VmMC00ZmExLTkzMTctMjExM2UzZDcwZjI3NjM4Njg4Nzc3OTMyNzM5MTQ3',
+            loadStrategy: 'on-user-interaction',
+            modalStyle: "side",
+
+        };
+
+        (() => { var c, d; (d = (c = window.SnipcartSettings).version) != null || (c.version = "3.0"); var s, S; (S = (s = window.SnipcartSettings).timeoutDuration) != null || (s.timeoutDuration = 2750); var l, p; (p = (l = window.SnipcartSettings).domain) != null || (l.domain = "cdn.snipcart.com"); var w, u; (u = (w = window.SnipcartSettings).protocol) != null || (w.protocol = "https"); var f = window.SnipcartSettings.version.includes("v3.0.0-ci") || window.SnipcartSettings.version != "3.0" && window.SnipcartSettings.version.localeCompare("3.4.0", void 0, { numeric: !0, sensitivity: "base" }) === -1, m = ["focus", "mouseover", "touchmove", "scroll", "keydown"]; window.LoadSnipcart = o; document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", r) : r(); function r() { window.SnipcartSettings.loadStrategy ? window.SnipcartSettings.loadStrategy === "on-user-interaction" && (m.forEach(t => document.addEventListener(t, o)), setTimeout(o, window.SnipcartSettings.timeoutDuration)) : o() } var a = !1; function o() { if (a) return; a = !0; let t = document.getElementsByTagName("head")[0], e = document.querySelector("#snipcart"), i = document.querySelector(`src[src^="${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}"][src$="snipcart.js"]`), n = document.querySelector(`link[href^="${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}"][href$="snipcart.css"]`); e || (e = document.createElement("div"), e.id = "snipcart", e.setAttribute("hidden", "true"), document.body.appendChild(e)), v(e), i || (i = document.createElement("script"), i.src = `${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.js`, i.async = !0, t.appendChild(i)), n || (n = document.createElement("link"), n.rel = "stylesheet", n.type = "text/css", n.href = `${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.css`, t.prepend(n)), m.forEach(g => document.removeEventListener(g, o)) } function v(t) { !f || (t.dataset.apiKey = window.SnipcartSettings.publicApiKey, window.SnipcartSettings.addProductBehavior && (t.dataset.configAddProductBehavior = window.SnipcartSettings.addProductBehavior), window.SnipcartSettings.modalStyle && (t.dataset.configModalStyle = window.SnipcartSettings.modalStyle), window.SnipcartSettings.currency && (t.dataset.currency = window.SnipcartSettings.currency), window.SnipcartSettings.templatesUrl && (t.dataset.templatesUrl = window.SnipcartSettings.templatesUrl)) } })();
+    </script>
+    <script type="module" src="./src/components/index.js"></script>
 </body>
-<div hidden id="snipcart" data-api-key="ZjFmOWZjNDUtM2VmMC00ZmExLTkzMTctMjExM2UzZDcwZjI3NjM4Njg4Nzc3OTMyNzM5MTQ3">
-
-</div>
-<script>
-    window.SnipcartSettings = {
-        publicApiKey: 'ZjFmOWZjNDUtM2VmMC00ZmExLTkzMTctMjExM2UzZDcwZjI3NjM4Njg4Nzc3OTMyNzM5MTQ3',
-        loadStrategy: 'on-user-interaction',
-        modalStyle: "side",
-
-    };
-
-    (() => { var c, d; (d = (c = window.SnipcartSettings).version) != null || (c.version = "3.0"); var s, S; (S = (s = window.SnipcartSettings).timeoutDuration) != null || (s.timeoutDuration = 2750); var l, p; (p = (l = window.SnipcartSettings).domain) != null || (l.domain = "cdn.snipcart.com"); var w, u; (u = (w = window.SnipcartSettings).protocol) != null || (w.protocol = "https"); var f = window.SnipcartSettings.version.includes("v3.0.0-ci") || window.SnipcartSettings.version != "3.0" && window.SnipcartSettings.version.localeCompare("3.4.0", void 0, { numeric: !0, sensitivity: "base" }) === -1, m = ["focus", "mouseover", "touchmove", "scroll", "keydown"]; window.LoadSnipcart = o; document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", r) : r(); function r() { window.SnipcartSettings.loadStrategy ? window.SnipcartSettings.loadStrategy === "on-user-interaction" && (m.forEach(t => document.addEventListener(t, o)), setTimeout(o, window.SnipcartSettings.timeoutDuration)) : o() } var a = !1; function o() { if (a) return; a = !0; let t = document.getElementsByTagName("head")[0], e = document.querySelector("#snipcart"), i = document.querySelector(`src[src^="${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}"][src$="snipcart.js"]`), n = document.querySelector(`link[href^="${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}"][href$="snipcart.css"]`); e || (e = document.createElement("div"), e.id = "snipcart", e.setAttribute("hidden", "true"), document.body.appendChild(e)), v(e), i || (i = document.createElement("script"), i.src = `${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.js`, i.async = !0, t.appendChild(i)), n || (n = document.createElement("link"), n.rel = "stylesheet", n.type = "text/css", n.href = `${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.css`, t.prepend(n)), m.forEach(g => document.removeEventListener(g, o)) } function v(t) { !f || (t.dataset.apiKey = window.SnipcartSettings.publicApiKey, window.SnipcartSettings.addProductBehavior && (t.dataset.configAddProductBehavior = window.SnipcartSettings.addProductBehavior), window.SnipcartSettings.modalStyle && (t.dataset.configModalStyle = window.SnipcartSettings.modalStyle), window.SnipcartSettings.currency && (t.dataset.currency = window.SnipcartSettings.currency), window.SnipcartSettings.templatesUrl && (t.dataset.templatesUrl = window.SnipcartSettings.templatesUrl)) } })();
-</script>
-<script type="module" src="./src/components/index.js"></script>
 
 </html>
