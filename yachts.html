@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,6 +24,7 @@
     <meta name="snipcart-product-price-speedboat" content="1200.00">
     <meta name="snipcart-product-description-speedboat" content="Fast and thrilling experience">
 </head>
+
 <body>
     <header>
         <div class="container">
@@ -68,12 +70,13 @@
                 <div class="package-grid">
                     <!-- Luxury Yacht -->
                     <div class="package-box">
-                        <img src="./public/Pictures/yachts/yatch1.webp" alt="Luxury yacht">
+                        <img src="./public/Pictures/yachts/yacht1.webp" alt="Luxury yacht">
                         <h3>Luxury Yacht</h3>
                         <p>Ultimate luxury sailing experience</p>
                         <p><strong>$2,500 per day</strong></p>
 
-                        <button class="btn btn-info" data-toggle="collapse" data-target="#yacht1-flavor">More Info</button>
+                        <button class="btn btn-info" data-toggle="collapse" data-target="#yacht1-flavor">More
+                            Info</button>
                         <div id="yacht1-flavor" class="flavor-content">
                             <p>Experience unmatched luxury with our premium yacht charter.</p>
                             <ul class="flavor-textList">
@@ -81,10 +84,8 @@
                                 <li>Master suite and 3 guest cabins</li>
                                 <li>Gourmet chef and premium bar service</li>
                             </ul>
-                            <button class="btn btn-AddToCart snipcart-add-item"
-                                data-item-id="luxury-yacht"
-                                data-item-name="Luxury Yacht"
-                                data-item-price="2500.00"
+                            <button class="btn btn-AddToCart snipcart-add-item" data-item-id="luxury-yacht"
+                                data-item-name="Luxury Yacht" data-item-price="2500.00"
                                 data-item-description="Ultimate luxury sailing experience"
                                 data-item-image="./public/Pictures/yachts/yacht1.webp">
                                 Add to cart
@@ -94,12 +95,13 @@
 
                     <!-- Catamaran -->
                     <div class="package-box">
-                        <img src="./public/Pictures/yachts/yatch2.webp" alt="Catamaran">
+                        <img src="./public/Pictures/yachts/yacht2.webp" alt="Catamaran">
                         <h3>Catamaran</h3>
                         <p>Stable and spacious sailing</p>
                         <p><strong>$1,800 per day</strong></p>
 
-                        <button class="btn btn-info" data-toggle="collapse" data-target="#yacht2-flavor">More Info</button>
+                        <button class="btn btn-info" data-toggle="collapse" data-target="#yacht2-flavor">More
+                            Info</button>
                         <div id="yacht2-flavor" class="flavor-content">
                             <p>Perfect for families and groups seeking comfort and stability.</p>
                             <ul class="flavor-textList">
@@ -107,10 +109,8 @@
                                 <li>Spacious deck and lounging areas</li>
                                 <li>Snorkeling equipment included</li>
                             </ul>
-                            <button class="btn btn-AddToCart snipcart-add-item"
-                                data-item-id="catamaran"
-                                data-item-name="Catamaran"
-                                data-item-price="1800.00"
+                            <button class="btn btn-AddToCart snipcart-add-item" data-item-id="catamaran"
+                                data-item-name="Catamaran" data-item-price="1800.00"
                                 data-item-description="Stable and spacious sailing"
                                 data-item-image="./public/Pictures/yachts/yacht2.webp">
                                 Add to cart
@@ -120,12 +120,13 @@
 
                     <!-- Speedboat -->
                     <div class="package-box">
-                        <img src="./public/Pictures/yachts/yatch3.webp" alt="Speedboat">
+                        <img src="./public/Pictures/yachts/yacht3.webp" alt="Speedboat">
                         <h3>Speedboat</h3>
                         <p>Fast and thrilling experience</p>
                         <p><strong>$1,200 per day</strong></p>
 
-                        <button class="btn btn-info" data-toggle="collapse" data-target="#yacht3-flavor">More Info</button>
+                        <button class="btn btn-info" data-toggle="collapse" data-target="#yacht3-flavor">More
+                            Info</button>
                         <div id="yacht3-flavor" class="flavor-content">
                             <p>Perfect for thrill-seekers and island hopping adventures.</p>
                             <ul class="flavor-textList">
@@ -133,10 +134,8 @@
                                 <li>Water sports equipment included</li>
                                 <li>Ideal for day trips and island hopping</li>
                             </ul>
-                            <button class="btn btn-AddToCart snipcart-add-item"
-                                data-item-id="speedboat"
-                                data-item-name="Speedboat"
-                                data-item-price="1200.00"
+                            <button class="btn btn-AddToCart snipcart-add-item" data-item-id="speedboat"
+                                data-item-name="Speedboat" data-item-price="1200.00"
                                 data-item-description="Fast and thrilling experience"
                                 data-item-image="./public/Pictures/yachts/yacht3.webp">
                                 Add to cart
@@ -152,32 +151,24 @@
         <p>Virgin Islands site, Copyright &copy; 2024</p>
     </footer>
 
-    <div hidden id="snipcart" data-api-key="ZjFmOWZjNDUtM2VmMC00ZmExLTkzMTctMjExM2UzZDcwZjI3NjM4Njg4Nzc3OTMyNzM5MTQ3">
-    </div>
+    
     <button id="backToTop" title="Go to top">↑</button>
 
-    <script src="./src/components/index.js"></script>
+    <div hidden id="snipcart" data-api-key="ZjFmOWZjNDUtM2VmMC00ZmExLTkzMTctMjExM2UzZDcwZjI3NjM4Njg4Nzc3OTMyNzM5MTQ3">
+
+    </div>
     <script>
         window.SnipcartSettings = {
             publicApiKey: 'ZjFmOWZjNDUtM2VmMC00ZmExLTkzMTctMjExM2UzZDcwZjI3NjM4Njg4Nzc3OTMyNzM5MTQ3',
             loadStrategy: 'on-user-interaction',
             modalStyle: "side",
+
         };
 
-        // Snipcart loading script (same as in your index.html)
-        (() => { var c,d;(d=(c=window.SnipcartSettings).version)!=null||(c.version="3.0");var s,S;(S=(s=window.SnipcartSettings).timeoutDuration)!=null||(s.timeoutDuration=2750);var l,p;(p=(l=window.SnipcartSettings).domain)!=null||(l.domain="cdn.snipcart.com");var w,u;(u=(w=window.SnipcartSettings).protocol)!=null||(w.protocol="https");var f=window.SnipcartSettings.version.includes("v3.0.0-ci")||window.SnipcartSettings.version!="3.0"&&window.SnipcartSettings.version.localeCompare("3.4.0",void 0,{numeric:!0,sensitivity:"base"})===-1,m=["focus","mouseover","touchmove","scroll","keydown"];window.LoadSnipcart=o;document.readyState==="loading"?document.addEventListener("DOMContentLoaded",r):r();function r(){window.SnipcartSettings.loadStrategy?window.SnipcartSettings.loadStrategy==="on-user-interaction"&&(m.forEach(t=>document.addEventListener(t,o)),setTimeout(o,window.SnipcartSettings.timeoutDuration)):o()}var a=!1;function o(){if(a)return;a=!0;let t=document.getElementsByTagName("head")[0],e=document.querySelector("#snipcart"),i=document.querySelector(`src[src^="${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}"][src$="snipcart.js"]`),n=document.querySelector(`link[href^="${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}"][href$="snipcart.css"]`);e||(e=document.createElement("div"),e.id="snipcart",e.setAttribute("hidden","true"),document.body.appendChild(e)),v(e),i||(i=document.createElement("script"),i.src=`${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.js`,i.async=!0,t.appendChild(i)),n||(n=document.createElement("link"),n.rel="stylesheet",n.type="text/css",n.href=`${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.css`,t.prepend(n)),m.forEach(g=>document.removeEventListener(g,o))}function v(t){!f||(t.dataset.apiKey=window.SnipcartSettings.publicApiKey,window.SnipcartSettings.addProductBehavior&&(t.dataset.configAddProductBehavior=window.SnipcartSettings.addProductBehavior),window.SnipcartSettings.modalStyle&&(t.dataset.configModalStyle=window.SnipcartSettings.modalStyle),window.SnipcartSettings.currency&&(t.dataset.currency=window.SnipcartSettings.currency),window.SnipcartSettings.templatesUrl&&(t.dataset.templatesUrl=window.SnipcartSettings.templatesUrl))}})();
-
-        // Initialize More Info buttons
-        document.addEventListener('DOMContentLoaded', () => {
-            const moreInfoButtons = document.querySelectorAll('.btn-info');
-            moreInfoButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const flavorSection = button.nextElementSibling;
-                    flavorSection.classList.toggle('active');
-                    button.textContent = flavorSection.classList.contains('active') ? 'Show Less' : 'More Info';
-                });
-            });
-        });
+        (() => { var c, d; (d = (c = window.SnipcartSettings).version) != null || (c.version = "3.0"); var s, S; (S = (s = window.SnipcartSettings).timeoutDuration) != null || (s.timeoutDuration = 2750); var l, p; (p = (l = window.SnipcartSettings).domain) != null || (l.domain = "cdn.snipcart.com"); var w, u; (u = (w = window.SnipcartSettings).protocol) != null || (w.protocol = "https"); var f = window.SnipcartSettings.version.includes("v3.0.0-ci") || window.SnipcartSettings.version != "3.0" && window.SnipcartSettings.version.localeCompare("3.4.0", void 0, { numeric: !0, sensitivity: "base" }) === -1, m = ["focus", "mouseover", "touchmove", "scroll", "keydown"]; window.LoadSnipcart = o; document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", r) : r(); function r() { window.SnipcartSettings.loadStrategy ? window.SnipcartSettings.loadStrategy === "on-user-interaction" && (m.forEach(t => document.addEventListener(t, o)), setTimeout(o, window.SnipcartSettings.timeoutDuration)) : o() } var a = !1; function o() { if (a) return; a = !0; let t = document.getElementsByTagName("head")[0], e = document.querySelector("#snipcart"), i = document.querySelector(`src[src^="${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}"][src$="snipcart.js"]`), n = document.querySelector(`link[href^="${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}"][href$="snipcart.css"]`); e || (e = document.createElement("div"), e.id = "snipcart", e.setAttribute("hidden", "true"), document.body.appendChild(e)), v(e), i || (i = document.createElement("script"), i.src = `${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.js`, i.async = !0, t.appendChild(i)), n || (n = document.createElement("link"), n.rel = "stylesheet", n.type = "text/css", n.href = `${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.css`, t.prepend(n)), m.forEach(g => document.removeEventListener(g, o)) } function v(t) { !f || (t.dataset.apiKey = window.SnipcartSettings.publicApiKey, window.SnipcartSettings.addProductBehavior && (t.dataset.configAddProductBehavior = window.SnipcartSettings.addProductBehavior), window.SnipcartSettings.modalStyle && (t.dataset.configModalStyle = window.SnipcartSettings.modalStyle), window.SnipcartSettings.currency && (t.dataset.currency = window.SnipcartSettings.currency), window.SnipcartSettings.templatesUrl && (t.dataset.templatesUrl = window.SnipcartSettings.templatesUrl)) } })();
     </script>
+    <script type="module" src="./src/components/index.js"></script>
+
 </body>
+
 </html>
