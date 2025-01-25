@@ -24,8 +24,24 @@
                 <ul>
                     <li><a href="index.html">Home</a></li>
                     <li><a href="yachts.html">Yachts</a></li>
-                    <li class="current"><a href="accommodations.html">Accommodations</a></li>
+                    <li><a href="accommodations.html">Accommodations</a></li>
                     <li><a href="about.html">About</a></li>
+                    <li class="auth-container">
+                        <button id="auth-toggle" class="auth-toggle">Login</button>
+                        <div id="auth-form" class="auth-form">
+                            <form id="auth-form-content">
+                                <input type="email" name="email" placeholder="Email" required>
+                                <input type="password" name="password" placeholder="Password" required>
+                                <div class="auth-buttons">
+                                    <button type="submit" id="login-btn">Login</button>
+                                    <button type="button" id="signup-btn">Sign Up</button>
+                                </div>
+                            </form>
+                        </div>
+                    </li>
+                    <li>
+                        <button class="snipcart-checkout">Cart</button>
+                    </li>
                 </ul>
             </nav>
         </div>

@@ -597,3 +597,35 @@ button:hover, .checkout-btn:hover {
   gap: 10px;
   align-items: center;
 }
+.snipcart-checkout {
+  display: block;
+  background: var(--primary-blue);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: var(--white);
+  cursor: pointer;
+}
+
+.snipcart-checkout:hover {
+  background: var(--primary-orange);
+}
+.snipcart-item-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.snipcart-item-line__image {
+  border-radius: 50%;
+  width: 50px !important;
+  height: 50px !important;
+}
+
+.snipcart-modal__header-summary-title img {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}

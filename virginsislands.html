@@ -11,23 +11,35 @@
     <header>
         <div class="container">
             <div id="branding">
-                <h1>Virgin Islands Travel</h1>
+                <h1>USVI Retreats</h1>
             </div>
             <nav>
-                <!-- Add this inside the nav element, before the ul -->
-<div class="hamburger">
-    <span class="bar"></span>
-    <span class="bar"></span>
-    <span class="bar"></span>
-</div>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
                 <ul>
-                    <li class="current"><a href="index.html">Home</a></li>
-                    <li><a href="#packages">Packages</a></li>
-                    <li><a href="#groups">Groups</a></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="yachts.html">Yachts</a></li>
                     <li><a href="accommodations.html">Accommodations</a></li>
-                    <li><a href="virginsislands.html">Virgin Islands</a></li>
                     <li><a href="about.html">About</a></li>
-                    <li><a href="#login">Login</a></li>
+                    <li class="auth-container">
+                        <button id="auth-toggle" class="auth-toggle">Login</button>
+                        <div id="auth-form" class="auth-form">
+                            <form id="auth-form-content">
+                                <input type="email" name="email" placeholder="Email" required>
+                                <input type="password" name="password" placeholder="Password" required>
+                                <div class="auth-buttons">
+                                    <button type="submit" id="login-btn">Login</button>
+                                    <button type="button" id="signup-btn">Sign Up</button>
+                                </div>
+                            </form>
+                        </div>
+                    </li>
+                    <li>
+                        <button class="snipcart-checkout">Cart</button>
+                    </li>
                 </ul>
             </nav>
         </div>
