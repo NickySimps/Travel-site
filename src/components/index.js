@@ -193,12 +193,68 @@ document.addEventListener('DOMContentLoaded', () => {
         'rooms'
       )}\nCatering Required: ${formData.get('catering')}`;
 
-      window.location.href = `mailto:admin@usvirginislandsretreats.com?subject=Retreat Inquiry&body=${encodeURIComponent(
+      window.location.href = `mailto:admin@usviretreats.com?subject=Retreat Inquiry&body=${encodeURIComponent(
         emailBody
       )}`;
     });
   }
 });
+
+//Service Buttons
+document.addEventListener('DOMContentLoaded', () => {
+  const serviceButtons = document.querySelectorAll('.service-btn');
+  
+  serviceButtons.forEach(button => {
+      button.addEventListener('click', (e) => {
+          e.preventDefault();
+          const service = button.dataset.service;
+          const packagesSection = document.querySelector('#packages');
+          
+          // Smooth scroll to packages
+          packagesSection.scrollIntoView({ behavior: 'smooth' });
+          
+          // Highlight relevant package
+          const targetPackage = document.querySelector(`[data-package-type="${service}"]`);
+          if (targetPackage) {
+              targetPackage.classList.add('highlighted');
+              setTimeout(() => {
+                  targetPackage.classList.remove('highlighted');
+              }, 2000);
+          }
+      });
+  });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Initialize service buttons
+  document.querySelectorAll('.btn-service').forEach(button => {
+      button.addEventListener('click', () => {
+          button.classList.toggle('selected');
+          updateCartButton(button.closest('.flavor-content'));
+      });
+  });
+  
+  function updateCartButton(flavorContent) {
+      const cartButton = flavorContent.querySelector('.snipcart-add-item');
+      const services = flavorContent.querySelectorAll('.btn-service.selected');
+      const servicesSelected = [...services].map(btn => btn.dataset.service);
+      
+      let option = 'None';
+      if (servicesSelected.includes('catering') && servicesSelected.includes('transport')) {
+          option = 'Both';
+      } else if (servicesSelected.includes('catering')) {
+          option = 'Catering';
+      } else if (servicesSelected.includes('transport')) {
+          option = 'Transport';
+      }
+      
+      cartButton.dataset.itemCustom3Value = option;
+  }
+
+  // Your existing code for More Info toggles, back to top button, etc.
+});
+
+
 
 // Firebase
 //import { initializeApp } from 'firebase/app';

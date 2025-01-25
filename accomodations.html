@@ -1,78 +1,217 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Our Accommodations</title>
-        <link rel="stylesheet" href="src/styles/style.css">
-        <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
-    </head>
-    <body>
-        <header>
-            <div class="container">
-                <div id="branding">
-                    <h1>Virgin Islands Travel</h1>
-                </div>
-                <nav>
-                    <!-- Add this inside the nav element, before the ul -->
-    <div class="hamburger">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-    </div>
-                    <ul>
-                        <li class="current"><a href="index.html">Home</a></li>
-                        <li><a href="#packages">Packages</a></li>
-                        <li><a href="#groups">Groups</a></li>
-                        <li><a href="accomodations.html">Accommodations</a></li>
-                        <li><a href="virginsislands.html">Virgin Islands</a></li>
-                        <li><a href="about.html">About</a></li>
-                        <li><a href="#login">Login</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </header>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USVI Retreats - Accommodations</title>
+    <link rel="stylesheet" href="src/styles/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
 <body>
+    <header>
+        <div class="container">
+            <div id="branding">
+                <h1>USVI Retreats</h1>
+            </div>
+            <nav>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="yachts.html">Yachts</a></li>
+                    <li class="current"><a href="accomodations.html">Accommodations</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
     <main>
-        <section id="accomodation-grid">
+        <section id="showcase">
             <div class="container">
-                <h2>Virgin Islands Accommodations</h2>
-            <ul class="grid-list">
-                <li class="accomodation-grid-item">
-                    <img src="public/Pictures/Accomodations/VillaMirage.jpg" alt="Accommodation 1"/>
-                    <h3>Villa Mirage</h3>
-                    <p>A luxurious villa overlooking the crystal-clear waters of St. John.</p>
-                    <button type="button">Learn More</button>
-                </li>
-                <li class="accomodation-grid-item">
-                    <img src="public/Pictures/Accomodations/StThomasBeachHouse.jpg" alt="Accommodation 2"/>
-                    <h3>The Beach House</h3>
-                    <p>A cozy beachfront retreat in St. Thomas, perfect for families or friends.</p>
-                    <button type="button">Learn More</button>
-                </li>
-                <li class="accomodation-grid-item">
-                    <img src="public/Pictures/Accomodations/JostVanDyke.jpg" alt="Accommodation 3"/>
-                    <h3>Island Oasis</h3>
-                    <p>A secluded villa on the island of Jost Van Dyke, ideal for honeymoons or romantic getaways.</p>
-                    <button type="button">Learn More</button>
-                </li>
-                <li class="accomodation-grid-item">
-                    <img src="public/Pictures/Accomodations/SeaBreezeInn.jpg" alt="Accommodation 4"/>
-                    <h3>Sea Breeze Inn</h3>
-                    <p>A charming bed and breakfast in Christiansted, perfect for exploring the island's historic sites.</p>
-                    <button type="button">Learn More</button>
-                </li>
-            </ul>
+                <img class="banner-image" src="public/Pictures/Accomodations/VillaMirage.jpg" alt="Luxury Villa">
+                <div class="showcase-content">
+                    <h1>Luxury Accommodations</h1>
+                    <p>Experience paradise in comfort</p>
+                </div>
             </div>
-            
+        </section>
+
+        <section id="accommodation-grid">
+            <div class="container">
+                <div class="package-grid">
+
+
+                    <div class="package-box">
+                        <img src="public/Pictures/Accomodations/VillaMirage.jpg" alt="Villa Mirage">
+                        <h3>Villa Mirage</h3>
+                        <p>Luxurious villa overlooking St. John</p>
+                        <p><strong>$1,200 per night</strong></p>
+                        <button class="btn btn-info" data-toggle="flavor-content">More Info</button>
+                        <div class="flavor-content">
+                            <ul class="flavor-textList">
+                                <li>4 bedrooms, 4.5 bathrooms</li>
+                                <li>Infinity pool</li>
+                                <li>Full kitchen</li>
+                                <li>Ocean views</li>
+                            </ul>
+                            <div class="additional-services" data-property="villa-mirage">
+                                <h4>Add Services:</h4>
+                                <button class="btn btn-service" data-service="catering">
+                                    Add Catering ($150/day)
+                                </button>
+                                <button class="btn btn-service" data-service="transport">
+                                    Add Transport ($200/day)
+                                </button>
+                            </div>
+                            <button class="btn btn-AddToCart snipcart-add-item" data-item-id="villa-mirage"
+                                data-item-name="Villa Mirage" data-item-price="1200.00"
+                                data-item-description="Luxury villa in St. John"
+                                data-item-image="public/Pictures/Accomodations/VillaMirage.jpg"
+                                data-item-custom1-name="Length of Stay" data-item-custom1-type="number"
+                                data-item-custom1-placeholder="Number of nights" data-item-custom1-required="true"
+                                data-item-custom2-name="Number of Guests" data-item-custom2-type="number"
+                                data-item-custom2-placeholder="Number of guests (max 8)"
+                                data-item-custom2-required="true" data-item-custom2-min="1" data-item-custom2-max="8"
+                                data-item-custom3-name="Additional Services"
+                                data-item-custom3-options="None[+0]|Catering[+150]|Transport[+200]|Both[+350]">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="package-box">
+                        <img src="public/Pictures/Accomodations/StThomasBeachHouse.jpg" alt="Beach House">
+                        <h3>The Beach House</h3>
+                        <p>Beachfront retreat in St. Thomas</p>
+                        <p><strong>$800 per night</strong></p>
+                        <button class="btn btn-info" data-toggle="flavor-content">More Info</button>
+                        <div class="flavor-content">
+                            <ul class="flavor-textList">
+                                <li>3 bedrooms, 2 bathrooms</li>
+                                <li>Direct beach access</li>
+                                <li>Outdoor dining area</li>
+                                <li>Water sports equipment</li>
+                            </ul>
+                            <div class="additional-services" data-property="beach-house">
+                                <h4>Add Services:</h4>
+                                <button class="btn btn-service" data-service="catering">
+                                    Add Catering ($150/day)
+                                </button>
+                                <button class="btn btn-service" data-service="transport">
+                                    Add Transport ($200/day)
+                                </button>
+                            </div>
+                            <button class="btn btn-AddToCart snipcart-add-item" data-item-id="beach-house"
+                                data-item-name="Beach House" data-item-price="800.00"
+                                data-item-description="Beachfront house in St. Thomas"
+                                data-item-image="public/Pictures/Accomodations/StThomasBeachHouse.jpg"
+                                data-item-custom1-name="Length of Stay" data-item-custom1-type="number"
+                                data-item-custom1-placeholder="Number of nights" data-item-custom1-required="true"
+                                data-item-custom2-name="Number of Guests" data-item-custom2-type="number"
+                                data-item-custom2-placeholder="Number of guests (max 6)"
+                                data-item-custom2-required="true" data-item-custom2-min="1" data-item-custom2-max="6"
+                                data-item-custom3-name="Additional Services"
+                                data-item-custom3-options="None[+0]|Catering[+150]|Transport[+200]|Both[+350]">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="package-box">
+                        <img src="public/Pictures/Accomodations/JostVanDyke.jpg" alt="Island Oasis">
+                        <h3>Island Oasis</h3>
+                        <p>Secluded villa on Jost Van Dyke</p>
+                        <p><strong>$950 per night</strong></p>
+                        <button class="btn btn-info" data-toggle="flavor-content">More Info</button>
+                        <div class="flavor-content">
+                            <ul class="flavor-textList">
+                                <li>2 bedroom villa</li>
+                                <li>Private pool</li>
+                                <li>Gourmet kitchen</li>
+                                <li>Mountain and ocean views</li>
+                            </ul>
+                            <div class="additional-services" data-property="island-oasis">
+                                <h4>Add Services:</h4>
+                                <button class="btn btn-service" data-service="catering">
+                                    Add Catering ($150/day)
+                                </button>
+                                <button class="btn btn-service" data-service="transport">
+                                    Add Transport ($200/day)
+                                </button>
+                            </div>
+                            <button class="btn btn-AddToCart snipcart-add-item" data-item-id="island-oasis"
+                                data-item-name="Island Oasis" data-item-price="950.00"
+                                data-item-description="Secluded villa on Jost Van Dyke"
+                                data-item-image="public/Pictures/Accomodations/JostVanDyke.jpg"
+                                data-item-custom1-name="Length of Stay" data-item-custom1-type="number"
+                                data-item-custom1-placeholder="Number of nights" data-item-custom1-required="true"
+                                data-item-custom2-name="Number of Guests" data-item-custom2-type="number"
+                                data-item-custom2-placeholder="Number of guests (max 4)"
+                                data-item-custom2-required="true" data-item-custom2-min="1" data-item-custom2-max="4"
+                                data-item-custom3-name="Additional Services"
+                                data-item-custom3-options="None[+0]|Catering[+150]|Transport[+200]|Both[+350]">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="package-box">
+                        <img src="public/Pictures/Accomodations/SeaBreezeInn.jpg" alt="Sea Breeze Inn">
+                        <h3>Sea Breeze Inn</h3>
+                        <p>Historic B&B in Christiansted</p>
+                        <p><strong>$300 per night</strong></p>
+                        <button class="btn btn-info" data-toggle="flavor-content">More Info</button>
+                        <div class="flavor-content">
+                            <ul class="flavor-textList">
+                                <li>Classic Caribbean style room</li>
+                                <li>Complimentary breakfast</li>
+                                <li>Walking distance to historic sites</li>
+                                <li>Garden views</li>
+                            </ul>
+                            <div class="additional-services" data-property="sea-breeze">
+                                <h4>Add Services:</h4>
+                                <button class="btn btn-service" data-service="catering">
+                                    Add Catering ($150/day)
+                                </button>
+                                <button class="btn btn-service" data-service="transport">
+                                    Add Transport ($200/day)
+                                </button>
+                            </div>
+                            <button class="btn btn-AddToCart snipcart-add-item" data-item-id="sea-breeze"
+                                data-item-name="Sea Breeze Inn" data-item-price="300.00"
+                                data-item-description="Historic B&B in Christiansted"
+                                data-item-image="public/Pictures/Accomodations/SeaBreezeInn.jpg"
+                                data-item-custom1-name="Length of Stay" data-item-custom1-type="number"
+                                data-item-custom1-placeholder="Number of nights" data-item-custom1-required="true"
+                                data-item-custom2-name="Number of Guests" data-item-custom2-type="number"
+                                data-item-custom2-placeholder="Number of guests (max 2)"
+                                data-item-custom2-required="true" data-item-custom2-min="1" data-item-custom2-max="2"
+                                data-item-custom3-name="Additional Services"
+                                data-item-custom3-options="None[+0]|Catering[+150]|Transport[+200]|Both[+350]">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
 
+    <button id="backToTop" title="Go to top">↑</button>
+
     <footer>
-        <P>Virgin Islands site, Copyright &copy; 2024</P>
+        <p>USVI Retreats, LLC &copy; 2024</p>
     </footer>
-        
+
+    <div hidden id="snipcart" data-api-key="ZjFmOWZjNDUtM2VmMC00ZmExLTkzMTctMjExM2UzZDcwZjI3NjM4Njg4Nzc3OTMyNzM5MTQ3">
+    </div>
+    <script src="src/components/index.js"></script>
 </body>
-<script src="src/components/index.js"></script>
+
 </html>
