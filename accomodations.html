@@ -52,7 +52,7 @@
                         <h3>Villa Mirage</h3>
                         <p>Luxurious villa overlooking St. John</p>
                         <p><strong>$1,200 per night</strong></p>
-                        <button class="btn btn-info" data-toggle="flavor-content">More Info</button>
+                        <button class="btn btn-info" data-toggle="collapse">More Info</button>
                         <div class="flavor-content">
                             <ul class="flavor-textList">
                                 <li>4 bedrooms, 4.5 bathrooms</li>
@@ -90,7 +90,7 @@
                         <h3>The Beach House</h3>
                         <p>Beachfront retreat in St. Thomas</p>
                         <p><strong>$800 per night</strong></p>
-                        <button class="btn btn-info" data-toggle="flavor-content">More Info</button>
+                        <button class="btn btn-info" data-toggle="collapse">More Info</button>
                         <div class="flavor-content">
                             <ul class="flavor-textList">
                                 <li>3 bedrooms, 2 bathrooms</li>
@@ -128,7 +128,7 @@
                         <h3>Island Oasis</h3>
                         <p>Secluded villa on Jost Van Dyke</p>
                         <p><strong>$950 per night</strong></p>
-                        <button class="btn btn-info" data-toggle="flavor-content">More Info</button>
+                        <button class="btn btn-info" data-toggle="collapse">More Info</button>
                         <div class="flavor-content">
                             <ul class="flavor-textList">
                                 <li>2 bedroom villa</li>
@@ -166,7 +166,7 @@
                         <h3>Sea Breeze Inn</h3>
                         <p>Historic B&B in Christiansted</p>
                         <p><strong>$300 per night</strong></p>
-                        <button class="btn btn-info" data-toggle="flavor-content">More Info</button>
+                        <button class="btn btn-info" data-toggle="collapse">More Info</button>
                         <div class="flavor-content">
                             <ul class="flavor-textList">
                                 <li>Classic Caribbean style room</li>
@@ -205,13 +205,20 @@
 
     <button id="backToTop" title="Go to top">↑</button>
 
-    <footer>
-        <p>USVI Retreats, LLC &copy; 2024</p>
-    </footer>
-
     <div hidden id="snipcart" data-api-key="ZjFmOWZjNDUtM2VmMC00ZmExLTkzMTctMjExM2UzZDcwZjI3NjM4Njg4Nzc3OTMyNzM5MTQ3">
+
     </div>
-    <script src="src/components/index.js"></script>
+    <script>
+        window.SnipcartSettings = {
+            publicApiKey: 'ZjFmOWZjNDUtM2VmMC00ZmExLTkzMTctMjExM2UzZDcwZjI3NjM4Njg4Nzc3OTMyNzM5MTQ3',
+            loadStrategy: 'on-user-interaction',
+            modalStyle: "side",
+
+        };
+
+        (() => { var c, d; (d = (c = window.SnipcartSettings).version) != null || (c.version = "3.0"); var s, S; (S = (s = window.SnipcartSettings).timeoutDuration) != null || (s.timeoutDuration = 2750); var l, p; (p = (l = window.SnipcartSettings).domain) != null || (l.domain = "cdn.snipcart.com"); var w, u; (u = (w = window.SnipcartSettings).protocol) != null || (w.protocol = "https"); var f = window.SnipcartSettings.version.includes("v3.0.0-ci") || window.SnipcartSettings.version != "3.0" && window.SnipcartSettings.version.localeCompare("3.4.0", void 0, { numeric: !0, sensitivity: "base" }) === -1, m = ["focus", "mouseover", "touchmove", "scroll", "keydown"]; window.LoadSnipcart = o; document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", r) : r(); function r() { window.SnipcartSettings.loadStrategy ? window.SnipcartSettings.loadStrategy === "on-user-interaction" && (m.forEach(t => document.addEventListener(t, o)), setTimeout(o, window.SnipcartSettings.timeoutDuration)) : o() } var a = !1; function o() { if (a) return; a = !0; let t = document.getElementsByTagName("head")[0], e = document.querySelector("#snipcart"), i = document.querySelector(`src[src^="${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}"][src$="snipcart.js"]`), n = document.querySelector(`link[href^="${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}"][href$="snipcart.css"]`); e || (e = document.createElement("div"), e.id = "snipcart", e.setAttribute("hidden", "true"), document.body.appendChild(e)), v(e), i || (i = document.createElement("script"), i.src = `${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.js`, i.async = !0, t.appendChild(i)), n || (n = document.createElement("link"), n.rel = "stylesheet", n.type = "text/css", n.href = `${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.css`, t.prepend(n)), m.forEach(g => document.removeEventListener(g, o)) } function v(t) { !f || (t.dataset.apiKey = window.SnipcartSettings.publicApiKey, window.SnipcartSettings.addProductBehavior && (t.dataset.configAddProductBehavior = window.SnipcartSettings.addProductBehavior), window.SnipcartSettings.modalStyle && (t.dataset.configModalStyle = window.SnipcartSettings.modalStyle), window.SnipcartSettings.currency && (t.dataset.currency = window.SnipcartSettings.currency), window.SnipcartSettings.templatesUrl && (t.dataset.templatesUrl = window.SnipcartSettings.templatesUrl)) } })();
+    </script>
+    <script type="module" src="./src/components/index.js"></script>
 </body>
 
 </html>
