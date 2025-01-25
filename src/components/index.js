@@ -6,55 +6,81 @@ const UI_ELEMENTS = {
   authToggle: '#auth-toggle',
   authForm: '#auth-form',
   authFormContent: '#auth-form-content',
-  openCartBtn: '#open-cart-btn'
+  openCartBtn: '#open-cart-btn',
+  backToTop: '#backToTop',
+  header: 'header',
+  newsletterForm: '.newsletter-form',
+  retreatForm: '#retreat-form',
+};
+
+// Utility Functions
+const debounce = (fn, delay) => {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => fn(...args), delay);
+  };
+};
+
+const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+const validatePhone = (phone) => /^\d{10}$/.test(phone);
+
+const toggleMoreInfo = (button) => {
+  const flavorSection = button.nextElementSibling;
+  const isShown = flavorSection.classList.contains('active');
+  flavorSection.classList.toggle('active');
+  button.textContent = isShown ? 'More Info' : 'Show Less';
 };
 
 // Event Handlers
-const toggleMoreInfo = (button) => {
-  const flavorSection = button.nextElementSibling;
-  const isCollapsed = flavorSection.classList.contains('collapse');
-  
-  flavorSection.classList.toggle('collapse', !isCollapsed);
-  flavorSection.classList.toggle('show', isCollapsed);
-  button.textContent = isCollapsed ? 'Show Less' : 'More Info';
-};
-
 const handleAuth = async (e) => {
   e.preventDefault();
   const isLogin = e.submitter.id === 'login-btn';
   const formData = new FormData(e.target);
-  
+
   try {
     const response = await fetch(isLogin ? '/login' : '/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(Object.fromEntries(formData))
+      body: JSON.stringify(Object.fromEntries(formData)),
     });
-    
-    const data = await response.json();
-    if (response.ok) window.location.href = '/';
-    else alert(data.error);
+
+    let data;
+    try {
+      data = await response.json();
+    } catch {
+      alert('Unexpected response from the server.');
+      return;
+    }
+
+    if (response.ok) {
+      window.location.href = '/';
+    } else {
+      alert(data.error || 'Authentication failed');
+    }
   } catch (err) {
     console.error('Auth error:', err);
-    alert('Authentication failed');
+    alert('Network error. Please try again.');
   }
 };
 
 const initializeNavigation = () => {
   const hamburger = document.querySelector(UI_ELEMENTS.hamburger);
   const navMenu = document.querySelector(UI_ELEMENTS.navMenu);
-  
+
   const closeMenu = () => {
     hamburger.classList.remove('active');
     navMenu.classList.remove('active');
+    hamburger.setAttribute('aria-expanded', 'false');
   };
 
   hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navMenu.classList.toggle('active');
+    const isActive = hamburger.classList.toggle('active');
+    navMenu.classList.toggle('active', isActive);
+    hamburger.setAttribute('aria-expanded', isActive);
   });
 
-  document.querySelectorAll('nav a').forEach(link => 
+  document.querySelectorAll('nav a').forEach((link) =>
     link.addEventListener('click', closeMenu)
   );
 
@@ -67,33 +93,33 @@ const initializeNavigation = () => {
 
 const initializeSnipcart = () => {
   const cartButton = document.createElement('button');
-  const openCartButton = document.querySelector(UI_ELEMENTS.openCartBtn);
-  
   cartButton.classList.add('snipcart-checkout');
   cartButton.textContent = 'Cart';
   document.querySelector('header').appendChild(cartButton);
-  
-  ['item.adding', 'item.added', 'cart.ready'].forEach(event => {
+
+  ['item.adding', 'item.added', 'cart.ready'].forEach((event) => {
     Snipcart.events.on(event, (data) => console.log(event, data));
   });
-
-  openCartButton.style.display = cartButton.hasChildNodes() ? 'block' : 'none';
 };
 
 // Initialize App
 document.addEventListener('DOMContentLoaded', () => {
-  // Navigation
   initializeNavigation();
   
+  const backToTop = document.querySelector(UI_ELEMENTS.backToTop);
+  const header = document.querySelector(UI_ELEMENTS.header);
+  let lastScrollTop = 0;
+
   // More Info buttons
-  document.querySelectorAll(UI_ELEMENTS.moreInfoBtns)
-    .forEach(btn => btn.addEventListener('click', () => toggleMoreInfo(btn)));
-  
+  document.querySelectorAll(UI_ELEMENTS.moreInfoBtns).forEach((btn) =>
+    btn.addEventListener('click', () => toggleMoreInfo(btn))
+  );
+
   // Auth functionality
   const authToggle = document.querySelector(UI_ELEMENTS.authToggle);
   const authForm = document.querySelector(UI_ELEMENTS.authForm);
   const authFormContent = document.querySelector(UI_ELEMENTS.authFormContent);
-  
+
   authToggle?.addEventListener('click', (e) => {
     e.stopPropagation();
     authForm?.classList.toggle('active');
@@ -106,102 +132,88 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   authFormContent?.addEventListener('submit', handleAuth);
-});
 
-// Form Validation
-const newsletterForm = document.querySelector('.newsletter-form');
+  // Debounced scroll event
+  window.addEventListener(
+    'scroll',
+    debounce(() => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-newsletterForm.addEventListener('submit', (e) => {
-    e.preventDefault();
+      // Back to top visibility
+      backToTop.style.display = scrollTop > 300 ? 'block' : 'none';
 
-    const email = document.getElementById('email');
-    const phone = document.getElementById('phone');
+      // Header hide/show
+      if (scrollTop > lastScrollTop && scrollTop > 200) {
+        header.style.transform = 'translateY(-100%)';
+      } else {
+        header.style.transform = 'translateY(0)';
+      }
 
-    if (!validateEmail(email.value)) {
+      lastScrollTop = scrollTop;
+    }, 100)
+  );
+
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // Newsletter form
+  const newsletterForm = document.querySelector(UI_ELEMENTS.newsletterForm);
+  if (newsletterForm) {
+    newsletterForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const email = e.target.querySelector('#email');
+      const phone = e.target.querySelector('#phone');
+
+      if (!validateEmail(email.value)) {
         alert('Please enter a valid email address.');
         return;
-    }
+      }
 
-    if (!validatePhone(phone.value)) {
+      if (phone && !validatePhone(phone.value)) {
         alert('Please enter a valid phone number.');
         return;
-    }
+      }
 
-    alert('Thank you for subscribing!');
-});
-
-function validateEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-function validatePhone(phone) {
-    return /^\d{10}$/.test(phone); // Example: 1234567890
-}
-
-// Initialize Snipcart
-window.addEventListener('snipcart.ready', initializeSnipcart);
-
-//Styling
-const navLinks = document.querySelectorAll('nav ul li a');
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        navLinks.forEach(nav => nav.classList.remove('active'));
-        link.classList.add('active');
+      alert('Thank you for subscribing!');
     });
-});
-
-
-const backToTop = document.getElementById('backToTop');
-
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 300) {
-        backToTop.classList.add('show');
-    } else {
-        backToTop.classList.remove('show');
-    }
-});
-
-backToTop.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-
-
-let lastScrollTop = 0;
-const header = document.querySelector('header');
-
-window.addEventListener('scroll', () => {
-  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-  
-  if (scrollTop > lastScrollTop && scrollTop > 200) {
-    header.style.transform = 'translateY(-100%)';
-    header.style.transition = 'transform 0.3s ease-in-out';
-  } else {
-    header.style.transform = 'translateY(0)';
   }
-  
-  lastScrollTop = scrollTop;
+
+  // Retreat form
+  const retreatForm = document.querySelector(UI_ELEMENTS.retreatForm);
+  if (retreatForm) {
+    retreatForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+
+      const emailBody = `Start Date: ${formData.get('startDate')}\nEnd Date: ${formData.get(
+        'endDate'
+      )}\nGuests: ${formData.get('guests')}\nRooms: ${formData.get(
+        'rooms'
+      )}\nCatering Required: ${formData.get('catering')}`;
+
+      window.location.href = `mailto:admin@usvirginislandsretreats.com?subject=Retreat Inquiry&body=${encodeURIComponent(
+        emailBody
+      )}`;
+    });
+  }
 });
 
-//Firebase
+// Firebase
+//import { initializeApp } from 'firebase/app';
+//import { getAnalytics, logEvent } from 'firebase/analytics';
 
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyAvKfaFzdlTzodxD2jQSLExl2haQSxvkiw",
-  authDomain: "travel-site-c65a7.firebaseapp.com",
-  projectId: "travel-site-c65a7",
-  storageBucket: "travel-site-c65a7.firebasestorage.app",
-  messagingSenderId: "515419394066",
-  appId: "1:515419394066:web:26dfc4f17f41bf205e08cb",
-  measurementId: "G-5DDFZ0MXTP"
+  apiKey: 'YOUR_API_KEY',
+  authDomain: 'YOUR_AUTH_DOMAIN',
+  projectId: 'YOUR_PROJECT_ID',
+  storageBucket: 'YOUR_STORAGE_BUCKET',
+  messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
+  appId: 'YOUR_APP_ID',
+  measurementId: 'YOUR_MEASUREMENT_ID',
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+// const app = initializeApp(firebaseConfig);
+// const analytics = getAnalytics(app);
+// logEvent(analytics, 'page_view');
