@@ -446,7 +446,121 @@ button:hover, .checkout-btn:hover {
     flex-basis: 100%;
   }
 }
+.package-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 2rem 0;
+}
 
+.package-box {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.package-box:hover {
+  transform: translateY(-5px);
+}
+
+.package-box img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.package-box h3 {
+  color: #333;
+  padding: 1rem;
+  margin: 0;
+}
+
+.package-box p {
+  padding: 0 1rem;
+  color: #666;
+}
+
+.package-box .btn-info {
+  margin: 1rem;
+  width: calc(100% - 2rem);
+  background: #87ceeb;
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.package-box .btn-AddToCart {
+  background: #ffdda9;
+  color: #333;
+  font-weight: bold;
+  width: calc(100% - 2rem);
+  margin: 1rem;
+}
+
+.flavor-content {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+  padding: 0 1rem;
+}
+
+.flavor-content.active {
+  max-height: 500px;
+  opacity: 1;
+  padding: 1rem;
+}
+.service-btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: #87ceeb;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-top: 1rem;
+  transition: background 0.3s ease;
+}
+.btn-service.selected {
+    background: var(--primary-orange);
+    color: white;
+  }
+
+.service-btn:hover {
+  background: #ffdda9;
+  color: #333;
+}
+.additional-services {
+  padding: 1rem 0;
+  border-top: 1px solid #eee;
+  margin-top: 1rem;
+}
+
+.btn-service {
+  display: block;
+  width: 100%;
+  margin: 0.5rem 0;
+  background: #ffdda9;
+  color: #333;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-service:hover {
+  background: #87ceeb;
+  color: white;
+}
+
+.package-box.highlighted {
+  box-shadow: 0 0 20px rgba(135, 206, 235, 0.5);
+  transform: translateY(-5px);
+}
 @media print {
   body {
     background: white;
