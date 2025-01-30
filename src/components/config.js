@@ -11,7 +11,9 @@ export const CONFIG = {
       newsletterForm: '.newsletter-form',
       retreatForm: '#retreat-form'
     },
-    API: {
-      snipcartKey: 'ZjFmOWZjNDUtM2VmMC00ZmExLTkzMTctMjExM2UzZDcwZjI3NjM4Njg4Nzc3OTMyNzM5MTQ3'
+    SNIPCART: {
+      PUBLIC_KEY: 'ZjFmOWZjNDUtM2VmMC00ZmExLTkzMTctMjExM2UzZDcwZjI3NjM4Njg4Nzc3OTMyNzM5MTQ3',
+      SCRIPT_URL: 'https://cdn.snipcart.com/themes/v3.0/default/snipcart.js',
+      CSS_URL: 'https://cdn.snipcart.com/themes/v3.0/default/snipcart.css'
     }
   };
