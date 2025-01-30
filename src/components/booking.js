@@ -257,13 +257,28 @@ export const initializeBooking = () => {
             const catering = document.getElementById('cateringService').checked;
             const transport = document.getElementById('transportService').checked;
             const total = document.getElementById('totalAmount').textContent;
+            const calculatedPrice = total.replace(/[^0-9.]/g, '');
             
-            // Create Snipcart button programmatically
+            // Include all pricing components in the validation URL
+            const days = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24)) + 1;
+            const basePrice = prices[currentPackage] * roomCount * days;
+            const cateringCost = catering ? prices.catering * days : 0;
+            const transportCost = transport ? prices.transport * days : 0;
+            
+            const validationUrl = `/packages.html#${currentPackage}?` + 
+                `basePrice=${basePrice}&` +
+                `catering=${cateringCost}&` +
+                `transport=${transportCost}&` +
+                `days=${days}&` +
+                `rooms=${roomCount}&` +
+                `total=${calculatedPrice}`;
+            
             const button = document.createElement('button');
             button.classList.add('snipcart-add-item');
             button.dataset.itemId = currentPackage;
             button.dataset.itemName = `${currentPackage.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} Booking`;
-            button.dataset.itemPrice = total.replace(/[^0-9.]/g, '');
+            button.dataset.itemPrice = calculatedPrice;
+            button.dataset.itemUrl = validationUrl;
             button.dataset.itemCustom1Name = "Check-in";
             button.dataset.itemCustom1Value = formatDate(checkInDate);
             button.dataset.itemCustom2Name = "Check-out";
@@ -273,9 +288,15 @@ export const initializeBooking = () => {
             button.dataset.itemCustom4Name = "Rooms";
             button.dataset.itemCustom4Value = roomCount;
             button.dataset.itemCustom5Name = "Services";
-            button.dataset.itemCustom5Value = `${catering ? 'Catering ' : ''}${transport ? 'Transport' : ''}`.trim() || 'None';
+            button.dataset.itemCustom5Type = "select";
+            button.dataset.itemCustom5Options = "None[+0]|Catering Only[+150]|Transport Only[+200]|Both Services[+350]";
+            button.dataset.itemCustom5Value = `${catering && transport ? 'Both Services' : 
+                                              catering ? 'Catering Only' : 
+                                              transport ? 'Transport Only' : 
+                                              'None'}`;
     
-            // Add to cart
+            button.dataset.itemUniqueId = `${currentPackage}-${Date.now()}`;
+            
             document.body.appendChild(button);
             button.click();
             document.body.removeChild(button);

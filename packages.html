@@ -1,3 +1,4 @@
+
 <div
   class="snipcart-add-item"
   data-item-id="friends-package"
@@ -116,3 +117,29 @@
       </div>
     </div>
   </section>
+
+  <!-- Add this script to packages.html -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const packageId = window.location.hash.substring(1);
+    
+    // Get all components of the price
+    const basePrice = parseFloat(urlParams.get('basePrice') || 0);
+    const cateringCost = parseFloat(urlParams.get('catering') || 0);
+    const transportCost = parseFloat(urlParams.get('transport') || 0);
+    const total = parseFloat(urlParams.get('total') || 0);
+    
+    // Validate total matches components
+    const calculatedTotal = basePrice + cateringCost + transportCost;
+    
+    if (Math.abs(calculatedTotal - total) < 0.01) { // Account for floating point precision
+        const packageButton = document.querySelector(`[data-item-id="${packageId}"]`);
+        if (packageButton) {
+            packageButton.dataset.itemPrice = total.toFixed(2);
+        }
+    } else {
+        console.error('Price validation failed');
+    }
+});
+  </script>
