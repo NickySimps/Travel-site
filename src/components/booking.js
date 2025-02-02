@@ -9,7 +9,7 @@ export const initializeBooking = () => {
     const checkInDisplay = document.getElementById('checkInDisplay');
     const checkOutDisplay = document.getElementById('checkOutDisplay');
     const confirmButton = document.getElementById('confirmDates');
-    
+
     let currentDate = new Date();
     let currentMonth = currentDate.getMonth();
     let currentYear = currentDate.getFullYear();
@@ -37,7 +37,45 @@ export const initializeBooking = () => {
         'fun-package': [
             { start: new Date(2024, 3, 15), end: new Date(2024, 3, 18) },
             { start: new Date(2024, 3, 22), end: new Date(2024, 3, 25) }
+        ],
+        'villa-alhambra': [
+            { start: new Date(2024, 2, 20), end: new Date(2024, 2, 23) },
+            { start: new Date(2024, 3, 3), end: new Date(2024, 3, 6) }
+        ],
+        'pool-villa': [
+            { start: new Date(2024, 2, 25), end: new Date(2024, 2, 28) },
+            { start: new Date(2024, 3, 10), end: new Date(2024, 3, 13) }
+        ],
+        'guest-villa': [
+            { start: new Date(2024, 3, 15), end: new Date(2024, 3, 18) }
+        ],
+        'tower-villa': [
+            { start: new Date(2024, 3, 5), end: new Date(2024, 3, 8) }
+        ],
+        'garden-villa': [
+            { start: new Date(2024, 3, 20), end: new Date(2024, 3, 23) }
         ]
+    };
+
+    const villaBaseRates = {
+        'villa-alhambra': 4146,  // Main villa pricing from spreadsheet
+        'pool-villa': 3500,      // Other villas scaled accordingly
+        'guest-villa': 3200,
+        'tower-villa': 3300,
+        'garden-villa': 2800
+    };
+
+    const additionalServices = {
+        'catering': 750,        // Per day from spreadsheet
+        'transport': 550        // Flat rate from spreadsheet
+    }
+    
+    const maxGuests = {
+        'villa-alhambra': 6,
+        'pool-villa': 4,
+        'guest-villa': 4,
+        'tower-villa': 4,
+        'garden-villa': 2
     };
 
     const months = [
@@ -53,17 +91,27 @@ export const initializeBooking = () => {
         }) : 'Not selected';
     };
 
- const isDateBooked = (date) => {
-    if (!currentPackage || !bookedDates[currentPackage]) return false;
-    return bookedDates[currentPackage].some(booking => {
-        const startDate = new Date(booking.start);
-        const endDate = new Date(booking.end);
-        startDate.setHours(0, 0, 0, 0);
-        endDate.setHours(0, 0, 0, 0);
-        date.setHours(0, 0, 0, 0);
-        return date >= startDate && date <= endDate;
-    });
-};
+    const isDateBooked = (startDate) => {
+        if (!currentPackage || !bookedDates[currentPackage]) return false;
+    
+        // Check each day of the 3-night stay
+        for (let i = 0; i < 3; i++) {
+            const checkDate = new Date(startDate);
+            checkDate.setDate(checkDate.getDate() + i);
+            
+            const isBooked = bookedDates[currentPackage].some(booking => {
+                const bookingStart = new Date(booking.start);
+                const bookingEnd = new Date(booking.end);
+                bookingStart.setHours(0, 0, 0, 0);
+                bookingEnd.setHours(0, 0, 0, 0);
+                checkDate.setHours(0, 0, 0, 0);
+                return checkDate >= bookingStart && checkDate <= bookingEnd;
+            });
+    
+            if (isBooked) return true;
+        }
+        return false;
+    };
 
     const isInRange = (date) => {
         if (!checkInDate || !checkOutDate) return false;
@@ -71,25 +119,27 @@ export const initializeBooking = () => {
     };
 
     const updateTotal = () => {
-        if (!checkInDate || !checkOutDate) return;
-
-        const days = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+        if (!checkInDate) return;
+    
+        const days = 3; // Fixed 3-night stay
         const guestCount = parseInt(document.getElementById('guestCount').value);
         const roomCount = parseInt(document.getElementById('roomCount').value);
-        const basePrice = prices[currentPackage] * roomCount * days;
+        
+        let baseRate = villaBaseRates[currentPackage] || 0;
+        const basePrice = baseRate * days;
         
         let additionalServices = 0;
         if (document.getElementById('cateringService').checked) {
-            additionalServices += prices.catering * days;
+            additionalServices += 750 * days; // Catering per day
         }
         if (document.getElementById('transportService').checked) {
-            additionalServices += prices.transport * days;
+            additionalServices += 550; // Flat rate for transport
         }
-
+    
         const total = basePrice + additionalServices;
         document.getElementById('totalAmount').textContent = `$${total.toLocaleString()}`;
     };
-
+    
     const updateDateDisplay = () => {
         checkInDisplay.textContent = `Check-in: ${formatDate(checkInDate)}`;
         checkOutDisplay.textContent = `Check-out: ${formatDate(checkOutDate)}`;
@@ -101,20 +151,23 @@ export const initializeBooking = () => {
         const clickedDate = new Date(currentYear, currentMonth, date);
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-
+    
         if (clickedDate < today || isDateBooked(clickedDate)) return;
-
-        if (!checkInDate || (checkInDate && checkOutDate)) {
-            checkInDate = clickedDate;
+    
+        // Always set checkInDate to clicked date
+        checkInDate = clickedDate;
+        
+        // Calculate checkout date (3 nights later)
+        checkOutDate = new Date(clickedDate);
+        checkOutDate.setDate(checkOutDate.getDate() + 3);
+        
+        // Validate if checkout date is available
+        if (isDateBooked(checkOutDate)) {
+            alert('The selected dates are not available. Some days in this range are already booked.');
+            checkInDate = null;
             checkOutDate = null;
-        } else {
-            if (clickedDate <= checkInDate) {
-                checkInDate = clickedDate;
-            } else {
-                checkOutDate = clickedDate;
-            }
         }
-
+    
         updateDateDisplay();
         createCalendar();
     };
@@ -142,15 +195,15 @@ export const initializeBooking = () => {
         for (let day = 1; day <= lastDate; day++) {
             const dayElement = document.createElement('div');
             dayElement.className = 'calendar-day';
-            
+    
             const dayNumber = document.createElement('div');
             dayNumber.className = 'day-number';
             dayNumber.textContent = day;
-
+    
             const date = new Date(currentYear, currentMonth, day);
             const today = new Date();
             today.setHours(0, 0, 0, 0);
-
+    
             if (date < today) {
                 dayElement.classList.add('past');
             } else if (isDateBooked(date)) {
@@ -158,15 +211,45 @@ export const initializeBooking = () => {
             } else {
                 dayElement.onclick = () => handleDateClick(day);
                 
-                if (checkInDate && date.getTime() === checkInDate.getTime()) {
-                    dayNumber.classList.add('selected-checkin');
-                } else if (checkOutDate && date.getTime() === checkOutDate.getTime()) {
-                    dayNumber.classList.add('selected-checkout');
-                } else if (checkInDate && date > checkInDate && (!checkOutDate || date < checkOutDate)) {
-                    dayNumber.classList.add('in-range');
-                }
+                // Add hover effect to show potential 3-night range
+                dayElement.addEventListener('mouseenter', () => {
+                    const hoverDate = new Date(currentYear, currentMonth, day);
+                    const potentialCheckout = new Date(hoverDate);
+                    potentialCheckout.setDate(potentialCheckout.getDate() + 3);
+                    
+                    // Only show hover effect if the full 3-night range is available
+                    if (!isDateBooked(hoverDate)) {
+                        dayNumber.classList.add('hover');
+                        // Highlight the potential range
+                        for (let i = 1; i <= 2; i++) {
+                            const rangeDate = new Date(hoverDate);
+                            rangeDate.setDate(rangeDate.getDate() + i);
+                            const rangeDayEl = document.querySelector(
+                                `.calendar-day[data-date="${rangeDate.toISOString().split('T')[0]}"]`
+                            );
+                            if (rangeDayEl) rangeDayEl.classList.add('in-range-hover');
+                        }
+                    }
+                });
+                
+                dayElement.addEventListener('mouseleave', () => {
+                    document.querySelectorAll('.hover, .in-range-hover')
+                        .forEach(el => {
+                            el.classList.remove('hover', 'in-range-hover');
+                        });
+                });
             }
-
+    
+            // Add data attribute for date targeting
+            dayElement.setAttribute('data-date', date.toISOString().split('T')[0]);
+    
+            // Update selected date display
+            if (checkInDate && date.getTime() === checkInDate.getTime()) {
+                dayNumber.classList.add('selected-checkin');
+            } else if (checkInDate && date > checkInDate && date <= checkOutDate) {
+                dayNumber.classList.add('in-range');
+            }
+    
             dayElement.appendChild(dayNumber);
             calendarGrid.appendChild(dayElement);
         }
@@ -178,13 +261,14 @@ export const initializeBooking = () => {
             currentPackage = button.dataset.package;
             checkInDate = null;
             checkOutDate = null;
-            
+
+            document.getElementById('guestCount').max = maxGuests[currentPackage];
             document.getElementById('guestCount').value = 1;
             document.getElementById('roomCount').value = 1;
             document.getElementById('cateringService').checked = false;
             document.getElementById('transportService').checked = false;
             document.getElementById('totalAmount').textContent = '$0';
-            
+
             updateDateDisplay();
             calendarModal.classList.add('active');
             createCalendar();
@@ -216,7 +300,7 @@ export const initializeBooking = () => {
     });
 
     document.querySelectorAll('.number-input .decrease').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const input = this.parentElement.querySelector('input');
             if (parseInt(input.value) > parseInt(input.min)) {
                 input.value = parseInt(input.value) - 1;
@@ -226,7 +310,7 @@ export const initializeBooking = () => {
     });
 
     document.querySelectorAll('.number-input .increase').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const input = this.parentElement.querySelector('input');
             if (parseInt(input.value) < parseInt(input.max)) {
                 input.value = parseInt(input.value) + 1;
@@ -250,46 +334,62 @@ export const initializeBooking = () => {
         });
     });
 
+    function validateVillaBooking(villaId) {
+        const maxGuests = {
+            'villa-alhambra': 6,
+            'pool-villa': 4,
+            'guest-villa': 4,
+            'tower-villa': 4,
+            'garden-villa': 2
+        };
+
+        const guestCount = parseInt(document.getElementById('guestCount').value);
+        if (guestCount > maxGuests[villaId]) {
+            alert(`This villa has a maximum capacity of ${maxGuests[villaId]} guests.`);
+            return false;
+        }
+        return true;
+    }
+    function initializeTooltips() {
+        const bookedDays = document.querySelectorAll('.calendar-day.booked');
+        bookedDays.forEach(day => {
+            day.title = "This date is not available";
+        });
+    }
+
+
+
     confirmButton?.addEventListener('click', () => {
-        if (checkInDate && checkOutDate) {
+        if (checkInDate && checkOutDate && validateVillaBooking(currentPackage)) {
             const guestCount = document.getElementById('guestCount').value;
             const roomCount = document.getElementById('roomCount').value;
             const catering = document.getElementById('cateringService').checked;
             const transport = document.getElementById('transportService').checked;
-            
-            // Calculate price components
-            const days = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
-            const basePrice = prices[currentPackage] * roomCount * days;
-            const cateringCost = catering ? prices.catering * days : 0;
-            const transportCost = transport ? prices.transport * days : 0;
+    
+            // Calculate final price
+            const days = 3; // Fixed 3-night stay
+            const basePrice = villaBaseRates[currentPackage] * days;
+            const cateringCost = catering ? additionalServices.catering * days : 0;
+            const transportCost = transport ? additionalServices.transport : 0;
             const totalPrice = basePrice + cateringCost + transportCost;
-            
-            // Create validation URL with all price components
-            const validationUrl = `/packages.html#${currentPackage}?` + 
-                `basePrice=${basePrice}&` +
-                `catering=${cateringCost}&` +
-                `transport=${transportCost}&` +
-                `total=${totalPrice}`;
-            
-            // Find and update the cart button
+    
+            // Find and update the Snipcart button
             const cartButton = document.querySelector(`[data-item-id="${currentPackage}"]`);
             if (cartButton) {
                 cartButton.dataset.itemPrice = totalPrice.toFixed(2);
-                cartButton.dataset.itemUrl = validationUrl;
                 cartButton.dataset.itemCustom1Value = formatDate(checkInDate);
                 cartButton.dataset.itemCustom2Value = formatDate(checkOutDate);
                 cartButton.dataset.itemCustom3Value = guestCount;
                 cartButton.dataset.itemCustom4Value = roomCount;
-                cartButton.dataset.itemCustom5Value = 
+                cartButton.dataset.itemCustom5Value =
                     catering && transport ? 'Both' :
-                    catering ? 'Catering' :
-                    transport ? 'Transport' : 'None';
+                    catering ? 'Daily Catering' :
+                    transport ? 'Airport Transport & Insurance' : 'None';
             }
-            
+    
             calendarModal.classList.remove('active');
         }
     });
-    
     calendarModal?.addEventListener('click', (e) => {
         if (e.target === calendarModal) {
             calendarModal.classList.remove('active');
