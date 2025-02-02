@@ -1,145 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USVI Retreats - Packages</title>
+    <link rel="stylesheet" href="src/styles/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div id="branding">
+                <h1>USVI Retreats</h1>
+            </div>
+            <nav>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="yachts.html">Yachts</a></li>
+                    <li><a href="accommodations.html">Accommodations</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li class="auth-container">
+                        <button id="auth-toggle" class="auth-toggle">Login</button>
+                        <div id="auth-form" class="auth-form">
+                            <form id="auth-form-content">
+                                <input type="email" name="email" placeholder="Email" required>
+                                <input type="password" name="password" placeholder="Password" required>
+                                <div class="auth-buttons">
+                                    <button type="submit" id="login-btn">Login</button>
+                                    <button type="button" id="signup-btn">Sign Up</button>
+                                </div>
+                            </form>
+                        </div>
+                    </li>
+                    <li>
+                        <button class="snipcart-checkout">Cart</button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-<div class="snipcart-add-item"
-    data-item-id="friends-package"
-    data-item-name="Friends Package"
-    data-item-price="500.00"
-    data-item-url="/packages.html#friends-package">
-    Add to Cart
-</div>
-  Add to Cart
-</div>
-<div
-  class="snipcart-add-item"
-  data-item-id="fun-package"
-  data-item-name="Fun Package"
-  data-item-price="700.00"
-  data-item-url="https://nickysimps.github.io/Travel-site/packages">
-  data-item-unique-id="7490c5a8-1ccb-4037-90a5-7fb65c977a03"
-  data-item-quantity="1"
->
-  Add to Cart
-</div>
-<div
-  class="snipcart-add-item"
-  data-item-id="sun-package"
-  data-item-name="Sun Package"
-  data-item-price="800.00"
-  data-item-url="https://nickysimps.github.io/Travel-site/packages">
-  data-item-unique-id="7490c5a8-1ccb-4037-90a5-7fb65c977a01"
-  data-item-quantiaty="1"
->
-  Add to Cart
-</div>
+    <section id="packages">
+        <div class="container">
+            <h2>Our Packages</h2>
+            <div class="package-grid">
+                <!-- Friends Package -->
+                <div class="package-box">
+                    <img src="./public/Pictures/beaches/beach_1.jpg" alt="Friends enjoying the beach">
+                    <h3>Friends Package</h3>
+                    <p>Perfect for group getaways</p>
+                    <p><strong>$500 per person</strong></p>
+                    
+                    <button class="btn btn-info" data-toggle="collapse">More Info</button>
+                    <div class="flavor-content">
+                        <p>Unwind with a complimentary couples' massage, followed by a sunset cocktail party.</p>
+                        <ul class="flavor-textList">
+                            <li>Exclusive access to the beachside yoga pavilion</li>
+                            <li>Personalized concierge service</li>
+                            <li>Special discounts on activities</li>
+                        </ul>
+                        <button class="snipcart-add-item"
+                            data-item-id="friends-package"
+                            data-item-name="Friends Package"
+                            data-item-price="500.00"
+                            data-item-url="/packages.html#friends-package"
+                            data-item-description="Perfect for group getaways"
+                            data-item-image="./public/Pictures/beaches/beach_1.jpg"
+                            data-item-custom1-name="Check-in"
+                            data-item-custom1-value=""
+                            data-item-custom2-name="Check-out"
+                            data-item-custom2-value=""
+                            data-item-custom3-name="Guests"
+                            data-item-custom3-value="1"
+                            data-item-custom4-name="Rooms"
+                            data-item-custom4-value="1"
+                            data-item-custom5-name="Services"
+                            data-item-custom5-options="None[+0]|Catering[+150]|Transport[+200]|Both[+350]">
+                            Add to Cart
+                        </button>
+                        <div class="booking-container">
+                            <button class="booking-btn" data-package="friends-package">Check Availability</button>
+                        </div>
+                    </div>
+                </div>
 
-<section id="packages">
-    <div class="container">
-      <h2>Our Packages</h2>
-      <div class="package-grid">
-        <!-- Yacht Package -->
-        <div class="package-box">
-          <img src="./public/Pictures/yachts/yacht1.webp" alt="Luxury yacht experience">
-          <h3>Yacht Experience</h3>
-          <p>Luxury sailing through paradise</p>
-          <p><strong>$2,500 per day</strong></p>
-          
-          <button class="btn btn-info" data-toggle="flavor-content">More Info</button>
-          <div class="flavor-content">
-            <p>Experience unmatched luxury with our premium yacht service.</p>
-            <ul class="flavor-textList">
-              <li>80-foot luxury vessel with professional crew</li>
-              <li>Gourmet catering included</li>
-              <li>Snorkeling and water sports equipment</li>
-            </ul>
-            <button class="btn btn-AddToCart snipcart-add-item"
-              data-item-id="luxury-yacht"
-              data-item-name="Luxury Yacht Package"
-              data-item-price="2500.00"
-              data-item-description="Luxury sailing through paradise"
-              data-item-image="./public/Pictures/yachts/yacht1.webp">
-              Book Now
-            </button>
-          </div>
+                <!-- Sun Package -->
+                <div class="package-box">
+                    <img src="./public/Pictures/beaches/beach_2.jpg" alt="Sunny beach view">
+                    <h3>Sun Package</h3>
+                    <p>Ultimate relaxation</p>
+                    <p><strong>$800 per person</strong></p>
+                    
+                    <button class="btn btn-info" data-toggle="collapse">More Info</button>
+                    <div class="flavor-content">
+                        <p>Experience the ultimate in relaxation and luxury.</p>
+                        <ul class="flavor-textList">
+                            <li>Private beach access</li>
+                            <li>Daily spa treatments</li>
+                            <li>Gourmet dining experiences</li>
+                        </ul>
+                        <button class="snipcart-add-item"
+                            data-item-id="sun-package"
+                            data-item-name="Sun Package"
+                            data-item-price="800.00"
+                            data-item-url="/packages.html#sun-package"
+                            data-item-description="Ultimate relaxation"
+                            data-item-image="./public/Pictures/beaches/beach_2.jpg"
+                            data-item-custom1-name="Check-in"
+                            data-item-custom1-value=""
+                            data-item-custom2-name="Check-out"
+                            data-item-custom2-value=""
+                            data-item-custom3-name="Guests"
+                            data-item-custom3-value="1"
+                            data-item-custom4-name="Rooms"
+                            data-item-custom4-value="1"
+                            data-item-custom5-name="Services"
+                            data-item-custom5-options="None[+0]|Catering[+150]|Transport[+200]|Both[+350]">
+                            Add to Cart
+                        </button>
+                        <div class="booking-container">
+                            <button class="booking-btn" data-package="sun-package">Check Availability</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fun Package -->
+                <div class="package-box">
+                    <img src="./public/Pictures/beaches/beach_3.jpg" alt="Fun beach activities">
+                    <h3>Fun Package</h3>
+                    <p>Adventure awaits</p>
+                    <p><strong>$700 per person</strong></p>
+                    
+                    <button class="btn btn-info" data-toggle="collapse">More Info</button>
+                    <div class="flavor-content">
+                        <p>Adventure and excitement await with our fun package.</p>
+                        <ul class="flavor-textList">
+                            <li>Water sports equipment included</li>
+                            <li>Guided island tours</li>
+                            <li>Adventure excursions</li>
+                        </ul>
+                        <button class="snipcart-add-item"
+                            data-item-id="fun-package"
+                            data-item-name="Fun Package"
+                            data-item-price="700.00"
+                            data-item-url="/packages.html#fun-package"
+                            data-item-description="Adventure awaits"
+                            data-item-image="./public/Pictures/beaches/beach_3.jpg"
+                            data-item-custom1-name="Check-in"
+                            data-item-custom1-value=""
+                            data-item-custom2-name="Check-out"
+                            data-item-custom2-value=""
+                            data-item-custom3-name="Guests"
+                            data-item-custom3-value="1"
+                            data-item-custom4-name="Rooms"
+                            data-item-custom4-value="1"
+                            data-item-custom5-name="Services"
+                            data-item-custom5-options="None[+0]|Catering[+150]|Transport[+200]|Both[+350]">
+                            Add to Cart
+                        </button>
+                        <div class="booking-container">
+                            <button class="booking-btn" data-package="fun-package">Check Availability</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-  
-        <!-- Catering Package -->
-        <div class="package-box">
-          <img src="./public/Pictures/catering/catering1.webp" alt="Premium catering service">
-          <h3>Premium Catering</h3>
-          <p>Exceptional dining experience</p>
-          <p><strong>$150 per person</strong></p>
-          
-          <button class="btn btn-info" data-toggle="flavor-content">More Info</button>
-          <div class="flavor-content">
-            <p>Exquisite local and international cuisine prepared by expert chefs.</p>
-            <ul class="flavor-textList">
-              <li>Customized menu planning</li>
-              <li>Special dietary accommodations</li>
-              <li>Professional service staff</li>
-            </ul>
-            <button class="btn btn-AddToCart snipcart-add-item"
-              data-item-id="premium-catering"
-              data-item-name="Premium Catering Package"
-              data-item-price="150.00"
-              data-item-description="Exceptional dining experience"
-              data-item-image="./public/Pictures/catering/catering1.webp">
-              Book Now
-            </button>
-          </div>
-        </div>
-  
-        <!-- Shuttle Package -->
-        <div class="package-box">
-          <img src="./public/Pictures/transport/shuttle1.webp" alt="VIP Transportation">
-          <h3>VIP Transport</h3>
-          <p>Seamless island transfers</p>
-          <p><strong>$200 per day</strong></p>
-          
-          <button class="btn btn-info" data-toggle="flavor-content">More Info</button>
-          <div class="flavor-content">
-            <p>Luxury transportation for your entire stay.</p>
-            <ul class="flavor-textList">
-              <li>Airport pickup and drop-off</li>
-              <li>Island tours included</li>
-              <li>24/7 availability</li>
-            </ul>
-            <button class="btn btn-AddToCart snipcart-add-item"
-              data-item-id="vip-transport"
-              data-item-name="VIP Transport Package"
-              data-item-price="200.00"
-              data-item-description="Seamless island transfers"
-              data-item-image="./public/Pictures/transport/shuttle1.webp">
-              Book Now
-            </button>
-          </div>
-        </div>
-      </div>
+    </section>
+
+    <button id="backToTop" title="Go to top">↑</button>
+
+    <div hidden id="snipcart" data-api-key="ZjFmOWZjNDUtM2VmMC00ZmExLTkzMTctMjExM2UzZDcwZjI3NjM4Njg4Nzc3OTMyNzM5MTQ3">
     </div>
-  </section>
 
-  <!-- Add this script to packages.html -->
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const packageId = window.location.hash.substring(1);
-    
-    // Get all components of the price
-    const basePrice = parseFloat(urlParams.get('basePrice') || 0);
-    const cateringCost = parseFloat(urlParams.get('catering') || 0);
-    const transportCost = parseFloat(urlParams.get('transport') || 0);
-    const total = parseFloat(urlParams.get('total') || 0);
-    
-    // Validate total matches components
-    const calculatedTotal = basePrice + cateringCost + transportCost;
-    
-    if (Math.abs(calculatedTotal - total) < 0.01) { // Account for floating point precision
-        const packageButton = document.querySelector(`[data-item-id="${packageId}"]`);
-        if (packageButton) {
-            packageButton.dataset.itemPrice = total.toFixed(2);
-        }
-    } else {
-        console.error('Price validation failed');
-    }
-});
-  </script>
+    <!-- Validation Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const packageId = window.location.hash.substring(1);
+            
+            // Get all components of the price
+            const basePrice = parseFloat(urlParams.get('basePrice') || 0);
+            const cateringCost = parseFloat(urlParams.get('catering') || 0);
+            const transportCost = parseFloat(urlParams.get('transport') || 0);
+            const total = parseFloat(urlParams.get('total') || 0);
+            
+            // Validate total matches components
+            const calculatedTotal = basePrice + cateringCost + transportCost;
+            
+            if (Math.abs(calculatedTotal - total) < 0.01) { // Account for floating point precision
+                const packageButton = document.querySelector(`[data-item-id="${packageId}"]`);
+                if (packageButton) {
+                    packageButton.dataset.itemPrice = total.toFixed(2);
+                }
+            } else {
+                console.error('Price validation failed');
+            }
+        });
+    </script>
 
-  
+    <script>
+        window.SnipcartSettings = {
+            publicApiKey: 'ZjFmOWZjNDUtM2VmMC00ZmExLTkzMTctMjExM2UzZDcwZjI3NjM4Njg4Nzc3OTMyNzM5MTQ3',
+            loadStrategy: 'on-user-interaction',
+            modalStyle: "side"
+        };
+
+        (() => {
+            const c = window.SnipcartSettings;
+            c.version = c.version || "3.0";
+            const s = window.SnipcartSettings;
+            s.timeoutDuration = s.timeoutDuration || 2750;
+            const l = window.SnipcartSettings;
+            l.domain = l.domain || "cdn.snipcart.com";
+            const w = window.SnipcartSettings;
+            w.protocol = w.protocol || "https";
+            const loadEvents = ["focus", "mouseover", "touchmove", "scroll", "keydown"];
+            
+            window.LoadSnipcart = loadSnipcart;
+            document.readyState === "loading" ? 
+                document.addEventListener("DOMContentLoaded", registerListeners) : 
+                registerListeners();
+
+            function registerListeners() {
+                if (window.SnipcartSettings.loadStrategy === "on-user-interaction") {
+                    loadEvents.forEach(event => document.addEventListener(event, loadSnipcart));
+                    setTimeout(loadSnipcart, window.SnipcartSettings.timeoutDuration);
+                } else {
+                    loadSnipcart();
+                }
+            }
+
+            let loaded = false;
+            function loadSnipcart() {
+                if (loaded) return;
+                loaded = true;
+                
+                const snipcartDiv = document.getElementById("snipcart");
+                if (!snipcartDiv) {
+                    const div = document.createElement("div");
+                    div.id = "snipcart";
+                    div.setAttribute("hidden", "true");
+                    document.body.appendChild(div);
+                }
+                
+                loadScript();
+                loadStyles();
+                loadEvents.forEach(event => document.removeEventListener(event, loadSnipcart));
+            }
+
+            function loadScript() {
+                const script = document.createElement("script");
+                script.src = `${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.js`;
+                script.async = true;
+                document.getElementsByTagName("head")[0].appendChild(script);
+            }
+
+            function loadStyles() {
+                const link = document.createElement("link");
+                link.rel = "stylesheet";
+                link.type = "text/css";
+                link.href = `${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.css`;
+                document.getElementsByTagName("head")[0].appendChild(link);
+            }
+        })();
+    </script>
+    
+    <script type="module" src="./src/components/index.js"></script>
+</body>
+</html>
