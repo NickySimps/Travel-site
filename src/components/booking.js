@@ -276,7 +276,7 @@ export const initializeBooking = () => {
             const button = document.createElement('button');
             button.classList.add('snipcart-add-item');
             button.dataset.itemId = currentPackage;
-            button.dataset.itemName = `${currentPackage.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} Booking`;
+            button.dataset.itemName = `${currentPackage.split('-').map(word => word.charAt(0).toUpperCase())}`;
             button.dataset.itemPrice = calculatedPrice;
             button.dataset.itemUrl = validationUrl;
             button.dataset.itemCustom1Name = "Check-in";
