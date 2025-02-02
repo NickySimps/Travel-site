@@ -257,31 +257,39 @@ export const initializeBooking = () => {
             const catering = document.getElementById('cateringService').checked;
             const transport = document.getElementById('transportService').checked;
             
-            // Calculate total price
+            // Calculate price components
             const days = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
             const basePrice = prices[currentPackage] * roomCount * days;
-            const services = catering && transport ? 'Both' :
-                            catering ? 'Catering' :
-                            transport ? 'Transport' : 'None';
+            const cateringCost = catering ? prices.catering * days : 0;
+            const transportCost = transport ? prices.transport * days : 0;
+            const totalPrice = basePrice + cateringCost + transportCost;
             
-            // Find the corresponding add to cart button
+            // Create validation URL with all price components
+            const validationUrl = `/packages.html#${currentPackage}?` + 
+                `basePrice=${basePrice}&` +
+                `catering=${cateringCost}&` +
+                `transport=${transportCost}&` +
+                `total=${totalPrice}`;
+            
+            // Find and update the cart button
             const cartButton = document.querySelector(`[data-item-id="${currentPackage}"]`);
             if (cartButton) {
-                // Update button attributes
+                cartButton.dataset.itemPrice = totalPrice.toFixed(2);
+                cartButton.dataset.itemUrl = validationUrl;
                 cartButton.dataset.itemCustom1Value = formatDate(checkInDate);
                 cartButton.dataset.itemCustom2Value = formatDate(checkOutDate);
                 cartButton.dataset.itemCustom3Value = guestCount;
                 cartButton.dataset.itemCustom4Value = roomCount;
-                cartButton.dataset.itemCustom5Value = services;
-                cartButton.dataset.itemPrice = (basePrice + 
-                    (catering ? prices.catering * days : 0) + 
-                    (transport ? prices.transport * days : 0)).toFixed(2);
+                cartButton.dataset.itemCustom5Value = 
+                    catering && transport ? 'Both' :
+                    catering ? 'Catering' :
+                    transport ? 'Transport' : 'None';
             }
             
-            // Close modal
             calendarModal.classList.remove('active');
         }
     });
+    
     calendarModal?.addEventListener('click', (e) => {
         if (e.target === calendarModal) {
             calendarModal.classList.remove('active');
