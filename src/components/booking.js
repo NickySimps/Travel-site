@@ -256,54 +256,32 @@ export const initializeBooking = () => {
             const roomCount = document.getElementById('roomCount').value;
             const catering = document.getElementById('cateringService').checked;
             const transport = document.getElementById('transportService').checked;
-            const total = document.getElementById('totalAmount').textContent;
-            const calculatedPrice = total.replace(/[^0-9.]/g, '');
             
-            // Include all pricing components in the validation URL
-            const days = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24)) + 1;
+            // Calculate total price
+            const days = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
             const basePrice = prices[currentPackage] * roomCount * days;
-            const cateringCost = catering ? prices.catering * days : 0;
-            const transportCost = transport ? prices.transport * days : 0;
+            const services = catering && transport ? 'Both' :
+                            catering ? 'Catering' :
+                            transport ? 'Transport' : 'None';
             
-            const validationUrl = `/packages.html#${currentPackage}?` + 
-                `basePrice=${basePrice}&` +
-                `catering=${cateringCost}&` +
-                `transport=${transportCost}&` +
-                `days=${days}&` +
-                `rooms=${roomCount}&` +
-                `total=${calculatedPrice}`;
+            // Find the corresponding add to cart button
+            const cartButton = document.querySelector(`[data-item-id="${currentPackage}"]`);
+            if (cartButton) {
+                // Update button attributes
+                cartButton.dataset.itemCustom1Value = formatDate(checkInDate);
+                cartButton.dataset.itemCustom2Value = formatDate(checkOutDate);
+                cartButton.dataset.itemCustom3Value = guestCount;
+                cartButton.dataset.itemCustom4Value = roomCount;
+                cartButton.dataset.itemCustom5Value = services;
+                cartButton.dataset.itemPrice = (basePrice + 
+                    (catering ? prices.catering * days : 0) + 
+                    (transport ? prices.transport * days : 0)).toFixed(2);
+            }
             
-            const button = document.createElement('button');
-            button.classList.add('snipcart-add-item');
-            button.dataset.itemId = currentPackage;
-            button.dataset.itemName = `${currentPackage.split('-').map(word => word.charAt(0).toUpperCase())}`;
-            button.dataset.itemPrice = calculatedPrice;
-            button.dataset.itemUrl = validationUrl;
-            button.dataset.itemCustom1Name = "Check-in";
-            button.dataset.itemCustom1Value = formatDate(checkInDate);
-            button.dataset.itemCustom2Name = "Check-out";
-            button.dataset.itemCustom2Value = formatDate(checkOutDate);
-            button.dataset.itemCustom3Name = "Guests";
-            button.dataset.itemCustom3Value = guestCount;
-            button.dataset.itemCustom4Name = "Rooms";
-            button.dataset.itemCustom4Value = roomCount;
-            button.dataset.itemCustom5Name = "Services";
-            button.dataset.itemCustom5Type = "select";
-            button.dataset.itemCustom5Options = "None[+0]|Catering Only[+150]|Transport Only[+200]|Both Services[+350]";
-            button.dataset.itemCustom5Value = `${catering && transport ? 'Both Services' : 
-                                              catering ? 'Catering Only' : 
-                                              transport ? 'Transport Only' : 
-                                              'None'}`;
-    
-            button.dataset.itemUniqueId = `${currentPackage}-${Date.now()}`;
-            
-            document.body.appendChild(button);
-            button.click();
-            document.body.removeChild(button);
+            // Close modal
             calendarModal.classList.remove('active');
         }
     });
-
     calendarModal?.addEventListener('click', (e) => {
         if (e.target === calendarModal) {
             calendarModal.classList.remove('active');
