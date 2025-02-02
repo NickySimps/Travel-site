@@ -50,159 +50,182 @@
     <main>
         <section id="showcase">
             <div class="container">
-                <img class="banner-image" src="public/Pictures/accommodations/VillaMirage.jpg" alt="Luxury Villa">
+                <img class="banner-image" src="public/Pictures/accommodations/services-banner.jpg" alt="Luxury Services">
                 <div class="showcase-content">
-                    <h1>Luxury Accommodations</h1>
-                    <p>Experience paradise in comfort</p>
+                    <h1>Premium Services</h1>
+                    <p>Enhance your stay with our luxury amenities</p>
                 </div>
             </div>
         </section>
+        
 
         <section id="accommodation-grid">
             <div class="container">
                 <div class="package-grid">
-
-
+                    <!-- Catering Service -->
                     <div class="package-box">
-                        <img src="public/Pictures/accommodations/VillaMirage.jpg" alt="Villa Mirage">
-                        <h3>Villa Mirage</h3>
-                        <p>Luxurious villa overlooking St. John</p>
-                        <p><strong>$1,200 per night</strong></p>
+                        <img src="public/Pictures/accommodations/catering.jpg" alt="Luxury Catering">
+                        <h3>Private Chef & Catering</h3>
+                        <p>Personalized dining experience in your villa</p>
+                        <p><strong>$750 per day</strong></p>
                         <button class="btn btn-info" data-toggle="collapse">More Info</button>
                         <div class="flavor-content">
                             <ul class="flavor-textList">
-                                <li>4 bedrooms, 4.5 bathrooms</li>
-                                <li>Infinity pool</li>
-                                <li>Full kitchen</li>
-                                <li>Ocean views</li>
+                                <li>Customized menu planning</li>
+                                <li>Breakfast, lunch, and dinner service</li>
+                                <li>Special dietary accommodations</li>
+                                <li>Local and international cuisine</li>
+                                <li>Professional service staff</li>
                             </ul>
-                            <div class="additional-services" data-property="villa-mirage">
-                                <h4>Add Services:</h4>
-                                <button class="btn btn-service" data-service="catering">
-                                    Add Catering ($150/day)
-                                </button>
-                                <button class="btn btn-service" data-service="transport">
-                                    Add Transport ($200/day)
-                                </button>
-                            </div>
-                            <button class="snipcart-add-item" data-item-id="villa-mirage" data-item-name="Villa Mirage"
-                                data-item-price="1200.00" data-item-description="Luxury villa in St. John"
-                                data-item-image="/public/Pictures/accommodations/VillaMirage.jpg"
-                                data-item-custom1-name="Stay Length" data-item-custom2-name="Guest Count"
-                                data-item-custom3-name="Additional Services" data-item-custom3-type="select"
-                                data-item-custom1-placeholder="Number of nights"
-                                data-item-custom2-placeholder="Number of guests"
-                                data-item-custom3-options="None[+0]|Catering[+150]|Transport[+200]|Both[+350]">
+                            <button class="snipcart-add-item"
+                                data-item-id="catering-service"
+                                data-item-name="Private Chef & Catering"
+                                data-item-price="750.00"
+                                data-item-url="/accommodations.html"
+                                data-item-description="Full-service daily catering"
+                                data-item-image="/public/Pictures/accommodations/catering.jpg"
+                                data-item-custom1-name="Date"
+                                data-item-custom2-name="Number of Days"
+                                data-item-custom3-name="Special Requests">
                                 Add to Cart
                             </button>
                         </div>
                     </div>
-
+        
+                    <!-- Airport Transfer & Insurance -->
                     <div class="package-box">
-                        <img src="public/Pictures/accommodations/StThomasBeachHouse.jpg" alt="Beach House">
-                        <h3>The Beach House</h3>
-                        <p>Beachfront retreat in St. Thomas</p>
-                        <p><strong>$800 per night</strong></p>
+                        <img src="public/Pictures/accommodations/transport.jpg" alt="Airport Transfer">
+                        <h3>Airport Transfer & Insurance</h3>
+                        <p>Seamless travel experience with complete coverage</p>
+                        <p><strong>$550 flat rate</strong></p>
                         <button class="btn btn-info" data-toggle="collapse">More Info</button>
                         <div class="flavor-content">
                             <ul class="flavor-textList">
-                                <li>3 bedrooms, 2 bathrooms</li>
-                                <li>Direct beach access</li>
-                                <li>Outdoor dining area</li>
-                                <li>Water sports equipment</li>
+                                <li>Round-trip airport transfers</li>
+                                <li>Luxury vehicle service</li>
+                                <li>Comprehensive travel insurance</li>
+                                <li>Luggage handling</li>
+                                <li>Flight monitoring</li>
                             </ul>
-                            <div class="additional-services" data-property="beach-house">
-                                <h4>Add Services:</h4>
-                                <button class="btn btn-service" data-service="catering">
-                                    Add Catering ($150/day)
-                                </button>
-                                <button class="btn btn-service" data-service="transport">
-                                    Add Transport ($200/day)
-                                </button>
-                            </div>
-                            <button class="btn btn-AddToCart snipcart-add-item" data-item-id="beach-house"
-                                data-item-name="Beach House" data-item-price="800.00"
-                                data-item-description="Beachfront house in St. Thomas"
-                                data-item-image="/public/Pictures/accommodations/StThomasBeachHouse.jpg"
-                                data-item-custom1-name="Stay Length" data-item-custom2-name="Guest Count"
-                                data-item-custom3-name="Additional Services" data-item-custom3-type="select"
-                                data-item-custom1-placeholder="Number of nights"
-                                data-item-custom2-placeholder="Number of guests"
-                                data-item-custom3-options="None[+0]|Catering[+150]|Transport[+200]|Both[+350]">
+                            <button class="snipcart-add-item"
+                                data-item-id="transport-insurance"
+                                data-item-name="Airport Transfer & Insurance"
+                                data-item-price="550.00"
+                                data-item-url="/accommodations.html"
+                                data-item-description="Round-trip transfer and insurance"
+                                data-item-image="/public/Pictures/accommodations/transport.jpg"
+                                data-item-custom1-name="Arrival Date"
+                                data-item-custom2-name="Flight Number"
+                                data-item-custom3-name="Number of Passengers">
                                 Add to Cart
                             </button>
                         </div>
                     </div>
-
+        
+                    <!-- Concierge Service -->
                     <div class="package-box">
-                        <img src="public/Pictures/accommodations/JostVanDyke.jpg" alt="Island Oasis">
-                        <h3>Island Oasis</h3>
-                        <p>Secluded villa on Jost Van Dyke</p>
-                        <p><strong>$950 per night</strong></p>
+                        <img src="public/Pictures/accommodations/concierge.jpg" alt="Concierge Service">
+                        <h3>Premium Concierge Service</h3>
+                        <p>Your personal assistant in paradise</p>
+                        <p><strong>$200 per day</strong></p>
                         <button class="btn btn-info" data-toggle="collapse">More Info</button>
                         <div class="flavor-content">
                             <ul class="flavor-textList">
-                                <li>2 bedroom villa</li>
-                                <li>Private pool</li>
-                                <li>Gourmet kitchen</li>
-                                <li>Mountain and ocean views</li>
+                                <li>24/7 personal assistance</li>
+                                <li>Restaurant reservations</li>
+                                <li>Activity planning and booking</li>
+                                <li>Local recommendations</li>
+                                <li>Special event arrangements</li>
                             </ul>
-                            <div class="additional-services" data-property="island-oasis">
-                                <h4>Add Services:</h4>
-                                <button class="btn btn-service" data-service="catering">
-                                    Add Catering ($150/day)
-                                </button>
-                                <button class="btn btn-service" data-service="transport">
-                                    Add Transport ($200/day)
-                                </button>
-                            </div>
-                            <button class="btn btn-AddToCart snipcart-add-item" data-item-id="island-oasis"
-                                data-item-name="Island Oasis" data-item-price="950.00"
-                                data-item-description="Secluded villa on Jost Van Dyke"
-                                data-item-image="/public/Pictures/accommodations/JostVanDyke.jpg"
-                                data-item-custom1-name="Stay Length" data-item-custom2-name="Guest Count"
-                                data-item-custom3-name="Additional Services" data-item-custom3-type="select"
-                                data-item-custom1-placeholder="Number of nights"
-                                data-item-custom2-placeholder="Number of guests"
-                                data-item-custom3-options="None[+0]|Catering[+150]|Transport[+200]|Both[+350]">
+                            <button class="snipcart-add-item"
+                                data-item-id="concierge-service"
+                                data-item-name="Premium Concierge Service"
+                                data-item-price="200.00"
+                                data-item-url="/accommodations.html"
+                                data-item-description="24/7 personal concierge"
+                                data-item-image="/public/Pictures/accommodations/concierge.jpg"
+                                data-item-custom1-name="Start Date"
+                                data-item-custom2-name="Number of Days"
+                                data-item-custom3-name="Special Requests">
                                 Add to Cart
                             </button>
                         </div>
                     </div>
-
+        
+                    <!-- Additional Services Package -->
                     <div class="package-box">
-                        <img src="public/Pictures/accommodations/SeaBreezeInn.jpg" alt="Sea Breeze Inn">
-                        <h3>Sea Breeze Inn</h3>
-                        <p>Historic B&B in Christiansted</p>
-                        <p><strong>$300 per night</strong></p>
+                        <img src="public/Pictures/accommodations/premium.jpg" alt="Premium Package">
+                        <h3>Complete Service Package</h3>
+                        <p>All-inclusive luxury experience</p>
+                        <p><strong>Special Package Rate</strong></p>
                         <button class="btn btn-info" data-toggle="collapse">More Info</button>
                         <div class="flavor-content">
                             <ul class="flavor-textList">
-                                <li>Classic Caribbean style room</li>
-                                <li>Complimentary breakfast</li>
-                                <li>Walking distance to historic sites</li>
-                                <li>Garden views</li>
+                                <li>Daily catering service</li>
+                                <li>Airport transfers & insurance</li>
+                                <li>Premium concierge service</li>
+                                <li>Priority reservations</li>
+                                <li>VIP amenities</li>
                             </ul>
-                            <div class="additional-services" data-property="sea-breeze">
-                                <h4>Add Services:</h4>
-                                <button class="btn btn-service" data-service="catering">
-                                    Add Catering ($150/day)
-                                </button>
-                                <button class="btn btn-service" data-service="transport">
-                                    Add Transport ($200/day)
-                                </button>
-                            </div>
-                            <button class="btn btn-AddToCart snipcart-add-item" data-item-id="sea-breeze"
-                                data-item-name="Sea Breeze Inn" data-item-price="300.00"
-                                data-item-description="Historic B&B in Christiansted"
-                                data-item-image="/public/Pictures/accommodations/SeaBreezeInn.jpg"
-                                data-item-custom1-name="Stay Length" data-item-custom2-name="Guest Count"
-                                data-item-custom3-name="Additional Services" data-item-custom3-type="select"
-                                data-item-custom1-placeholder="Number of nights"
-                                data-item-custom2-placeholder="Number of guests"
-                                data-item-custom3-options="None[+0]|Catering[+150]|Transport[+200]|Both[+350]">
+                            <button class="snipcart-add-item"
+                                data-item-id="complete-package"
+                                data-item-name="Complete Service Package"
+                                data-item-price="1000.00"
+                                data-item-url="/accommodations.html"
+                                data-item-description="All-inclusive service package"
+                                data-item-image="/public/Pictures/accommodations/premium.jpg"
+                                data-item-custom1-name="Start Date"
+                                data-item-custom2-name="Number of Days"
+                                data-item-custom3-name="Special Requests">
                                 Add to Cart
                             </button>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Service Features Section -->
+                <div class="estate-amenities">
+                    <h2>Service Features</h2>
+                    <div class="amenities-grid">
+                        <div class="amenities-column">
+                            <h3>Catering</h3>
+                            <ul>
+                                <li>Gourmet meal preparation</li>
+                                <li>Local ingredients</li>
+                                <li>Dietary accommodations</li>
+                                <li>Wine pairing</li>
+                                <li>Table service</li>
+                            </ul>
+                        </div>
+                        <div class="amenities-column">
+                            <h3>Transportation</h3>
+                            <ul>
+                                <li>Luxury vehicles</li>
+                                <li>Professional drivers</li>
+                                <li>Flight monitoring</li>
+                                <li>Door-to-door service</li>
+                                <li>24/7 availability</li>
+                            </ul>
+                        </div>
+                        <div class="amenities-column">
+                            <h3>Concierge</h3>
+                            <ul>
+                                <li>Activity bookings</li>
+                                <li>Local expertise</li>
+                                <li>Restaurant reservations</li>
+                                <li>Special arrangements</li>
+                                <li>Personal shopping</li>
+                            </ul>
+                        </div>
+                        <div class="amenities-column">
+                            <h3>Insurance</h3>
+                            <ul>
+                                <li>Travel coverage</li>
+                                <li>Medical assistance</li>
+                                <li>Trip protection</li>
+                                <li>24/7 support</li>
+                                <li>Emergency services</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -210,8 +233,97 @@
         </section>
     </main>
 
-    <button id="backToTop" title="Go to top">↑</button>
+    <section id="newsletter" class="bg-gradient">
+        <div class="container">
+            <div class="mission-statement">
+                Join our community to receive exclusive offers and updates about our luxury properties and services.
+            </div>
+            <form class="newsletter-form">
+                <div class="package-grid">
+                    <div class="package-box">
+                        <div class="flavor-content active">
+                            <h2>Stay Connected</h2>
+                            <div class="flavor-textList">
+                                <li>Special seasonal promotions</li>
+                                <li>Exclusive villa access</li>
+                                <li>Local event invitations</li>
+                                <li>Travel tips and guides</li>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <input type="text" name="firstName" id="firstName" placeholder="First Name" required>
+                                <input type="text" name="lastName" id="lastName" placeholder="Last Name" required>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                                <input type="tel" name="phone" id="phone" placeholder="Phone Number" required>
+                                <input type="email" name="email" id="email" placeholder="Email Address" required>
+                            </div>
+                            <div class="service-option" style="margin-top: 1rem;">
+                                <input type="checkbox" id="preferences" required>
+                                <label for="preferences">I agree to receive updates about USVI Retreats properties and
+                                    services</label>
+                            </div>
+                            <button type="submit" class="btn-book" style="margin-top: 1rem;">Subscribe to
+                                Updates</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+    <footer>
+        <div class="container">
+            <div class="package-grid" style="padding: 2rem 0;">
+                <!-- Company Info -->
+                <div class="flavor-content active">
+                    <h3>USVI Retreats</h3>
+                    <ul class="flavor-textList">
+                        <li>Luxury Villa Rentals</li>
+                        <li>St. Thomas, USVI</li>
+                        <li>Contact: +1 (555) 123-4567</li>
+                        <li>Email: info@usviretreats.com</li>
+                    </ul>
+                </div>
 
+                <!-- Quick Links -->
+                <div class="flavor-content active">
+                    <h3>Quick Links</h3>
+                    <ul class="flavor-textList">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="yachts.html">Yachts</a></li>
+                        <li><a href="accommodations.html">Services</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div class="flavor-content active">
+                    <h3>Our Services</h3>
+                    <ul class="flavor-textList">
+                        <li>Luxury Villas</li>
+                        <li>Private Catering</li>
+                        <li>Concierge Service</li>
+                        <li>Airport Transfers</li>
+                    </ul>
+                </div>
+
+                <!-- Follow Us -->
+                <div class="flavor-content active">
+                    <h3>Follow Us</h3>
+                    <ul class="flavor-textList">
+                        <li>Instagram</li>
+                        <li>Facebook</li>
+                        <li>Twitter</li>
+                        <li>LinkedIn</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mission-statement" style="text-align: center; margin-top: 2rem;">
+                USVI Retreats, LLC &copy; 2024 | All Rights Reserved | Privacy Policy | Terms of Service
+            </div>
+        </div>
+    </footer>
+    <button id="backToTop" title="Go to top">↑</button>
     <div hidden id="snipcart" data-api-key="ZjFmOWZjNDUtM2VmMC00ZmExLTkzMTctMjExM2UzZDcwZjI3NjM4Njg4Nzc3OTMyNzM5MTQ3">
 
     </div>
