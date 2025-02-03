@@ -17,27 +17,10 @@ export const initializeBooking = () => {
     let checkOutDate = null;
     let currentPackage = null;
 
-    const prices = {
-        'friends-package': 500,
-        'sun-package': 800,
-        'fun-package': 700,
-        'catering': 150,
-        'transport': 200
-    };
+    
 
     const bookedDates = {
-        'friends-package': [
-            { start: new Date(2024, 2, 20), end: new Date(2024, 2, 23) },
-            { start: new Date(2024, 3, 3), end: new Date(2024, 3, 6) }
-        ],
-        'sun-package': [
-            { start: new Date(2024, 2, 25), end: new Date(2024, 2, 28) },
-            { start: new Date(2024, 3, 10), end: new Date(2024, 3, 13) }
-        ],
-        'fun-package': [
-            { start: new Date(2024, 3, 15), end: new Date(2024, 3, 18) },
-            { start: new Date(2024, 3, 22), end: new Date(2024, 3, 25) }
-        ],
+     
         'villa-alhambra': [
             { start: new Date(2024, 2, 20), end: new Date(2024, 2, 23) },
             { start: new Date(2024, 3, 3), end: new Date(2024, 3, 6) }
@@ -57,18 +40,38 @@ export const initializeBooking = () => {
         ]
     };
 
-    const villaBaseRates = {
-        'villa-alhambra': 4146,  // Main villa pricing from spreadsheet
-        'pool-villa': 3500,      // Other villas scaled accordingly
-        'guest-villa': 3200,
-        'tower-villa': 3300,
-        'garden-villa': 2800
+    const packageTotalPrices = {
+        'villa-alhambra': {
+            basePrice: 12438,  // 4146 x 3 nights
+            withCatering: 15438,  // base + 3000 (catering)
+            withTransport: 12988,  // base + 550 (transport)
+            withBoth: 15988  // base + 3000 + 550
+        },
+        'pool-villa': {
+            basePrice: 10500,
+            withCatering: 13500,  // base + 3000
+            withTransport: 11050,  // base + 550
+            withBoth: 14050   // base + 3000 + 550
+        },
+        'guest-villa': {
+            basePrice: 9600,
+            withCatering: 12600,
+            withTransport: 10150,
+            withBoth: 13150
+        },
+        'tower-villa': {
+            basePrice: 9900,
+            withCatering: 12900,
+            withTransport: 10450,
+            withBoth: 13450
+        },
+        'garden-villa': {
+            basePrice: 8400,
+            withCatering: 11400,
+            withTransport: 8950,
+            withBoth: 11950
+        }
     };
-
-    const additionalServices = {
-        'catering': 750,        // Per day from spreadsheet
-        'transport': 550        // Flat rate from spreadsheet
-    }
     
     const maxGuests = {
         'villa-alhambra': 6,
@@ -119,25 +122,24 @@ export const initializeBooking = () => {
     };
 
     const updateTotal = () => {
-        if (!checkInDate) return;
+        if (!currentPackage) return;
     
-        const days = 3; // Fixed 3-night stay
-        const guestCount = parseInt(document.getElementById('guestCount').value);
-        const roomCount = parseInt(document.getElementById('roomCount').value);
+        const hasCatering = document.getElementById('cateringService').checked;
+        const hasTransport = document.getElementById('transportService').checked;
         
-        let baseRate = villaBaseRates[currentPackage] || 0;
-        const basePrice = baseRate * days;
-        
-        let additionalServices = 0;
-        if (document.getElementById('cateringService').checked) {
-            additionalServices += 750 * days; // Catering per day
-        }
-        if (document.getElementById('transportService').checked) {
-            additionalServices += 550; // Flat rate for transport
+        let finalPrice;
+        if (hasCatering && hasTransport) {
+            finalPrice = packageTotalPrices[currentPackage].withBoth;
+        } else if (hasCatering) {
+            finalPrice = packageTotalPrices[currentPackage].withCatering;
+        } else if (hasTransport) {
+            finalPrice = packageTotalPrices[currentPackage].withTransport;
+        } else {
+            finalPrice = packageTotalPrices[currentPackage].basePrice;
         }
     
-        const total = basePrice + additionalServices;
-        document.getElementById('totalAmount').textContent = `$${total.toLocaleString()}`;
+        document.getElementById('totalAmount').textContent = `$${finalPrice.toLocaleString()}`;
+        return finalPrice;
     };
     
     const updateDateDisplay = () => {
@@ -361,38 +363,43 @@ export const initializeBooking = () => {
 
     confirmButton?.addEventListener('click', () => {
         if (checkInDate && checkOutDate && validateVillaBooking(currentPackage)) {
-            const guestCount = document.getElementById('guestCount').value;
-            const roomCount = document.getElementById('roomCount').value;
-            const catering = document.getElementById('cateringService').checked;
-            const transport = document.getElementById('transportService').checked;
+            const hasCatering = document.getElementById('cateringService').checked;
+            const hasTransport = document.getElementById('transportService').checked;
+            
+            let finalPrice;
+            if (hasCatering && hasTransport) {
+                finalPrice = packageTotalPrices[currentPackage].withBoth;
+            } else if (hasCatering) {
+                finalPrice = packageTotalPrices[currentPackage].withCatering;
+            } else if (hasTransport) {
+                finalPrice = packageTotalPrices[currentPackage].withTransport;
+            } else {
+                finalPrice = packageTotalPrices[currentPackage].basePrice;
+            }
     
-            // Calculate final price
-            const days = 3; // Fixed 3-night stay
-            const basePrice = villaBaseRates[currentPackage] * days;
-            const cateringCost = catering ? additionalServices.catering * days : 0;
-            const transportCost = transport ? additionalServices.transport : 0;
-            const totalPrice = basePrice + cateringCost + transportCost;
-    
-            // Find and update the Snipcart button
-            const cartButton = document.querySelector(`[data-item-id="${currentPackage}"]`);
-            if (cartButton) {
-                cartButton.dataset.itemPrice = totalPrice.toFixed(2);
-                cartButton.dataset.itemCustom1Value = formatDate(checkInDate);
-                cartButton.dataset.itemCustom2Value = formatDate(checkOutDate);
-                cartButton.dataset.itemCustom3Value = guestCount;
-                cartButton.dataset.itemCustom4Value = roomCount;
-                cartButton.dataset.itemCustom5Value =
-                    catering && transport ? 'Both' :
-                    catering ? 'Daily Catering' :
-                    transport ? 'Airport Transport & Insurance' : 'None';
+            // Update Snipcart button
+            const snipcartButton = document.querySelector(`[data-item-id="${currentPackage}"]`);
+            if (snipcartButton) {
+                snipcartButton.setAttribute('data-item-price', finalPrice.toString());
+                snipcartButton.setAttribute('data-item-custom1-value', formatDate(checkInDate));
+                snipcartButton.setAttribute('data-item-custom2-value', formatDate(checkOutDate));
+                snipcartButton.setAttribute('data-item-custom3-value', document.getElementById('guestCount').value);
+                snipcartButton.setAttribute('data-item-custom4-value', document.getElementById('roomCount').value);
+                snipcartButton.setAttribute('data-item-custom5-value', 
+                    hasCatering && hasTransport ? 'Both' :
+                    hasCatering ? 'Daily Catering' :
+                    hasTransport ? 'Airport Transport & Insurance' : 'None'
+                );
             }
     
             calendarModal.classList.remove('active');
         }
     });
+    
     calendarModal?.addEventListener('click', (e) => {
         if (e.target === calendarModal) {
             calendarModal.classList.remove('active');
         }
     });
 };
+
