@@ -513,7 +513,35 @@
             <button id="confirmDates" class="confirm-dates" disabled>Set Booking</button>
         </div>
     </div>
-
+    <div id="bookingOrb" class="booking-orb modal-btn" >
+        <span class="booking-orb-icon">📅</span>
+    </div>
+    <div class="booking-details-panel">
+        <div class="booking-detail-item">
+            <span>Property:</span>
+            <span id="orbProperty"></span>
+        </div>
+        <div class="booking-detail-item">
+            <span>Check-in:</span>
+            <span id="orbCheckIn"></span>
+        </div>
+        <div class="booking-detail-item">
+            <span>Check-out:</span>
+            <span id="orbCheckOut"></span>
+        </div>
+        <div class="booking-detail-item">
+            <span>Guests:</span>
+            <span id="orbGuests"></span>
+        </div>
+        <div class="booking-detail-item">
+            <span>Services:</span>
+            <span id="orbServices"></span>
+        </div>
+        <div class="booking-detail-item">
+            <span>Total:</span>
+            <span id="orbTotal"></span>
+        </div>
+    </div>
     <!-- Snipcart Setup -->
     <div hidden id="snipcart" data-api-key="YOUR_API_KEY"></div>
     <script type="module" src="./src/components/index.js"></script>
