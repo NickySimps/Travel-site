@@ -8,6 +8,7 @@ import { initializeServiceBooking } from './service-booking.js';
 import { initializeNavigation } from './navigation.js';
 import { initializeCart } from './ShoppingCart.js';
 
+
 document.addEventListener('DOMContentLoaded', () => {
   initializeUI();
   initializeAuth();

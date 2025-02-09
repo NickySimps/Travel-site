@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Completing Login - USVI Retreats</title>
+    <link rel="stylesheet" href="src/styles/style.css">
+</head>
+<body>
+    <div class="login-complete-container">
+        <h2>Completing Your Login</h2>
+        <p>Please wait while we verify your email...</p>
+    </div>
+
+    <script type="module">
+        // This page will automatically handle the email link sign-in
+        // The auth.js initialization will detect the email link and complete the sign-in
+        import { initializeAuth } from './src/components/auth.js';
+        initializeAuth();
+    </script>
+</body>
+</html>

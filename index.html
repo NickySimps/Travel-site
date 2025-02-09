@@ -378,8 +378,8 @@
                                 <input type="text" name="lastName" id="lastName" placeholder="Last Name" required>
                             </div>
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
-                                <input type="tel" name="phone" id="phone" placeholder="Phone Number" required>
-                                <input type="email" name="email" id="email" placeholder="Email Address" required>
+                                <input type="tel" name="phone" id="newsletter-phone" placeholder="Phone Number" required>
+                                <input type="email" name="email" id="newsletter-email" placeholder="Email Address" required>
                             </div>
                             <div class="service-option" style="margin-top: 1rem;">
                                 <input type="checkbox" id="preferences" required>
@@ -542,9 +542,75 @@
             <span id="orbTotal"></span>
         </div>
     </div>
+
+    <div id="bookingInquiryModal" class="inquiry-modal">
+        <div class="inquiry-content">
+            <button class="close-inquiry">&times;</button>
+            <h3>Complete Your Booking Request</h3>
+            <div id="bookingSummary" class="booking-summary">
+                <!-- Filled dynamically -->
+            </div>
+            <form id="inquiryForm" class="inquiry-form">
+                <div class="form-group">
+                    <input type="text" id="fullName" name="fullName" placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" name="email" placeholder="Email Address" required>
+                </div>
+                <div class="form-group">
+                    <input type="tel" id="phone" name="phone" placeholder="Phone Number" required 
+                           pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number">
+                </div>
+                <div class="form-group">
+                    <textarea id="specialRequests" name="specialRequests" 
+                              placeholder="Special Requests or Questions"></textarea>
+                </div>
+                <button type="submit" class="submit-inquiry">Submit Booking Request</button>
+            </form>
+        </div>
+    </div>
+    <!-- Auth Modal -->
+<div id="auth-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="auth-form">
+            <div id="login-section">
+                <h2>Login</h2>
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" placeholder="Password" required>
+                </div>
+                <button type="submit">Login</button>
+                <p>Don't have an account? <a href="#" id="switch-to-signup">Sign up</a></p>
+            </div>
+            
+            <div id="signup-section" style="display: none;">
+                <h2>Sign Up</h2>
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" placeholder="Password" required>
+                </div>
+                <button type="submit">Sign Up</button>
+                <p>Already have an account? <a href="#" id="switch-to-login">Login</a></p>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- User Menu -->
+<div id="user-menu" class="user-menu">
+    <div id="user-display"></div>
+    <button id="logout-btn">Logout</button>
+</div>
     <!-- Snipcart Setup -->
     <div hidden id="snipcart" data-api-key="YOUR_API_KEY"></div>
     <script type="module" src="./src/components/index.js"></script>
-</body>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script></body>
 
 </html>
