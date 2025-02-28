@@ -7,8 +7,10 @@ export const initializeForms = () => {
 
   newsletterForm?.addEventListener('submit', (e) => {
     e.preventDefault();
-const email = document.getElementById('newsletter-email').value;
-const phone = document.getElementById('newsletter-phone').value;
+    const email = document.getElementById('email') || document.getElementById('newsletter-email');
+    const phone = document.getElementById('phone') || document.getElementById('newsletter-phone');
+    const emailValue = email ? email.value : '';
+    const phoneValue = phone ? phone.value : '';
 
     if (!validateEmail(email) || !validatePhone(phone)) {
       alert('Please check your email and phone number.');

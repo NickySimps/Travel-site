@@ -528,7 +528,17 @@ button:hover, .checkout-btn:hover {
     background: var(--primary-orange);
     color: white;
   }
-
+  @media screen and (max-width: 768px) {
+    nav ul.active {
+      height: 100vh;
+      overflow-y: auto;
+      padding-bottom: 100px;
+    }
+    
+    .package-box img {
+      height: 180px;
+    }
+  }
 .service-btn:hover {
   background: #ffdda9;
   color: #333;

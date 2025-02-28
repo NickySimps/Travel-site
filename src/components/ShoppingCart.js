@@ -2,7 +2,7 @@ import { CONFIG } from './config.js';
 
 export const initializeCart = () => {
   if (window.SnipcartSettings) return; // Prevent duplicate initialization
-  
+
   window.SnipcartSettings = {
     publicApiKey: CONFIG.SNIPCART.PUBLIC_KEY,
     loadStrategy: 'on-user-interaction',
@@ -18,7 +18,7 @@ export const initializeCart = () => {
   link.rel = "stylesheet";
   link.href = CONFIG.SNIPCART.CSS_URL;
   document.head.appendChild(link);
-};
+
 
   window.addEventListener('snipcart.ready', () => {
     // Now Snipcart is guaranteed to be loaded
@@ -27,7 +27,7 @@ export const initializeCart = () => {
     cartButton.classList.add('snipcart-checkout');
     cartButton.textContent = 'Cart';
     document.querySelector('header').appendChild(cartButton);
-    
+
     console.log('Snipcart ready');
     Snipcart.events.on('item.adding', (item) => {
       console.log('Adding item:', item);
@@ -38,11 +38,11 @@ export const initializeCart = () => {
     Snipcart.events.on('cart.ready', (cart) => {
       console.log('Cart ready:', cart);
     });
-    
-  
-    if (cartButton.hasChildNodes()) 
-    {
-    openCartButton.style.display = cartButton.hasChildNodes() ? 'block' : 'none';
-    
-  }
-});
+
+
+    if (cartButton.hasChildNodes()) {
+      openCartButton.style.display = cartButton.hasChildNodes() ? 'block' : 'none';
+
+    }
+  });
+};

@@ -7,7 +7,7 @@ import {
     signInWithEmailLink,
     signOut,
     onAuthStateChanged 
-} from 'firebase/auth';
+} from './firebase/auth';
 
 const auth = getAuth();
 

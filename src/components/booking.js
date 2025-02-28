@@ -12,6 +12,7 @@ export const initializeBooking = () => {
     const checkOutDisplay = document.getElementById('checkOutDisplay');
     const confirmButton = document.getElementById('confirmDates');
     const inquiryForm = document.getElementById('inquiryForm');
+    
 
     let currentDate = new Date();
     let currentMonth = currentDate.getMonth();
