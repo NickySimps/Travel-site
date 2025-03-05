@@ -7,9 +7,11 @@ import {
     signInWithEmailLink,
     signOut,
     onAuthStateChanged 
-} from './firebase/auth';
+} from 'firebase/auth';
 
-const auth = getAuth();
+const firebaseConfig = CONFIG.FIREBASE;
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 const actionCodeSettings = {
     url: window.location.origin + '/login-complete.html',

@@ -19,6 +19,9 @@ export const CONFIG = {
     FIREBASE: {
       apiKey: "AIzaSyAvKfaFzdlTzodxD2jQSLExl2haQSxvkiw",
       authDomain: "travel-site-c65a7.firebaseapp.com",
-      projectId: "travel-site-c65a7"
+      projectId: "travel-site-c65a7",
+      storageBucket: "travel-site-c65a7.appspot.com",
+      messagingSenderId: "your-messaging-sender-id",
+      appId: "your-app-id"
   }
   };
