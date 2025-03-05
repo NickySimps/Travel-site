@@ -1,17 +1,11 @@
 // auth.js
 import { CONFIG } from 'config.js';
-import { 
-    getAuth, 
-    sendSignInLinkToEmail,
-    isSignInWithEmailLink,
-    signInWithEmailLink,
-    signOut,
-    onAuthStateChanged 
-} from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
 
+// Initialize Firebase using the global firebase object
 const firebaseConfig = CONFIG.FIREBASE;
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
 const actionCodeSettings = {
     url: window.location.origin + '/login-complete.html',
@@ -44,13 +38,13 @@ export const initializeAuth = () => {
     };
 
     // Check if the current page is handling an email sign-in link
-    if (isSignInWithEmailLink(auth, window.location.href)) {
+    if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
         let email = window.localStorage.getItem('emailForSignIn');
         if (!email) {
             email = window.prompt('Please provide your email for confirmation');
         }
 
-        signInWithEmailLink(auth, email, window.location.href)
+        firebase.auth().signInWithEmailLink(email, window.location.href)
             .then(() => {
                 window.localStorage.removeItem('emailForSignIn');
                 window.location.href = '/'; // Redirect to home page
@@ -61,7 +55,7 @@ export const initializeAuth = () => {
     }
 
     // Auth state observer
-    onAuthStateChanged(auth, updateAuthUI);
+    firebase.auth().onAuthStateChanged(updateAuthUI);
 
     // Toggle auth form
     authToggle?.addEventListener('click', (e) => {
@@ -84,7 +78,7 @@ export const initializeAuth = () => {
         const email = e.target.email.value;
 
         try {
-            await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+            await firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings);
             window.localStorage.setItem('emailForSignIn', email);
             alert('Check your email for the login link!');
             authForm.classList.remove('active');
@@ -97,7 +91,7 @@ export const initializeAuth = () => {
     document.addEventListener('click', async (e) => {
         if (e.target.id === 'logout-btn') {
             try {
-                await signOut(auth);
+                await firebase.auth().signOut();
             } catch (error) {
                 console.error('Error signing out:', error);
             }
