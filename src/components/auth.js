@@ -1,11 +1,18 @@
 // auth.js
 import { CONFIG } from 'config.js';
 import { initializeApp } from 'firebase/app';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 // Initialize Firebase using the global firebase object
 const firebaseConfig = CONFIG.FIREBASE;
 const firebaseApp = initializeApp(firebaseConfig);
-const auth = firebase.auth();
+const auth = getAuth(firebaseApp);
+
+//Detect auth state change
+
+
+
+
 
 const actionCodeSettings = {
     url: window.location.origin + '/login-complete.html',
@@ -16,6 +23,15 @@ export const initializeAuth = () => {
     const authToggle = document.querySelector(CONFIG.UI.authToggle);
     const authForm = document.querySelector(CONFIG.UI.authForm);
     const authFormContent = document.querySelector(CONFIG.UI.authFormContent);
+
+    onAuthStateChangedauth, (user) => {
+        if (!user) {
+            console.log('logged in.');
+        }  else {
+            console.log('no user');
+        }
+        
+    }
 
     const updateAuthUI = (user) => {
         if (user) {
