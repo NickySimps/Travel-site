@@ -1,0 +1,57 @@
+/* Layout Header */
+header {
+    background-color: var(--white);
+    padding: var(--spacing-sm) 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: var(--z-top);
+    box-shadow: 0 2px 5px var(--soft-shadow);
+    transition: transform var(--transition-default);
+  }
+  
+  header .container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  #branding {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-sm);
+  }
+  
+  #branding h1 {
+    font-size: 2rem;
+    color: var(--primary-blue);
+    margin: 0;
+  }
+  
+  .auth-container {
+    position: relative;
+  }
+  
+  .auth-form {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--white);
+    padding: var(--spacing-sm);
+    border-radius: var(--border-radius-md);
+    box-shadow: 0 4px 6px var(--soft-shadow);
+    width: 250px;
+    z-index: var(--z-modal);
+  }
+  
+  .auth-form.active {
+    display: block;
+  }
+  
+  @media screen and (max-width: 768px) {
+    #branding h1 {
+      font-size: 1.5rem;
+    }
+  }

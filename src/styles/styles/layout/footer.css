@@ -1,0 +1,36 @@
+/* Layout Footer */
+footer {
+    background-color: var(--white);
+    padding: var(--spacing-xl) 0;
+    margin-top: auto;
+  }
+  
+  footer .package-grid {
+    padding: var(--spacing-lg) 0;
+  }
+  
+  footer .flavor-content {
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  footer h3 {
+    color: var(--primary-blue);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  footer .flavor-textList li {
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  footer .mission-statement {
+    text-align: center;
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-sm);
+    border-top: 1px solid var(--soft-shadow);
+  }
+  
+  @media screen and (max-width: 768px) {
+    footer .package-grid {
+      gap: var(--spacing-md);
+    }
+  }

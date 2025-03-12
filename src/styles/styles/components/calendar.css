@@ -1,0 +1,81 @@
+/* Components Calendar */
+.calendar-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: var(--z-modal);
+    justify-content: center;
+    align-items: center;
+}
+
+.calendar-modal.active {
+    display: flex;
+}
+
+.calendar-content {
+    background: var(--white);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 5px 15px var(--soft-shadow);
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-sm);
+    padding: var(--spacing-xs);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: var(--spacing-md);
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xs);
+    cursor: pointer;
+    border-radius: var(--border-radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.calendar-day.past .day-number {
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+.calendar-day.selected-checkin .day-number {
+    background-color: var(--primary-blue);
+    color: var(--white);
+}
+
+.calendar-day.selected-checkout .day-number {
+    background-color: var(--primary-orange);
+    color: var(--black);
+}
+
+.calendar-day .day-number.in-range {
+    background-color: rgba(135, 206, 235, 0.2);
+}
+
+@media screen and (max-width: 768px) {
+    .calendar-content {
+        width: 95%;
+        padding: var(--spacing-sm);
+    }
+}

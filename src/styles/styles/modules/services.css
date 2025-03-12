@@ -1,0 +1,87 @@
+/* Modules Services */
+#services {
+    padding: var(--spacing-xl) 0;
+    background: rgba(255, 255, 255, 0.9);
+  }
+  
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-xl);
+    margin: var(--spacing-xl) 0;
+  }
+  
+  .service-package-box {
+    background: var(--white);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: 0 4px 6px var(--soft-shadow);
+    transition: all var(--transition-default);
+    margin-bottom: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .service-price-tag {
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+    background: var(--primary-blue);
+    color: var(--white);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 25px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px var(--soft-shadow);
+  }
+  
+  .service-booking-form {
+    padding: var(--spacing-sm);
+    background: #f8f9fa;
+    border-radius: var(--border-radius-md);
+    margin-top: var(--spacing-sm);
+  }
+  
+  .service-feature {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .service-feature-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: var(--spacing-xs);
+    color: var(--primary-blue);
+  }
+  
+  .service-total {
+    background: #f8f9fa;
+    padding: var(--spacing-sm);
+    border-radius: var(--border-radius-md);
+    margin-top: var(--spacing-sm);
+  }
+  
+  .service-total-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .service-total-final {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--primary-blue);
+    border-top: 2px solid #ddd;
+    padding-top: var(--spacing-xs);
+    margin-top: var(--spacing-xs);
+  }
+  
+  @media screen and (max-width: 768px) {
+    .service-package-box {
+      margin: var(--spacing-sm) 0;
+    }
+  
+    .services-grid {
+      grid-template-columns: 1fr;
+    }
+  }

@@ -1,0 +1,74 @@
+/* Components Forms */
+.newsletter-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-sm);
+  }
+  
+  .newsletter-form input,
+  .auth-form input {
+    flex-grow: 1;
+    min-width: 200px;
+    padding: var(--spacing-sm);
+    border: 2px solid var(--primary-blue);
+    border-radius: var(--border-radius-sm);
+    font-family: var(--main-font);
+  }
+  
+  .service-option {
+    display: flex;
+    gap: var(--spacing-sm);
+    align-items: center;
+    margin-top: var(--spacing-sm);
+  }
+  
+  .service-option input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-blue);
+  }
+  
+  .number-input {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius-sm);
+    overflow: hidden;
+  }
+  
+  .number-input button {
+    background: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 1.2rem;
+  }
+  
+  .number-input button:hover {
+    background: var(--primary-orange);
+  }
+  
+  .number-input input {
+    width: 60px;
+    text-align: center;
+    border: none;
+    padding: var(--spacing-xs);
+    -moz-appearance: textfield;
+  }
+  
+  .number-input input::-webkit-outer-spin-button,
+  .number-input input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .newsletter-form {
+      flex-direction: column;
+    }
+    
+    .newsletter-form input {
+      width: 100%;
+    }
+  }

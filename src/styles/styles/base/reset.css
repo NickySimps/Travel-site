@@ -1,0 +1,55 @@
+/* Base Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  html,
+  body {
+    height: 100vh;
+    line-height: 1.6;
+    font-family: var(--main-font);
+  }
+  
+  body {
+    background-image: linear-gradient(
+      to bottom left,
+      var(--primary-blue) 40%,
+      var(--primary-orange) 100%
+    );
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-attachment: fixed;
+    background-size: contain;
+    padding-top: 80px;
+  }
+  
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  
+  ul, ol {
+    list-style: none;
+  }
+  
+  @media screen and (max-width: 768px) {
+    body {
+      padding-top: 70px;
+    }
+  }

@@ -1,0 +1,50 @@
+
+/* Base Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--main-font);
+    line-height: 1.2;
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  h1 {
+    font-size: 2rem;
+  }
+  
+  h2 {
+    font-size: 1.75rem;
+  }
+  
+  h3 {
+    font-size: 1.5rem;
+  }
+  
+  p {
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .flavor-textList {
+    list-style-type: circle;
+    padding-left: 10%;
+    font-family: var(--accent-font);
+    font-weight: 100;
+    margin: var(--spacing-sm) 0;
+  }
+  
+  .mission-statement {
+    font-style: italic;
+    text-align: center;
+  }
+  
+  @media screen and (max-width: 768px) {
+    h1 {
+      font-size: 1.75rem;
+    }
+    
+    h2 {
+      font-size: 1.5rem;
+    }
+    
+    h3 {
+      font-size: 1.25rem;
+    }
+  }

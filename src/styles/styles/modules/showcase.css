@@ -1,0 +1,62 @@
+/* Modules Showcase */
+#showcase {
+    position: relative;
+    margin-bottom: var(--spacing-xl);
+    z-index: var(--z-normal);
+  }
+  
+  #showcase .container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--white);
+    padding: var(--spacing-xl) var(--spacing-sm);
+  }
+  
+  .banner-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: var(--z-below);
+    filter: brightness(0.6);
+  }
+  
+  .showcase-content {
+    z-index: var(--z-normal);
+    max-width: 800px;
+  }
+  
+  .showcase-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-sm);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  
+  .showcase-content p {
+    font-size: 1.2rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  }
+  
+  .mission-statement {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: var(--spacing-xl);
+    margin: var(--spacing-lg) 0;
+    border-radius: var(--border-radius-lg);
+    text-align: center;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .showcase-content h1 {
+      font-size: 2rem;
+    }
+  
+    .showcase-content p {
+      font-size: 1rem;
+    }
+  }

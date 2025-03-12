@@ -22,6 +22,7 @@ export const CONFIG = {
       projectId: "travel-site-c65a7",
       storageBucket: "travel-site-c65a7.appspot.com",
       messagingSenderId: "your-messaging-sender-id",
-      appId: "your-app-id"
+      appId: "1:515419394066:web:26dfc4f17f41bf205e08cb",
+      measurementId: ""
   }
   };
