@@ -6,6 +6,12 @@ import { CONFIG } from './config.js';
 // import { initializeApp } from 'firebase/app';
 // import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
+
+// Check if Firebase is already initialized
+if (!firebase.apps.length) {
+    firebase.initializeApp(CONFIG.FIREBASE);
+  }
+
 // Initialize Firebase using the global firebase object
 const firebaseConfig = CONFIG.FIREBASE;
 firebase.initializeApp(firebaseConfig);
