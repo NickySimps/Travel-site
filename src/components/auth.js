@@ -24,14 +24,13 @@ export const initializeAuth = () => {
     const authForm = document.querySelector(CONFIG.UI.authForm);
     const authFormContent = document.querySelector(CONFIG.UI.authFormContent);
 
-    onAuthStateChangedauth, (user) => {
-        if (!user) {
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
             console.log('logged in.');
-        }  else {
+        } else {
             console.log('no user');
         }
-        
-    }
+    });
 
     const updateAuthUI = (user) => {
         if (user) {
