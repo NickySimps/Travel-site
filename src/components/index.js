@@ -7,7 +7,6 @@ import { initializeForms } from './forms.js';
 import { initializeServiceBooking } from './service-booking.js';
 import { initializeNavigation } from './navigation.js';
 
-
 document.addEventListener('DOMContentLoaded', () => {
   initializeUI();
   initializeAuth();

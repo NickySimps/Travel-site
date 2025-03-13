@@ -1,35 +1,30 @@
 // auth.js
 import { CONFIG } from './config.js';
-import { initializeApp } from 'firebase/app';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+
+// No need to import Firebase - it's available globally via the CDN
+// Remove these lines:
+// import { initializeApp } from 'firebase/app';
+// import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 // Initialize Firebase using the global firebase object
 const firebaseConfig = CONFIG.FIREBASE;
-const firebaseApp = initializeApp(firebaseConfig);
-const auth = getAuth(firebaseApp);
-
-//Detect auth state change
-
-
-
-
-
-const actionCodeSettings = {
-    url: window.location.origin + '/login-complete.html',
-    handleCodeInApp: true
-};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
 export const initializeAuth = () => {
     const authToggle = document.querySelector(CONFIG.UI.authToggle);
     const authForm = document.querySelector(CONFIG.UI.authForm);
     const authFormContent = document.querySelector(CONFIG.UI.authFormContent);
 
-    onAuthStateChanged(auth, (user) => {
+    // Use firebase.auth().onAuthStateChanged instead of imported version
+    firebase.auth().onAuthStateChanged((user) => {
         if (user) {
             console.log('logged in.');
         } else {
             console.log('no user');
         }
+        
+        updateAuthUI(user);
     });
 
     const updateAuthUI = (user) => {
@@ -69,13 +64,10 @@ export const initializeAuth = () => {
             });
     }
 
-    // Auth state observer
-    firebase.auth().onAuthStateChanged(updateAuthUI);
-
     // Toggle auth form
     authToggle?.addEventListener('click', (e) => {
         e.stopPropagation();
-        if (!auth.currentUser) {
+        if (!firebase.auth().currentUser) { // Use firebase.auth() instead of auth
             authForm?.classList.toggle('active');
         }
     });
