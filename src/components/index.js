@@ -8,11 +8,45 @@ import { initializeServiceBooking } from './service-booking.js';
 import { initializeNavigation } from './navigation.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('DOM fully loaded, initializing components...');
+  
+  // Initialize UI components first (base functionality)
   initializeUI();
-  initializeAuth();
-  initializeServices();
-  initializeBooking();
-  initializeForms();
+  
+  // Initialize navigation features
   initializeNavigation();
-  initializeServiceBooking();
+  
+  // Initialize auth after UI is ready
+  try {
+    initializeAuth();
+  } catch (error) {
+    console.error('Error initializing authentication:', error);
+  }
+  
+  // Initialize the rest of the components with error handling
+  try {
+    initializeServices();
+  } catch (error) {
+    console.error('Error initializing services:', error);
+  }
+  
+  try {
+    initializeBooking();
+  } catch (error) {
+    console.error('Error initializing booking:', error);
+  }
+  
+  try {
+    initializeForms();
+  } catch (error) {
+    console.error('Error initializing forms:', error);
+  }
+  
+  try {
+    initializeServiceBooking();
+  } catch (error) {
+    console.error('Error initializing service booking:', error);
+  }
+  
+  console.log('All components initialized');
 });

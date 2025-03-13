@@ -10,53 +10,51 @@ const initializeUI = () => {
 
   window.addEventListener('scroll', debounce(() => {
     const scrollTop = window.pageYOffset;
-    backToTop.style.display = scrollTop > 300 ? 'block' : 'none';
-    header.style.transform = scrollTop > lastScrollTop && scrollTop > 200 ?
-      'translateY(-100%)' : 'translateY(0)';
+    if (backToTop) {
+      backToTop.style.display = scrollTop > 300 ? 'block' : 'none';
+    }
+    if (header) {
+      header.style.transform = scrollTop > lastScrollTop && scrollTop > 200 ?
+        'translateY(-100%)' : 'translateY(0)';
+    }
     lastScrollTop = scrollTop;
   }, 100));
 
-
-  backToTop.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+  if (backToTop) {
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
 
   initializeCart();
 
-  document.querySelectorAll(CONFIG.UI.moreInfoBtns).forEach(btn => {
-    btn.addEventListener('click', () => {
-      const content = btn.nextElementSibling;
-      content.classList.toggle('active');
-      btn.textContent = content.classList.contains('active') ? 'Show Less' : 'More Info';
-    });
-  });
+  // Single implementation for all "More Info" buttons
   document.querySelectorAll('.btn-info').forEach(btn => {
     btn.addEventListener('click', () => {
-      // Find the next sibling that contains the content
-      const content = btn.nextElementSibling;
+      // Find the target element
+      const targetId = btn.getAttribute('data-target');
+      let content;
+      
+      if (targetId) {
+        // If the button has a data-target attribute, use it to find the content
+        content = document.querySelector(targetId);
+      } else {
+        // Otherwise, look for the next sibling with flavor-content class
+        content = btn.nextElementSibling;
+        while (content && !content.classList.contains('flavor-content')) {
+          content = content.nextElementSibling;
+        }
+      }
 
-      // Toggle active class
-      if (content && content.classList.contains('flavor-content')) {
+      if (content) {
+        // Toggle the active class
         content.classList.toggle('active');
-
+        
         // Update button text based on state
         btn.textContent = content.classList.contains('active') ? 'Less Info' : 'More Info';
-
-        // Optional: Close other open sections
-        const siblings = btn.closest('.package-box')
-          .querySelectorAll('.flavor-content.active');
-
-        siblings.forEach(sibling => {
-          if (sibling !== content) {
-            sibling.classList.remove('active');
-            sibling.previousElementSibling.textContent = 'More Info';
-          }
-        });
       }
     });
   });
 };
-
-
 
 export { initializeUI };
