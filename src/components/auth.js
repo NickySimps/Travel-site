@@ -1,5 +1,5 @@
 // auth.js
-import { CONFIG } from 'config.js';
+import { CONFIG } from './config.js';
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
