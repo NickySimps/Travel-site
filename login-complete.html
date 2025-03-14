@@ -2,23 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src 'self' fonts.googleapis.com fonts.gstatic.com data:; style-src 'self' 'unsafe-inline' fonts.googleapis.com; script-src 'self';">    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=YourOtherFont&display=swap" rel="stylesheet">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self' fonts.googleapis.com fonts.gstatic.com data:; style-src 'self' 'unsafe-inline' fonts.googleapis.com; script-src 'self'; connect-src 'self';">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Completing Login - USVI Retreats</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="src/styles/style.css">
+    <style>
+        .login-complete-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 2rem;
+        }
+    </style>
 </head>
 <body>
     <div class="login-complete-container">
         <h2>Completing Your Login</h2>
         <p>Please wait while we verify your email...</p>
+        <div id="status-message"></div>
     </div>
 
     <script type="module">
         // This page will automatically handle the email link sign-in
         // The auth.js initialization will detect the email link and complete the sign-in
         import { initializeAuth } from './src/components/auth.js';
-        initializeAuth();
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                initializeAuth();
+                document.getElementById('status-message').textContent = 'Verification in progress...';
+            } catch (error) {
+                document.getElementById('status-message').textContent = 'Error: ' + error.message;
+                console.error('Authentication error:', error);
+            }
+        });
     </script>
-    
 </body>
 </html>
