@@ -7,8 +7,8 @@ let firebaseAuth;
 
 // Action code settings for email link sign-in
 const actionCodeSettings = {
-  url: window.location.origin + '/login-complete.html',
-  handleCodeInApp: true
+    url: window.location.origin + '/Travel-site/login-complete.html',
+    handleCodeInApp: true
 };
 
 export const initializeAuth = () => {
