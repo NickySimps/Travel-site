@@ -1,6 +1,6 @@
+// src/components/main.js
 import { CONFIG } from './config.js';
 import { debounce } from './utils.js';
-import { initializeCart } from './ShoppingCart.js';
 
 let lastScrollTop = 0;
 
@@ -25,8 +25,6 @@ const initializeUI = () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
-
-  initializeCart();
 
   // Single implementation for all "More Info" buttons
   document.querySelectorAll('.btn-info').forEach(btn => {

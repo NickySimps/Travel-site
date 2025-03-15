@@ -1,3 +1,4 @@
+// src/components/index.js
 import { CONFIG } from './config.js';
 import { initializeUI } from './main.js';
 import { initializeAuth } from './auth.js';
@@ -6,6 +7,7 @@ import { initializeBooking } from './booking.js';
 import { initializeForms } from './forms.js';
 import { initializeServiceBooking } from './service-booking.js';
 import { initializeNavigation } from './navigation.js';
+import { initializeCustomCart } from './CustomCart.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   console.log('DOM fully loaded, initializing components...');
@@ -15,6 +17,14 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Initialize navigation features
   initializeNavigation();
+  
+  // Initialize our custom cart instead of Snipcart
+  try {
+    initializeCustomCart();
+    console.log('Custom cart initialized');
+  } catch (error) {
+    console.error('Error initializing custom cart:', error);
+  }
   
   // Initialize auth after UI is ready
   try {

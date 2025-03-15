@@ -1,4 +1,4 @@
-// login-handler.js
+// src/components/login-handler.js
 function updateStatus(message) {
     console.log(message);
     document.getElementById('status-message').textContent = message;
@@ -10,10 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Firebase configuration from your config
     const firebaseConfig = {
         apiKey: "AIzaSyAvKfaFzdlTzodxD2jQSLExl2haQSxvkiw",
-        authDomain: "travel-site-c65a7.firebaseapp.com",
-        projectId: "travel-site-c65a7",
-        storageBucket: "travel-site-c65a7.appspot.com",
-        messagingSenderId: "your-messaging-sender-id",
+        authDomain: "usvi-retreats.firebaseapp.com",
+        projectId: "usvi-retreats",
+        storageBucket: "usvi-retreats.appspot.com",
+        messagingSenderId: "515419394066",
         appId: "1:515419394066:web:26dfc4f17f41bf205e08cb"
     };
     
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         updateStatus("Sign-in successful! Redirecting...");
                         localStorage.removeItem('emailForSignIn');
                         setTimeout(() => {
-                            window.location.href = '/Travel-site/'; // Adjust this path as needed
+                            window.location.href = '/'; // Adjust path as needed
                         }, 1000);
                     })
                     .catch((error) => {

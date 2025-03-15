@@ -1,5 +1,4 @@
-// Enhanced auth.js with better auth state management and logout
-
+// src/components/auth.js
 import { CONFIG } from './config.js';
 
 // Global firebase app reference
@@ -110,7 +109,7 @@ export const initializeAuth = () => {
       firebaseAuth.signInWithEmailLink(email, window.location.href)
         .then(() => {
           window.localStorage.removeItem('emailForSignIn');
-          window.location.href = '/Travel-site/'; // Redirect to home page
+          window.location.href = '/'; // Redirect to home page
         })
         .catch((error) => {
           console.error('Error signing in with email link:', error);
