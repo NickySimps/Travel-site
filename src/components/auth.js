@@ -11,15 +11,42 @@ const actionCodeSettings = {
   handleCodeInApp: true
 };
 
-export const initializeAuth = () => {
-  // Check if Firebase is already initialized to avoid double initialization
-  if (!firebase.apps.length) {
-    firebaseApp = firebase.initializeApp(CONFIG.FIREBASE);
+export const initializeAuth = (firebaseAlreadyInitialized = false) => {
+  // Check if Firebase is already initialized
+  if (!firebaseAlreadyInitialized && typeof firebase !== 'undefined') {
+    if (!firebase.apps.length) {
+      console.log('Initializing Firebase app');
+      try {
+        firebaseApp = firebase.initializeApp(CONFIG.FIREBASE);
+      } catch (error) {
+        console.error('Error initializing Firebase:', error);
+        // If error says already initialized, use existing app
+        if (error.code === 'app/duplicate-app') {
+          firebaseApp = firebase.app();
+        } else {
+          throw error; // Re-throw if it's a different error
+        }
+      }
+    } else {
+      console.log('Firebase already initialized, using existing app');
+      firebaseApp = firebase.app(); // Use the existing app
+    }
+  } else if (typeof firebase !== 'undefined') {
+    console.log('Using existing Firebase instance');
+    firebaseApp = firebase.app(); // Use existing app
   } else {
-    firebaseApp = firebase.app(); // Use the existing app if it was already initialized
+    console.warn('Firebase not available, authentication features will not work');
+    return;
   }
 
-  firebaseAuth = firebase.auth();
+  // Initialize auth
+  try {
+    firebaseAuth = firebase.auth();
+    console.log('Firebase Auth initialized');
+  } catch (error) {
+    console.error('Error initializing Firebase Auth:', error);
+    return;
+  }
   
   const authStatusElement = document.getElementById('auth-status');
 
@@ -67,54 +94,67 @@ export const initializeAuth = () => {
       const authForm = document.getElementById('auth-form');
       const authFormContent = document.getElementById('auth-form-content');
       
-      // Toggle auth form
-      authToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        authForm.classList.toggle('active');
-      });
-      
-      // Close dropdown when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!e.target.closest('.auth-container')) {
-          authForm.classList.remove('active');
-        }
-      });
+      if (authToggle && authForm) {
+        // Toggle auth form
+        authToggle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          authForm.classList.toggle('active');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+          if (authForm && !e.target.closest('.auth-container')) {
+            authForm.classList.remove('active');
+          }
+        });
+      }
       
       // Handle form submission for email link login
-      authFormContent.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = e.target.email.value;
+      if (authFormContent) {
+        authFormContent.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const email = e.target.email.value;
 
-        try {
-          await firebaseAuth.sendSignInLinkToEmail(email, actionCodeSettings);
-          window.localStorage.setItem('emailForSignIn', email);
-          alert('Check your email for the login link!');
-          authForm.classList.remove('active');
-        } catch (error) {
-          console.error('Error sending login link:', error);
-          alert('Error sending login link: ' + error.message);
-        }
-      });
+          try {
+            await firebaseAuth.sendSignInLinkToEmail(email, actionCodeSettings);
+            window.localStorage.setItem('emailForSignIn', email);
+            alert('Check your email for the login link!');
+            if (authForm) {
+              authForm.classList.remove('active');
+            }
+          } catch (error) {
+            console.error('Error sending login link:', error);
+            alert('Error sending login link: ' + error.message);
+          }
+        });
+      }
     }
   });
 
   // Handle email link sign-in if we're on the login-complete page
   if (window.location.pathname.includes('login-complete.html')) {
+    console.log('Detected login-complete page, handling email sign-in');
     if (firebaseAuth.isSignInWithEmailLink(window.location.href)) {
       let email = window.localStorage.getItem('emailForSignIn');
       if (!email) {
         email = window.prompt('Please provide your email for confirmation');
       }
 
-      firebaseAuth.signInWithEmailLink(email, window.location.href)
-        .then(() => {
-          window.localStorage.removeItem('emailForSignIn');
-          window.location.href = '/'; // Redirect to home page
-        })
-        .catch((error) => {
-          console.error('Error signing in with email link:', error);
-          alert('Error signing in: ' + error.message);
-        });
+      if (email) {
+        console.log('Attempting to sign in with email link');
+        firebaseAuth.signInWithEmailLink(email, window.location.href)
+          .then(() => {
+            console.log('Sign-in successful');
+            window.localStorage.removeItem('emailForSignIn');
+            window.location.href = window.location.origin + '/Travel-site/'; // Redirect to home page
+          })
+          .catch((error) => {
+            console.error('Error signing in with email link:', error);
+            alert('Error signing in: ' + error.message);
+          });
+      }
+    } else {
+      console.warn('Not a valid sign-in link');
     }
   }
 };
