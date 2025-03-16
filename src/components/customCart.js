@@ -1,4 +1,3 @@
-// src/components/CustomCart.js
 export class CustomCart {
     constructor() {
       this.items = [];
