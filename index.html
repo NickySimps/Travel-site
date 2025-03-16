@@ -8,26 +8,7 @@
     <link rel="stylesheet" href="src/styles/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
 
-    <!-- Friends Package -->
-    <meta name="snipcart-product-id-friends" content="friends-package">
-    <meta name="snipcart-product-name-friends" content="Friends Package">
-    <meta name="snipcart-product-price-friends" content="500.00">
-    <meta name="snipcart-product-url-friends" content="/packages.html">
-    <meta name="snipcart-product-description-friends" content="Perfect for group getaways">
-
-    <!-- Sun Package -->
-    <meta name="snipcart-product-id-sun" content="sun-package">
-    <meta name="snipcart-product-name-sun" content="Sun Package">
-    <meta name="snipcart-product-price-sun" content="800.00">
-    <meta name="snipcart-product-url-friends" content="/packages.html">
-    <meta name="snipcart-product-description-sun" content="Ultimate relaxation">
-
-    <!-- Fun Package -->
-    <meta name="snipcart-product-id-fun" content="fun-package">
-    <meta name="snipcart-product-name-fun" content="Fun Package">
-    <meta name="snipcart-product-price-fun" content="700.00">
-    <meta name="snipcart-product-url-friends" content="/packages.html">
-    <meta name="snipcart-product-description-fun" content="Adventure awaits">
+  
 </head>
 
 <body>
@@ -63,9 +44,7 @@
                             </div>
                         </div>
                     </li>
-                    <li>
-                        <button class="snipcart-checkout">Cart</button>
-                    </li>
+                    
                 </ul>
             </nav>
         </div>
@@ -442,17 +421,22 @@
                         <li>Facebook</li>
                         <li>Twitter</li>
                         <li>LinkedIn</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="mission-statement" style="text-align: center; margin-top: 2rem;">
-                USVI Retreats, LLC &copy; 2024 | All Rights Reserved | Privacy Policy | Terms of Service
-            </div>
+                    </ul>sni id="backToTop" title="Go to top">↑</button>
+    <button class="cart-float">
+        <i class="fa fa-shopping-cart"></i>
+        <span class="cart-count">0</span>
+      </button>
+      
+      <div class="cart-panel">
+        <div class="cart-items">
+          <!-- Cart items will be populated here via JavaScript -->
         </div>
-    </footer>
-    <button id="backToTop" title="Go to top">↑</button>
-
+        <div class="cart-total">
+          <span>Total:</span>
+          <span class="total-amount">$0.00</span>
+        </div>
+        <button class="checkout-btn">Checkout</button>
+      </div>
     <!-- Booking Calendar Modal -->
     <div id="calendarModal" class="calendar-modal">
         <div class="calendar-content">
@@ -611,7 +595,6 @@
         <button id="logout-btn">Logout</button>
     </div>
     <!-- Snipcart Setup -->
-    <div hidden id="snipcart" data-api-key="YOUR_API_KEY"></div>
     <script type="module" src="./src/components/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
