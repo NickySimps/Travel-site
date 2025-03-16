@@ -1,3 +1,5 @@
+// Enhanced booking.js with proper cart integration
+
 export const initializeBooking = () => {
     const calendarModal = document.getElementById('calendarModal');
     const inquiryModal = document.getElementById('bookingInquiryModal');
@@ -35,34 +37,39 @@ export const initializeBooking = () => {
 
     const packagePrices = {
         'villa-alhambra': {
-            basePrice: 12438,
-            withCatering: 15438,
-            withTransport: 12988,
-            withBoth: 15988
+            basePrice: 2500,
+            perNight: true,
+            withCatering: 3000,
+            withTransport: 550,
+            withBoth: 3550
         },
         'pool-villa': {
-            basePrice: 10500,
-            withCatering: 13500,
-            withTransport: 11050,
-            withBoth: 14050
+            basePrice: 1800,
+            perNight: true,
+            withCatering: 3000,
+            withTransport: 550,
+            withBoth: 3550
         },
         'guest-villa': {
-            basePrice: 9600,
-            withCatering: 12600,
-            withTransport: 10150,
-            withBoth: 13150
+            basePrice: 1500,
+            perNight: true,
+            withCatering: 3000,
+            withTransport: 550,
+            withBoth: 3550
         },
         'tower-villa': {
-            basePrice: 9900,
-            withCatering: 12900,
-            withTransport: 10450,
-            withBoth: 13450
+            basePrice: 3300,
+            perNight: true,
+            withCatering: 3000,
+            withTransport: 550,
+            withBoth: 3550
         },
         'garden-villa': {
-            basePrice: 8400,
-            withCatering: 11400,
-            withTransport: 8950,
-            withBoth: 11950
+            basePrice: 2800,
+            perNight: true,
+            withCatering: 3000,
+            withTransport: 550,
+            withBoth: 3550
         }
     };
 
@@ -87,6 +94,12 @@ export const initializeBooking = () => {
         }) : 'Not selected';
     };
 
+    const calculateNights = (checkIn, checkOut) => {
+        if (!checkIn || !checkOut) return 0;
+        const oneDay = 24 * 60 * 60 * 1000;
+        return Math.round(Math.abs((checkOut - checkIn) / oneDay));
+    };
+
     const isDateBooked = (date) => {
         if (!currentPackage || !bookedDates[currentPackage]) return false;
         
@@ -98,25 +111,40 @@ export const initializeBooking = () => {
     };
 
     const updateTotal = () => {
-        if (!currentPackage) return 0;
+        if (!currentPackage || !checkInDate || !checkOutDate) return 0;
 
         const hasCatering = document.getElementById('cateringService').checked;
         const hasTransport = document.getElementById('transportService').checked;
         
         let price = packagePrices[currentPackage];
-        let finalPrice;
-
-        if (hasCatering && hasTransport) {
-            finalPrice = price.withBoth;
-        } else if (hasCatering) {
-            finalPrice = price.withCatering;
-        } else if (hasTransport) {
-            finalPrice = price.withTransport;
-        } else {
-            finalPrice = price.basePrice;
+        let baseTotal = price.basePrice;
+        
+        // Calculate total nights
+        const nights = calculateNights(checkInDate, checkOutDate);
+        
+        // If price is per night, multiply by number of nights
+        if (price.perNight) {
+            baseTotal = baseTotal * nights;
         }
-
-        document.getElementById('totalAmount').textContent = `$${finalPrice.toLocaleString()}`;
+        
+        // Add services costs
+        let serviceCost = 0;
+        if (hasCatering && hasTransport) {
+            serviceCost = price.withBoth;
+        } else if (hasCatering) {
+            serviceCost = price.withCatering;
+        } else if (hasTransport) {
+            serviceCost = price.withTransport;
+        }
+        
+        const finalPrice = baseTotal + serviceCost;
+        
+        // Update the displayed total
+        const totalElement = document.getElementById('totalAmount');
+        if (totalElement) {
+            totalElement.textContent = `$${finalPrice.toLocaleString()}`;
+        }
+        
         return finalPrice;
     };
 
@@ -197,9 +225,14 @@ export const initializeBooking = () => {
                         // Find and highlight potential range days
                         const allDays = document.querySelectorAll('.calendar-day');
                         allDays.forEach(dayEl => {
-                            const dayDate = new Date(currentYear, currentMonth, parseInt(dayEl.textContent));
-                            if (dayDate > hoverDate && dayDate <= potentialEndDate) {
-                                dayEl.querySelector('.day-number').classList.add('in-range-hover');
+                            if (dayEl.querySelector('.day-number') && !dayEl.classList.contains('header')) {
+                                const dayNum = parseInt(dayEl.querySelector('.day-number').textContent);
+                                if (!isNaN(dayNum)) {
+                                    const dayDate = new Date(currentYear, currentMonth, dayNum);
+                                    if (dayDate > hoverDate && dayDate <= potentialEndDate) {
+                                        dayEl.querySelector('.day-number').classList.add('in-range-hover');
+                                    }
+                                }
                             }
                         });
                     }
@@ -229,6 +262,123 @@ export const initializeBooking = () => {
         }
     };
 
+    // New function to add booking to cart
+    const addBookingToCart = (bookingDetails) => {
+        // Debug logs
+        console.log("Adding to cart:", bookingDetails);
+        
+        // First try to find the exact button
+        let addToCartButton = document.querySelector(`[data-item-id="${bookingDetails.propertyId}"]`);
+        
+        // If not found, try broader selectors
+        if (!addToCartButton) {
+            console.log("Button not found with exact ID, trying alternative selectors");
+            // Try to find any button containing the property ID
+            const buttons = document.querySelectorAll('.snipcart-add-item');
+            for (const btn of buttons) {
+                if (btn.dataset.itemId && btn.dataset.itemId.includes(bookingDetails.propertyId)) {
+                    addToCartButton = btn;
+                    break;
+                }
+            }
+        }
+        
+        // If still not found, create a new button
+        if (!addToCartButton) {
+            console.log("Creating custom cart button");
+            addToCartButton = document.createElement('button');
+            addToCartButton.className = 'snipcart-add-item';
+            addToCartButton.dataset.itemId = bookingDetails.propertyId;
+            addToCartButton.dataset.itemName = bookingDetails.propertyName;
+            addToCartButton.dataset.itemUrl = window.location.href;
+            addToCartButton.dataset.itemDescription = `${bookingDetails.propertyName} - ${formatDate(bookingDetails.checkIn)} to ${formatDate(bookingDetails.checkOut)}`;
+            addToCartButton.style.display = 'none';
+            document.body.appendChild(addToCartButton);
+        }
+        
+        try {
+            // Format dates for cart
+            const checkInFormatted = bookingDetails.checkIn.toISOString().split('T')[0];
+            const checkOutFormatted = bookingDetails.checkOut.toISOString().split('T')[0];
+            
+            console.log("Setting cart attributes:", {
+                dates: `${checkInFormatted} to ${checkOutFormatted}`,
+                guests: bookingDetails.guests,
+                services: bookingDetails.services,
+                total: bookingDetails.total
+            });
+            
+            // Update the Snipcart button attributes
+            addToCartButton.dataset.itemCustom1Name = "Check-in";
+            addToCartButton.dataset.itemCustom1Value = checkInFormatted;
+            
+            addToCartButton.dataset.itemCustom2Name = "Check-out";
+            addToCartButton.dataset.itemCustom2Value = checkOutFormatted;
+            
+            addToCartButton.dataset.itemCustom3Name = "Guests";
+            addToCartButton.dataset.itemCustom3Value = bookingDetails.guests;
+            
+            // Handle services
+            let servicesOption = "None";
+            if (bookingDetails.services.includes('Catering') && bookingDetails.services.includes('Transport')) {
+                servicesOption = "Both (+$3550)";
+            } else if (bookingDetails.services.includes('Catering')) {
+                servicesOption = "Catering (+$3000)";
+            } else if (bookingDetails.services.includes('Transport')) {
+                servicesOption = "Airport Transport & Insurance (+$550)";
+            }
+            
+            addToCartButton.dataset.itemCustom5Name = "Services";
+            addToCartButton.dataset.itemCustom5Value = servicesOption;
+            
+            // Update price based on nights and services
+            const nights = calculateNights(bookingDetails.checkIn, bookingDetails.checkOut);
+            addToCartButton.dataset.itemPrice = bookingDetails.total.toFixed(2);
+            
+            console.log("About to click add to cart button");
+            
+            // Check if using custom cart or Snipcart
+            if (window.Snipcart) {
+                // If Snipcart is loaded, use their API directly
+                console.log("Using Snipcart API");
+                Snipcart.api.items.add({
+                    id: bookingDetails.propertyId,
+                    name: bookingDetails.propertyName,
+                    price: bookingDetails.total.toFixed(2),
+                    url: window.location.href,
+                    description: `${bookingDetails.propertyName} - ${formatDate(bookingDetails.checkIn)} to ${formatDate(bookingDetails.checkOut)}`,
+                    customFields: [
+                        {
+                            name: "Check-in",
+                            value: checkInFormatted
+                        },
+                        {
+                            name: "Check-out",
+                            value: checkOutFormatted
+                        },
+                        {
+                            name: "Guests",
+                            value: bookingDetails.guests
+                        },
+                        {
+                            name: "Services",
+                            value: servicesOption
+                        }
+                    ]
+                });
+            } else {
+                // Trigger click on the add to cart button
+                console.log("Clicking cart button");
+                addToCartButton.click();
+            }
+            
+            return true;
+        } catch (error) {
+            console.error('Error adding booking to cart:', error);
+            return false;
+        }
+    };
+
     const showInquiryModal = (bookingDetails) => {
         if (!document.getElementById('bookingInquiryModal')) {
             // Create modal if it doesn't exist
@@ -255,7 +405,10 @@ export const initializeBooking = () => {
                                 <textarea id="specialRequests" name="specialRequests" 
                                           placeholder="Special Requests or Questions"></textarea>
                             </div>
-                            <button type="submit" class="submit-inquiry">Submit Booking Request</button>
+                            <div class="booking-actions">
+                                <button type="button" id="addToCartBtn" class="add-to-cart-btn">Add to Cart</button>
+                                <button type="submit" class="submit-inquiry">Submit Booking Request</button>
+                            </div>
                         </form>
                     </div>
                 </div>`;
@@ -265,9 +418,44 @@ export const initializeBooking = () => {
             const newModal = document.getElementById('bookingInquiryModal');
             const closeBtn = newModal.querySelector('.close-inquiry');
             const form = newModal.querySelector('#inquiryForm');
+            const addToCartBtn = newModal.querySelector('#addToCartBtn');
             
             closeBtn.addEventListener('click', () => newModal.classList.remove('active'));
+            
+            addToCartBtn.addEventListener('click', (e) => {
+                e.preventDefault(); // Prevent any form submission
+                console.log("Add to cart button clicked in modal");
+                
+                // First close the modal to prevent it from interfering
+                newModal.classList.remove('active');
+                
+                // Short delay to ensure modal is closed before cart action
+                setTimeout(() => {
+                    if (addBookingToCart(currentBookingDetails)) {
+                        alert('Booking added to cart successfully!');
+                    } else {
+                        alert('There was an error adding your booking to the cart. Please try again.');
+                        // Reopen modal if adding to cart failed
+                        newModal.classList.add('active');
+                    }
+                }, 100);
+            });
+            
             initializeInquiryForm(form);
+        } else {
+            // Modal exists, just update content and add event listener
+            const addToCartBtn = document.getElementById('addToCartBtn');
+            if (addToCartBtn) {
+                addToCartBtn.removeEventListener('click', null);
+                addToCartBtn.addEventListener('click', () => {
+                    if (addBookingToCart(currentBookingDetails)) {
+                        alert('Booking added to cart successfully!');
+                        document.getElementById('bookingInquiryModal').classList.remove('active');
+                    } else {
+                        alert('There was an error adding your booking to the cart. Please try again.');
+                    }
+                });
+            }
         }
 
         currentBookingDetails = bookingDetails;
@@ -277,10 +465,10 @@ export const initializeBooking = () => {
         if (summary) {
             summary.innerHTML = `
                 <p><strong>Property:</strong> ${bookingDetails.propertyName}</p>
-                <p><strong>Dates:</strong> ${formatDate(bookingDetails.checkIn)} - ${formatDate(bookingDetails.checkOut)}</p>
+                <p><strong>Dates:</strong> ${formatDate(bookingDetails.checkIn)} - ${formatDate(bookingDetails.checkOut)} (${calculateNights(bookingDetails.checkIn, bookingDetails.checkOut)} nights)</p>
                 <p><strong>Guests:</strong> ${bookingDetails.guests}</p>
                 <p><strong>Services:</strong> ${bookingDetails.services.join(', ') || 'None'}</p>
-                <p><strong>Total:</strong> ${bookingDetails.total.toLocaleString()}</p>
+                <p><strong>Total:</strong> $${bookingDetails.total.toLocaleString()}</p>
             `;
         }
 
@@ -302,26 +490,31 @@ export const initializeBooking = () => {
 
             try {
                 // Initialize EmailJS with your public key
-                emailjs.init("YOUR_PUBLIC_KEY");
+                if (typeof emailjs !== 'undefined') {
+                    emailjs.init("YOUR_PUBLIC_KEY");
 
-                // Send the email
-                await emailjs.send(
-                    "YOUR_SERVICE_ID",
-                    "YOUR_TEMPLATE_ID",
-                    {
-                        to_email: "bookings@usviretreats.com",
-                        from_name: inquiryData.fullName,
-                        from_email: inquiryData.email,
-                        phone: inquiryData.phone,
-                        property: inquiryData.propertyName,
-                        check_in: formatDate(inquiryData.checkIn),
-                        check_out: formatDate(inquiryData.checkOut),
-                        guests: inquiryData.guests,
-                        services: inquiryData.services.join(', ') || 'None',
-                        total: `${inquiryData.total.toLocaleString()}`,
-                        special_requests: inquiryData.specialRequests || 'None'
-                    }
-                );
+                    // Send the email
+                    await emailjs.send(
+                        "YOUR_SERVICE_ID",
+                        "YOUR_TEMPLATE_ID",
+                        {
+                            to_email: "bookings@usviretreats.com",
+                            from_name: inquiryData.fullName,
+                            from_email: inquiryData.email,
+                            phone: inquiryData.phone,
+                            property: inquiryData.propertyName,
+                            check_in: formatDate(inquiryData.checkIn),
+                            check_out: formatDate(inquiryData.checkOut),
+                            guests: inquiryData.guests,
+                            services: inquiryData.services.join(', ') || 'None',
+                            total: `${inquiryData.total.toLocaleString()}`,
+                            special_requests: inquiryData.specialRequests || 'None'
+                        }
+                    );
+                }
+
+                // Also add to cart
+                addBookingToCart(currentBookingDetails);
 
                 // Update modal content to show confirmation
                 const modalContent = document.querySelector('.inquiry-content');
@@ -331,6 +524,7 @@ export const initializeBooking = () => {
                         <div class="confirmation-details">
                             <p>We have received your request for ${inquiryData.propertyName}.</p>
                             <p>We will contact you shortly at ${inquiryData.email} to finalize your reservation.</p>
+                            <p>Your booking has also been added to your cart.</p>
                         </div>
                         <button class="submit-inquiry" onclick="document.getElementById('bookingInquiryModal').classList.remove('active')">
                             Close
@@ -365,19 +559,33 @@ export const initializeBooking = () => {
                                         <textarea id="specialRequests" name="specialRequests" 
                                                   placeholder="Special Requests or Questions"></textarea>
                                     </div>
-                                    <button type="submit" class="submit-inquiry">Submit Booking Request</button>
+                                    <div class="booking-actions">
+                                        <button type="button" id="addToCartBtn" class="add-to-cart-btn">Add to Cart</button>
+                                        <button type="submit" class="submit-inquiry">Submit Booking Request</button>
+                                    </div>
                                 </form>
                             `;
                             
                             // Reinitialize event listeners
                             const newCloseBtn = modalContent.querySelector('.close-inquiry');
                             const newForm = modalContent.querySelector('#inquiryForm');
+                            const newAddToCartBtn = modalContent.querySelector('#addToCartBtn');
                             
                             if (newCloseBtn) {
                                 newCloseBtn.addEventListener('click', () => inquiryModal.classList.remove('active'));
                             }
                             if (newForm) {
                                 initializeInquiryForm(newForm);
+                            }
+                            if (newAddToCartBtn) {
+                                newAddToCartBtn.addEventListener('click', () => {
+                                    if (addBookingToCart(currentBookingDetails)) {
+                                        alert('Booking added to cart successfully!');
+                                        inquiryModal.classList.remove('active');
+                                    } else {
+                                        alert('There was an error adding your booking to the cart. Please try again.');
+                                    }
+                                });
                             }
                         }
                     }
@@ -408,11 +616,22 @@ export const initializeBooking = () => {
             checkOutDate = null;
             
             // Reset form values
-            document.getElementById('guestCount').max = maxGuests[currentPackage];
-            document.getElementById('guestCount').value = 1;
-            document.getElementById('roomCount').value = 1;
-            document.getElementById('cateringService').checked = false;
-            document.getElementById('transportService').checked = false;
+            if (document.getElementById('guestCount')) {
+                document.getElementById('guestCount').max = maxGuests[currentPackage] || 6;
+                document.getElementById('guestCount').value = 1;
+            }
+            
+            if (document.getElementById('roomCount')) {
+                document.getElementById('roomCount').value = 1;
+            }
+            
+            if (document.getElementById('cateringService')) {
+                document.getElementById('cateringService').checked = false;
+            }
+            
+            if (document.getElementById('transportService')) {
+                document.getElementById('transportService').checked = false;
+            }
             
             updateDateDisplay();
             calendarModal.classList.add('active');
@@ -442,126 +661,136 @@ export const initializeBooking = () => {
     document.getElementById('transportService')?.addEventListener('change', updateTotal);
 
     // Confirm booking
-    confirmButton?.addEventListener('click', () => {
+    confirmButton?.addEventListener('click', (e) => {
+        // Prevent default form submission behavior which might be causing the refresh
+        e.preventDefault();
+        
         if (!checkInDate || !checkOutDate) return;
 
-        const propertyElement = document.querySelector(`[data-package="${currentPackage}"]`)
-            .closest('.package-box')
-            .querySelector('h3');
+        // Logging to debug
+        console.log("Set Booking clicked for package:", currentPackage);
+
+        // Find property element using different selector strategies to ensure we find it
+        let propertyElement = null;
+        let propertyName = "";
+        
+        // First try the original approach
+        propertyElement = document.querySelector(`[data-package="${currentPackage}"]`)
+            ?.closest('.package-box')
+            ?.querySelector('h3');
+            
+        if (propertyElement) {
+            propertyName = propertyElement.textContent;
+        } else {
+            // Try an alternative approach - look for any button with the package attribute
+            const button = document.querySelector(`button[data-package="${currentPackage}"]`);
+            if (button) {
+                // Find the closest parent with a heading
+                const parentBox = button.closest('.package-box, .villa-card');
+                if (parentBox) {
+                    propertyElement = parentBox.querySelector('h3');
+                    if (propertyElement) {
+                        propertyName = propertyElement.textContent;
+                    }
+                }
+            }
+            
+            // If still not found, use the package ID as fallback
+            if (!propertyName) {
+                propertyName = currentPackage.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                console.log("Using fallback property name:", propertyName);
+            }
+        }
 
         const bookingDetails = {
-            propertyName: propertyElement.textContent,
+            propertyId: currentPackage,
+            propertyName: propertyName,
             checkIn: checkInDate,
             checkOut: checkOutDate,
-            guests: document.getElementById('guestCount').value,
+            guests: document.getElementById('guestCount')?.value || 1,
             services: [],
             total: updateTotal()
         };
 
-        if (document.getElementById('cateringService').checked) {
+        if (document.getElementById('cateringService')?.checked) {
             bookingDetails.services.push('Catering');
         }
-        if (document.getElementById('transportService').checked) {
+        if (document.getElementById('transportService')?.checked) {
             bookingDetails.services.push('Transport');
         }
 
+        console.log("Booking details prepared:", bookingDetails);
+        
+        // Directly try to add to cart if that's what's needed
+        // Uncomment the following line if you want to skip the inquiry modal
+        // if (addBookingToCart(bookingDetails)) return;
+        
         showInquiryModal(bookingDetails);
     });
 
-    // Handle inquiry form submission
-    inquiryForm?.addEventListener('submit', async (e) => {
-        e.preventDefault();
+    // Initialize the calendar if it exists
+    if (calendarGrid) {
+        createCalendar();
+    }
+    
+    // Create a direct cart addition function for debugging
+    // This can be exposed on the window for testing in console
+    window.directAddToCart = (packageId) => {
+        if (!packageId) {
+            alert("Please specify a package ID");
+            return;
+        }
         
-        const formData = new FormData(e.target);
-        const inquiryData = {
-            ...currentBookingDetails,
-            fullName: formData.get('fullName'),
-            email: formData.get('email'),
-            phone: formData.get('phone'),
-            specialRequests: formData.get('specialRequests')
+        // Set up basic booking details
+        currentPackage = packageId;
+        const today = new Date();
+        checkInDate = new Date(today);
+        checkInDate.setDate(today.getDate() + 7); // A week from today
+        
+        checkOutDate = new Date(checkInDate);
+        checkOutDate.setDate(checkInDate.getDate() + 3); // 3 night stay
+        
+        const propertyName = packageId.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        
+        const bookingDetails = {
+            propertyId: packageId,
+            propertyName: propertyName,
+            checkIn: checkInDate,
+            checkOut: checkOutDate,
+            guests: 2,
+            services: [],
+            total: packagePrices[packageId]?.basePrice * 3 || 1500 * 3
         };
-
-        try {
-            // Format email content
-            const emailContent = `
-                New Booking Request
-
-                Property: ${inquiryData.propertyName}
-                Dates: ${formatDate(inquiryData.checkIn)} - ${formatDate(inquiryData.checkOut)}
-                Guests: ${inquiryData.guests}
-                Services: ${inquiryData.services.join(', ') || 'None'}
-                Total: ${inquiryData.total.toLocaleString()}
-
-                Customer Information:
-                Name: ${inquiryData.fullName}
-                Email: ${inquiryData.email}
-                Phone: ${inquiryData.phone}
-                Special Requests: ${inquiryData.specialRequests || 'None'}
-            `;
-
-            // Send booking confirmation email
-            await fetch('/api/send-booking-email', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    to: 'bookings@usviretreats.com',
-                    subject: `New Booking Request - ${inquiryData.propertyName}`,
-                    text: emailContent,
-                    replyTo: inquiryData.email
-                })
-            });
-
-            // Update modal content to show confirmation
-            const modalContent = inquiryModal.querySelector('.inquiry-content');
-            modalContent.innerHTML = `
-                <div class="confirmation-message">
-                    <h3>Thank You for Your Booking Request!</h3>
-                    <div class="confirmation-details">
-                        <p>We have received your request for ${inquiryData.propertyName}.</p>
-                        <p>A confirmation email has been sent to ${inquiryData.email}.</p>
-                        <p>We will contact you shortly to finalize your reservation.</p>
-                    </div>
-                    <button class="submit-inquiry" onclick="document.getElementById('bookingInquiryModal').classList.remove('active')">
-                        Close
-                    </button>
-                </div>
-            `;
-
-            // Reset form data after 3 seconds
-            setTimeout(() => {
-                inquiryModal.classList.remove('active');
-                e.target.reset();
-                currentBookingDetails = null;
-                
-                // Restore original modal content
-                modalContent.innerHTML = document.getElementById('inquiryModalTemplate').innerHTML;
-            }, 3000);
-
-        } catch (error) {
-            console.error('Error submitting booking:', error);
-            const modalContent = inquiryModal.querySelector('.inquiry-content');
-            modalContent.innerHTML = `
-                <div class="confirmation-message error">
-                    <h3>Booking Request Error</h3>
-                    <p>There was an error submitting your booking. Please try again or contact us directly.</p>
-                    <button class="submit-inquiry" onclick="location.reload()">
-                        Try Again
-                    </button>
-                </div>
-            `;
+        
+        console.log("Direct add to cart triggered for:", bookingDetails);
+        
+        const success = addBookingToCart(bookingDetails);
+        if (success) {
+            alert(`${propertyName} added to cart for dates ${formatDate(checkInDate)} to ${formatDate(checkOutDate)}`);
+        } else {
+            alert("Failed to add to cart directly. Check console for details.");
         }
-    });
-
-    // Close modals when clicking outside
-    window.addEventListener('click', (e) => {
-        if (e.target === calendarModal) {
-            calendarModal.classList.remove('active');
+    };
+    
+    // Optional: Add debugging helper
+    const addDebugOverlay = () => {
+        // Only add in development
+        if (window.location.hostname !== 'localhost' && !window.location.hostname.includes('127.0.0.1')) {
+            return;
         }
-        if (e.target === inquiryModal) {
-            inquiryModal.classList.remove('active');
-        }
-    });
-
-    // Initialize
-    createCalendar();
+        
+        const debugDiv = document.createElement('div');
+        debugDiv.className = 'debug-info';
+        debugDiv.innerHTML = `
+            <p>Debug: Click buttons below to test cart</p>
+            <button onclick="window.directAddToCart('villa-alhambra')">Add Alhambra</button>
+            <button onclick="window.directAddToCart('pool-villa')">Add Pool Villa</button>
+            <button onclick="window.directAddToCart('guest-villa')">Add Guest Villa</button>
+        `;
+        document.body.appendChild(debugDiv);
+    };
+    
+    // Uncomment to enable debug overlay in development
+    // addDebugOverlay();
 };
+
