@@ -57,11 +57,9 @@ export const initializeServiceBooking = () => {
                 return;
             }
 
-            // Update Snipcart button attributes
             button.dataset.itemCustom1Value = dateInput.value;
             button.dataset.itemCustom2Value = quantityInput.value;
             
-            // Trigger Snipcart add item
             button.click();
         });
     });

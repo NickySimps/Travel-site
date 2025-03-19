@@ -2,7 +2,6 @@
 .btn,
 .btn-book,
 .btn-service,
-.snipcart-checkout,
 .auth-toggle {
   background-color: var(--primary-blue);
   border-radius: var(--border-radius-sm);

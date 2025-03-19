@@ -274,7 +274,7 @@ export const initializeBooking = () => {
         if (!addToCartButton) {
             console.log("Button not found, creating a custom button");
             addToCartButton = document.createElement('button');
-            addToCartButton.className = 'snipcart-add-item hidden-button';
+            addToCartButton.className = 'cart-add-item hidden-button';
             addToCartButton.style.display = 'none';
             addToCartButton.dataset.itemId = bookingDetails.propertyId;
             addToCartButton.dataset.itemName = bookingDetails.propertyName;

@@ -38,7 +38,7 @@
                         </div>
                     </li>
                     <li>
-                        <button class="snipcart-checkout">Cart</button>
+                        <button class="cart-checkout">Cart</button>
                     </li>
                 </ul>
             </nav>
@@ -74,7 +74,7 @@
               <li>Luxury furnishings from around the world</li>
             </ul>
             <div class="price">$2,500/night</div>
-            <button class="btn-book snipcart-add-item"
+            <button class="btn-book cart-add-item"
               data-item-id="villa-alhambra"
               data-item-name="Villa Alhambra"
               data-item-price="12438.00"
@@ -105,7 +105,7 @@
               <li>Direct access to pool and hot tub</li>
             </ul>
             <div class="price">$1,800/night</div>
-            <button class="btn-book snipcart-add-item"
+            <button class="btn-book cart-add-item"
               data-item-id="pool-villa"
               data-item-name="Pool Villa"
               data-item-price="1800.00"
@@ -136,7 +136,7 @@
               <li>Outdoor bar and grill area</li>
             </ul>
             <div class="price">$1,500/night</div>
-            <button class="btn-book snipcart-add-item"
+            <button class="btn-book cart-add-item"
               data-item-id="guest-villa"
               data-item-name="Guest Villa"
               data-item-price="1500.00"
@@ -167,7 +167,7 @@
               <li>Outdoor grill</li>
             </ul>
             <div class="price">$1,600/night</div>
-            <button class="btn-book snipcart-add-item"
+            <button class="btn-book cart-add-item"
               data-item-id="tower-villa"
               data-item-name="Tower Villa"
               data-item-price="3300.00"
@@ -198,7 +198,7 @@
               <li>Charming cottage atmosphere</li>
             </ul>
             <div class="price">$1,200/night</div>
-            <button class="btn-book snipcart-add-item"
+            <button class="btn-book cart-add-item"
               data-item-id="garden-villa"
               data-item-name="Garden Villa"
               data-item-price="2800.00"
@@ -268,7 +268,6 @@
 
     <button id="backToTop" title="Go to top">↑</button>
 
-    <div hidden id="snipcart" data-api-key="ZjFmOWZjNDUtM2VmMC00ZmExLTkzMTctMjExM2UzZDcwZjI3NjM4Njg4Nzc3OTMyNzM5MTQ3">
     </div>
 
     <!-- Validation Script -->
@@ -297,73 +296,7 @@
         });
     </script>
 
-    <script>
-        window.SnipcartSettings = {
-            publicApiKey: 'ZjFmOWZjNDUtM2VmMC00ZmExLTkzMTctMjExM2UzZDcwZjI3NjM4Njg4Nzc3OTMyNzM5MTQ3',
-            loadStrategy: 'on-user-interaction',
-            modalStyle: "side"
-        };
 
-        (() => {
-            const c = window.SnipcartSettings;
-            c.version = c.version || "3.0";
-            const s = window.SnipcartSettings;
-            s.timeoutDuration = s.timeoutDuration || 2750;
-            const l = window.SnipcartSettings;
-            l.domain = l.domain || "cdn.snipcart.com";
-            const w = window.SnipcartSettings;
-            w.protocol = w.protocol || "https";
-            const loadEvents = ["focus", "mouseover", "touchmove", "scroll", "keydown"];
-            
-            window.LoadSnipcart = loadSnipcart;
-            document.readyState === "loading" ? 
-                document.addEventListener("DOMContentLoaded", registerListeners) : 
-                registerListeners();
-
-            function registerListeners() {
-                if (window.SnipcartSettings.loadStrategy === "on-user-interaction") {
-                    loadEvents.forEach(event => document.addEventListener(event, loadSnipcart));
-                    setTimeout(loadSnipcart, window.SnipcartSettings.timeoutDuration);
-                } else {
-                    loadSnipcart();
-                }
-            }
-
-            let loaded = false;
-            function loadSnipcart() {
-                if (loaded) return;
-                loaded = true;
-                
-                const snipcartDiv = document.getElementById("snipcart");
-                if (!snipcartDiv) {
-                    const div = document.createElement("div");
-                    div.id = "snipcart";
-                    div.setAttribute("hidden", "true");
-                    document.body.appendChild(div);
-                }
-                
-                loadScript();
-                loadStyles();
-                loadEvents.forEach(event => document.removeEventListener(event, loadSnipcart));
-            }
-
-            function loadScript() {
-                const script = document.createElement("script");
-                script.src = `${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.js`;
-                script.async = true;
-                document.getElementsByTagName("head")[0].appendChild(script);
-            }
-
-            function loadStyles() {
-                const link = document.createElement("link");
-                link.rel = "stylesheet";
-                link.type = "text/css";
-                link.href = `${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.css`;
-                document.getElementsByTagName("head")[0].appendChild(link);
-            }
-        })();
-    </script>
-    
     <script type="module" src="./src/components/index.js"></script>
 </body>
 </html> 

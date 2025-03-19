@@ -69,24 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Error initializing forms:', error);
     }
     
-    // Snipcart initialization if needed
-    try {
-      if (document.querySelector('.snipcart-checkout') && window.SnipcartSettings === undefined) {
-        console.log('Initializing Snipcart');
-        window.SnipcartSettings = {
-          publicApiKey: 'ZjFmOWZjNDUtM2VmMC00ZmExLTkzMTctMjExM2UzZDcwZjI3NjM4Njg4Nzc3OTMyNzM5MTQ3',
-          loadStrategy: 'on-user-interaction',
-          modalStyle: "side"
-        };
-        
-        // Dynamically load Snipcart script
-        const script = document.createElement('script');
-        script.src = 'https://cdn.snipcart.com/themes/v3.3.0/default/snipcart.js';
-        document.body.appendChild(script);
-      }
-    } catch (error) {
-      console.error('Error initializing cart:', error);
-    }
     
     console.log('All components initialized');
   } catch (mainError) {

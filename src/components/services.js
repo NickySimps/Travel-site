@@ -24,7 +24,7 @@ export const initializeServices = () => {
 };
 
 const updateCartButton = (container) => {
-  const cartButton = container?.querySelector('.snipcart-add-item');
+  const cartButton = container?.querySelector('.cart-add-item');
   const selectedServices = [...container?.querySelectorAll('.btn-service.selected') || []];
   const services = selectedServices.map(btn => btn.dataset.service);
   

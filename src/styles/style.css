@@ -278,8 +278,7 @@ button,
 .submit-inquiry,
 .add-to-cart-btn,
 .direct-cart-button,
-.btn-quote,
-.snipcart-checkout {
+.btn-quote{
   background-color: var(--primary-blue);
   border-radius: 5px;
   padding: 10px 20px;
@@ -300,8 +299,7 @@ button:hover,
 .submit-inquiry:hover,
 .add-to-cart-btn:hover,
 .direct-cart-button:hover,
-.btn-quote:hover,
-.snipcart-checkout:hover {
+.btn-quote:hover {
   background-color: var(--primary-orange);
   color: var(--black);
 }
@@ -834,26 +832,7 @@ button:hover,
   flex: 1;
 }
 
-/* Shopping Cart UI */
-.snipcart-item-image {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-}
 
-.snipcart-item-line__image {
-  border-radius: 50%;
-  width: 50px !important;
-  height: 50px !important;
-}
-
-.snipcart-modal__header-summary-title img {
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
-}
 
 /* Booking Orb */
 .booking-orb {
