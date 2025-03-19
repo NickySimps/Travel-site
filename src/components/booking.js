@@ -267,32 +267,18 @@ export const initializeBooking = () => {
         // Debug logs
         console.log("Adding to cart:", bookingDetails);
         
-        // First try to find the exact button
+        // Try to find a button matching the property ID
         let addToCartButton = document.querySelector(`[data-item-id="${bookingDetails.propertyId}"]`);
         
-        // If not found, try broader selectors
+        // If not found, create a new button
         if (!addToCartButton) {
-            console.log("Button not found with exact ID, trying alternative selectors");
-            // Try to find any button containing the property ID
-            const buttons = document.querySelectorAll('.snipcart-add-item');
-            for (const btn of buttons) {
-                if (btn.dataset.itemId && btn.dataset.itemId.includes(bookingDetails.propertyId)) {
-                    addToCartButton = btn;
-                    break;
-                }
-            }
-        }
-        
-        // If still not found, create a new button
-        if (!addToCartButton) {
-            console.log("Creating custom cart button");
+            console.log("Button not found, creating a custom button");
             addToCartButton = document.createElement('button');
-            addToCartButton.className = 'snipcart-add-item';
+            addToCartButton.className = 'snipcart-add-item hidden-button';
+            addToCartButton.style.display = 'none';
             addToCartButton.dataset.itemId = bookingDetails.propertyId;
             addToCartButton.dataset.itemName = bookingDetails.propertyName;
             addToCartButton.dataset.itemUrl = window.location.href;
-            addToCartButton.dataset.itemDescription = `${bookingDetails.propertyName} - ${formatDate(bookingDetails.checkIn)} to ${formatDate(bookingDetails.checkOut)}`;
-            addToCartButton.style.display = 'none';
             document.body.appendChild(addToCartButton);
         }
         
@@ -301,76 +287,43 @@ export const initializeBooking = () => {
             const checkInFormatted = bookingDetails.checkIn.toISOString().split('T')[0];
             const checkOutFormatted = bookingDetails.checkOut.toISOString().split('T')[0];
             
-            console.log("Setting cart attributes:", {
-                dates: `${checkInFormatted} to ${checkOutFormatted}`,
-                guests: bookingDetails.guests,
-                services: bookingDetails.services,
-                total: bookingDetails.total
-            });
+            // Calculate nights
+            const nights = calculateNights(bookingDetails.checkIn, bookingDetails.checkOut);
             
-            // Update the Snipcart button attributes
+            // Update button attributes with all form data
+            addToCartButton.dataset.itemPrice = bookingDetails.total.toFixed(2);
+            addToCartButton.dataset.itemDescription = `${bookingDetails.propertyName} - ${nights} nights`;
             addToCartButton.dataset.itemCustom1Name = "Check-in";
             addToCartButton.dataset.itemCustom1Value = checkInFormatted;
-            
             addToCartButton.dataset.itemCustom2Name = "Check-out";
             addToCartButton.dataset.itemCustom2Value = checkOutFormatted;
-            
             addToCartButton.dataset.itemCustom3Name = "Guests";
             addToCartButton.dataset.itemCustom3Value = bookingDetails.guests;
             
-            // Handle services
-            let servicesOption = "None";
-            if (bookingDetails.services.includes('Catering') && bookingDetails.services.includes('Transport')) {
-                servicesOption = "Both (+$3550)";
-            } else if (bookingDetails.services.includes('Catering')) {
-                servicesOption = "Catering (+$3000)";
-            } else if (bookingDetails.services.includes('Transport')) {
-                servicesOption = "Airport Transport & Insurance (+$550)";
-            }
-            
-            addToCartButton.dataset.itemCustom5Name = "Services";
-            addToCartButton.dataset.itemCustom5Value = servicesOption;
-            
-            // Update price based on nights and services
-            const nights = calculateNights(bookingDetails.checkIn, bookingDetails.checkOut);
-            addToCartButton.dataset.itemPrice = bookingDetails.total.toFixed(2);
-            
-            console.log("About to click add to cart button");
-            
-            // Check if using custom cart or Snipcart
-            if (window.Snipcart) {
-                // If Snipcart is loaded, use their API directly
-                console.log("Using Snipcart API");
-                Snipcart.api.items.add({
-                    id: bookingDetails.propertyId,
-                    name: bookingDetails.propertyName,
-                    price: bookingDetails.total.toFixed(2),
-                    url: window.location.href,
-                    description: `${bookingDetails.propertyName} - ${formatDate(bookingDetails.checkIn)} to ${formatDate(bookingDetails.checkOut)}`,
-                    customFields: [
-                        {
-                            name: "Check-in",
-                            value: checkInFormatted
-                        },
-                        {
-                            name: "Check-out",
-                            value: checkOutFormatted
-                        },
-                        {
-                            name: "Guests",
-                            value: bookingDetails.guests
-                        },
-                        {
-                            name: "Services",
-                            value: servicesOption
-                        }
-                    ]
-                });
+            // Add services as a custom field
+            let servicesText = "";
+            if (bookingDetails.services && bookingDetails.services.length > 0) {
+                servicesText = bookingDetails.services.join(', ');
             } else {
-                // Trigger click on the add to cart button
-                console.log("Clicking cart button");
-                addToCartButton.click();
+                servicesText = "None";
             }
+            
+            addToCartButton.dataset.itemCustom4Name = "Services";
+            addToCartButton.dataset.itemCustom4Value = servicesText;
+            
+            console.log("Cart button configured with properties:", {
+                id: addToCartButton.dataset.itemId,
+                name: addToCartButton.dataset.itemName,
+                price: addToCartButton.dataset.itemPrice,
+                checkin: addToCartButton.dataset.itemCustom1Value,
+                checkout: addToCartButton.dataset.itemCustom2Value,
+                guests: addToCartButton.dataset.itemCustom3Value,
+                services: addToCartButton.dataset.itemCustom4Value
+            });
+            
+            // Trigger click on the button to add to cart
+            addToCartButton.click();
+            console.log("Item added to cart via button click");
             
             return true;
         } catch (error) {
@@ -378,6 +331,7 @@ export const initializeBooking = () => {
             return false;
         }
     };
+    
 
     const showInquiryModal = (bookingDetails) => {
         if (!document.getElementById('bookingInquiryModal')) {
@@ -664,68 +618,73 @@ export const initializeBooking = () => {
     confirmButton?.addEventListener('click', (e) => {
         // Prevent default form submission behavior which might be causing the refresh
         e.preventDefault();
+        e.stopPropagation();
         
-        if (!checkInDate || !checkOutDate) return;
-
+        if (!checkInDate || !checkOutDate) {
+            console.log("Missing dates, cannot proceed");
+            return;
+        }
+    
         // Logging to debug
         console.log("Set Booking clicked for package:", currentPackage);
-
-        // Find property element using different selector strategies to ensure we find it
-        let propertyElement = null;
-        let propertyName = "";
+    
+        // Find property name
+        let propertyName = currentPackage;
         
-        // First try the original approach
-        propertyElement = document.querySelector(`[data-package="${currentPackage}"]`)
-            ?.closest('.package-box')
-            ?.querySelector('h3');
-            
-        if (propertyElement) {
-            propertyName = propertyElement.textContent;
-        } else {
-            // Try an alternative approach - look for any button with the package attribute
-            const button = document.querySelector(`button[data-package="${currentPackage}"]`);
-            if (button) {
-                // Find the closest parent with a heading
-                const parentBox = button.closest('.package-box, .villa-card');
-                if (parentBox) {
-                    propertyElement = parentBox.querySelector('h3');
-                    if (propertyElement) {
-                        propertyName = propertyElement.textContent;
+        // Try to get a more user-friendly name by searching the DOM
+        try {
+            const packageButtons = document.querySelectorAll(`[data-package="${currentPackage}"]`);
+            for (const button of packageButtons) {
+                const closestBox = button.closest('.package-box, .villa-card');
+                if (closestBox) {
+                    const nameElement = closestBox.querySelector('h3');
+                    if (nameElement) {
+                        propertyName = nameElement.textContent.trim();
+                        break;
                     }
                 }
             }
-            
-            // If still not found, use the package ID as fallback
-            if (!propertyName) {
-                propertyName = currentPackage.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-                console.log("Using fallback property name:", propertyName);
-            }
+        } catch (error) {
+            console.warn("Could not find property name in DOM:", error);
         }
-
+    
+        // Calculate booking total with all services
+        const totalPrice = updateTotal();
+        
+        // Get services
+        const services = [];
+        if (document.getElementById('cateringService')?.checked) {
+            services.push('Catering');
+        }
+        if (document.getElementById('transportService')?.checked) {
+            services.push('Transport');
+        }
+        
+        // Prepare the complete booking details
         const bookingDetails = {
             propertyId: currentPackage,
             propertyName: propertyName,
             checkIn: checkInDate,
             checkOut: checkOutDate,
             guests: document.getElementById('guestCount')?.value || 1,
-            services: [],
-            total: updateTotal()
+            services: services,
+            total: totalPrice
         };
-
-        if (document.getElementById('cateringService')?.checked) {
-            bookingDetails.services.push('Catering');
-        }
-        if (document.getElementById('transportService')?.checked) {
-            bookingDetails.services.push('Transport');
-        }
-
+    
         console.log("Booking details prepared:", bookingDetails);
         
-        // Directly try to add to cart if that's what's needed
-        // Uncomment the following line if you want to skip the inquiry modal
-        // if (addBookingToCart(bookingDetails)) return;
-        
-        showInquiryModal(bookingDetails);
+        // Try to add booking directly to cart
+        if (addBookingToCart(bookingDetails)) {
+            console.log("Successfully added to cart!");
+            // Close the calendar modal
+            calendarModal.classList.remove('active');
+            // Show confirmation
+            alert('Your booking has been added to the cart!');
+        } else {
+            console.error("Failed to add booking to cart directly");
+            // If direct cart add fails, show the inquiry modal as fallback
+            showInquiryModal(bookingDetails);
+        }
     });
 
     // Initialize the calendar if it exists
