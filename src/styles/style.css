@@ -1373,3 +1373,87 @@ button:hover,
   /* other styles... */
   transform-origin: bottom left;  /* Change from bottom right to bottom left */
 }
+
+/* Add these styles to your existing style.css file */
+
+/* Make sure the cart panel has a proper transition */
+.cart-panel {
+  position: fixed;
+  bottom: 80px;
+  left: 20px;
+  background: white;
+  border-radius: 10px;
+  width: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  transform: scale(0);
+  transform-origin: bottom left;
+  transition: transform 0.3s ease;
+  z-index: 999;
+  padding: 15px;
+}
+.cart-panel.open {
+  transform: scale(1);
+}
+
+/* Keep the cart visible when hovering the cart button */
+.cart-float:hover + .cart-panel,
+.cart-panel:hover {
+  transform: scale(1);
+}
+
+/* Add a visible hover state to the cart button */
+.cart-float:hover {
+  background-color: #ffdda9;
+  transform: scale(1.1);
+}
+
+/* Make cart items easier to read */
+.cart-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 8px;
+}
+
+.cart-item-details {
+  flex: 1;
+  margin: 0 10px;
+}
+
+.cart-item-name {
+  font-weight: bold;
+  margin-bottom: 3px;
+}
+
+.cart-item-price {
+  color: #87ceeb;
+  font-size: 0.9rem;
+}
+
+/* Improve the remove button */
+.remove-item {
+  background: none;
+  border: none;
+  color: #ff6b6b;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 5px;
+  font-weight: bold;
+  transition: transform 0.2s ease;
+}
+
+.remove-item:hover {
+  transform: scale(1.2);
+  color: #ff0000;
+}
+
+/* Empty cart message */
+.empty-cart {
+  color: #999;
+  text-align: center;
+  padding: 10px 0;
+  font-style: italic;
+}

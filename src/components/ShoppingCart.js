@@ -1,4 +1,4 @@
-// Enhanced ShoppingCart.js implementation
+// Final Updated ShoppingCart.js implementation
 // Save this file to src/components/ShoppingCart.js
 
 class ShoppingCart {
@@ -34,13 +34,14 @@ class ShoppingCart {
     this.cartFloat = document.querySelector('.cart-float') || document.createElement('button');
     if (!this.cartFloat.classList.contains('cart-float')) {
       this.cartFloat.className = 'cart-float';
-      this.cartFloat.innerHTML = '<i class="fa fa-shopping-cart"></i>';
+      this.cartFloat.innerHTML = '<i class="fa fa-shopping-cart"></i><span class="cart-count">0</span>';
       document.body.appendChild(this.cartFloat);
     }
     
     // Create cart count badge
-    this.cartCount = this.cartFloat.querySelector('.cart-count') || document.createElement('span');
-    if (!this.cartCount.classList.contains('cart-count')) {
+    this.cartCount = this.cartFloat.querySelector('.cart-count');
+    if (!this.cartCount) {
+      this.cartCount = document.createElement('span');
       this.cartCount.className = 'cart-count';
       this.cartFloat.appendChild(this.cartCount);
     }
@@ -107,17 +108,45 @@ class ShoppingCart {
     this.cartFloat.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      this.cartPanel.style.transform = this.cartPanel.style.transform === 'scale(1)' ? 'scale(0)' : 'scale(1)';
-      console.log("Cart panel toggled");
+      
+      // Toggle the cart panel visibility using classList instead of style
+      if (this.cartPanel.classList.contains('open')) {
+        this.cartPanel.classList.remove('open');
+        this.cartPanel.style.transform = 'scale(0)';
+      } else {
+        this.cartPanel.classList.add('open');
+        this.cartPanel.style.transform = 'scale(1)';
+      }
+    });
+    
+    // Also handle the cart-checkout buttons
+    document.querySelectorAll('.cart-checkout').forEach(button => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Toggle the cart panel visibility
+        if (this.cartPanel.classList.contains('open')) {
+          this.cartPanel.classList.remove('open');
+          this.cartPanel.style.transform = 'scale(0)';
+        } else {
+          this.cartPanel.classList.add('open');
+          this.cartPanel.style.transform = 'scale(1)';
+        }
+      });
     });
     
     // Close cart panel when clicking outside
     document.addEventListener('click', (e) => {
-      if (!this.cartPanel.contains(e.target) && e.target !== this.cartFloat) {
+      if (this.cartPanel.classList.contains('open') && 
+          !this.cartPanel.contains(e.target) && 
+          e.target !== this.cartFloat &&
+          !e.target.closest('.cart-checkout')) {
+        this.cartPanel.classList.remove('open');
         this.cartPanel.style.transform = 'scale(0)';
       }
     });
-
+  
     // Checkout button functionality
     this.checkoutBtn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -128,16 +157,6 @@ class ShoppingCart {
       
       this.showCheckoutForm();
     });
-    
-    // Fix for "Set Booking" button
-    const confirmDatesBtn = document.getElementById('confirmDates');
-    if (confirmDatesBtn) {
-      confirmDatesBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        console.log("Set Booking button clicked, capturing event");
-      });
-    }
   }
 
   setupAddToCartButtons() {
@@ -183,68 +202,6 @@ class ShoppingCart {
         this.addToCart(productName, productPrice, productImg);
       }
     });
-    
-    // Special handler for booking confirmation button
-    const confirmDatesBtn = document.getElementById('confirmDates');
-    if (confirmDatesBtn) {
-      confirmDatesBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        // Get booking details from the calendar modal
-        const packageId = window.currentPackage || '';
-        const checkInDate = window.checkInDate;
-        const checkOutDate = window.checkOutDate;
-        
-        if (!packageId || !checkInDate || !checkOutDate) {
-          console.log("Missing booking details");
-          return;
-        }
-        
-        // Find property details
-        let propertyName = packageId.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-        let basePrice = 0;
-        
-        // Try to find price from packagePrices object or from DOM
-        try {
-          if (window.packagePrices && window.packagePrices[packageId]) {
-            basePrice = window.packagePrices[packageId].basePrice;
-          } else {
-            // Find price in DOM
-            const packageElement = document.querySelector(`[data-package="${packageId}"]`);
-            if (packageElement) {
-              const priceElement = packageElement.closest('.package-box, .villa-card').querySelector('strong, .price');
-              if (priceElement) {
-                const priceText = priceElement.textContent;
-                basePrice = parseFloat(priceText.replace(/[^0-9.]/g, ''));
-              }
-            }
-          }
-        } catch (error) {
-          console.error("Error finding price:", error);
-        }
-        
-        // Calculate total price
-        const nights = Math.round(Math.abs((checkOutDate - checkInDate) / (24 * 60 * 60 * 1000)));
-        const totalPrice = basePrice * nights;
-        
-        // Add to cart
-        this.addToCart(
-          `${propertyName} (${nights} nights)`,
-          totalPrice,
-          ''
-        );
-        
-        // Close the calendar modal
-        const calendarModal = document.getElementById('calendarModal');
-        if (calendarModal) {
-          calendarModal.classList.remove('active');
-        }
-        
-        // Show confirmation
-        alert(`${propertyName} has been added to your cart!`);
-      });
-    }
   }
 
   addToCart(name, price, imgSrc) {
@@ -272,9 +229,13 @@ class ShoppingCart {
     this.cartFloat.classList.add('pulse');
     setTimeout(() => this.cartFloat.classList.remove('pulse'), 500);
     
-    // Show the cart panel briefly
+    // Show the cart panel briefly for visual feedback
+    this.cartPanel.classList.add('open');
     this.cartPanel.style.transform = 'scale(1)';
-    setTimeout(() => this.cartPanel.style.transform = 'scale(0)', 3000);
+    setTimeout(() => {
+      this.cartPanel.classList.remove('open');
+      this.cartPanel.style.transform = 'scale(0)';
+    }, 3000);
   }
 
   updateCart() {
@@ -307,8 +268,13 @@ class ShoppingCart {
       const itemElement = document.createElement('div');
       itemElement.className = 'cart-item';
       
+      // Use a default image if none is provided
+      const imgSrc = item.imgSrc || './public/Pictures/villas/alhambra.jpg';
+      
       itemElement.innerHTML = `
-        <img class="cart-item-img" src="${item.imgSrc || './public/Pictures/villas/alhambra.jpg'}" alt="${item.name}" style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;">
+        <div style="width: 40px; height: 40px; margin-right: 10px;">
+          <img src="${imgSrc}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;">
+        </div>
         <div class="cart-item-details">
           <div class="cart-item-name">${item.name}</div>
           <div class="cart-item-price">$${item.price.toFixed(2)} × ${item.quantity}</div>
@@ -508,41 +474,12 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log("DOM loaded, initializing cart...");
   window.usviCart = new ShoppingCart().initialize();
   
-  // Fix submission behaviors
-  document.querySelectorAll('form').forEach(form => {
-    form.addEventListener('submit', (e) => {
-      // Prevent default form submission that causes page refresh
-      e.preventDefault();
-      console.log("Form submission prevented for:", form);
-    });
-  });
-  
-  // Fix for buttons inside forms
-  document.querySelectorAll('button').forEach(button => {
-    // Skip submit buttons
-    if (button.type !== 'submit') {
-      button.addEventListener('click', (e) => {
-        e.preventDefault();
-      });
+  // Add icons to the cart-checkout buttons if they don't have any
+  document.querySelectorAll('.cart-checkout').forEach(button => {
+    if (button.textContent.trim() === 'Cart' && !button.querySelector('i')) {
+      button.innerHTML = '<i class="fas fa-shopping-cart"></i> Cart';
     }
   });
-  
-  // Fix for the booking functionality
-  const confirmDatesBtn = document.getElementById('confirmDates');
-  if (confirmDatesBtn) {
-    // Make global properties available
-    window.currentPackage = '';
-    window.checkInDate = null;
-    window.checkOutDate = null;
-    
-    document.querySelectorAll('.booking-btn').forEach(button => {
-      button.addEventListener('click', (e) => {
-        e.preventDefault();
-        window.currentPackage = button.dataset.package;
-        console.log("Current package set to:", window.currentPackage);
-      });
-    });
-  }
 });
 
 export { ShoppingCart };
