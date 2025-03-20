@@ -1,5 +1,5 @@
-// ShoppingCart.js - Floating cart implementation
-import { CONFIG } from './config.js';
+// Enhanced ShoppingCart.js implementation
+// Save this file to src/components/ShoppingCart.js
 
 class ShoppingCart {
   constructor() {
@@ -16,6 +16,7 @@ class ShoppingCart {
   }
 
   initialize() {
+    console.log("Initializing shopping cart...");
     // Create the floating cart UI
     this.createCartUI();
     
@@ -29,51 +30,66 @@ class ShoppingCart {
   }
 
   createCartUI() {
-    // Create the floating cart button
-    this.cartFloat = document.createElement('button');
-    this.cartFloat.className = 'cart-float';
-    this.cartFloat.innerHTML = '<i class="fa fa-shopping-cart"></i>';
+    // Create the floating cart button if it doesn't exist
+    this.cartFloat = document.querySelector('.cart-float') || document.createElement('button');
+    if (!this.cartFloat.classList.contains('cart-float')) {
+      this.cartFloat.className = 'cart-float';
+      this.cartFloat.innerHTML = '<i class="fa fa-shopping-cart"></i>';
+      document.body.appendChild(this.cartFloat);
+    }
     
     // Create cart count badge
-    this.cartCount = document.createElement('span');
-    this.cartCount.className = 'cart-count';
+    this.cartCount = this.cartFloat.querySelector('.cart-count') || document.createElement('span');
+    if (!this.cartCount.classList.contains('cart-count')) {
+      this.cartCount.className = 'cart-count';
+      this.cartFloat.appendChild(this.cartCount);
+    }
     this.cartCount.textContent = this.getTotalItems();
-    this.cartFloat.appendChild(this.cartCount);
     
-    // Create the cart panel
-    this.cartPanel = document.createElement('div');
-    this.cartPanel.className = 'cart-panel';
+    // Create the cart panel if it doesn't exist
+    this.cartPanel = document.querySelector('.cart-panel') || document.createElement('div');
+    if (!this.cartPanel.classList.contains('cart-panel')) {
+      this.cartPanel.className = 'cart-panel';
+      document.body.appendChild(this.cartPanel);
+    }
     
-    // Create cart items container
-    this.cartItems = document.createElement('div');
-    this.cartItems.className = 'cart-items';
-    this.cartPanel.appendChild(this.cartItems);
+    // Create cart items container if it doesn't exist
+    this.cartItems = this.cartPanel.querySelector('.cart-items') || document.createElement('div');
+    if (!this.cartItems.classList.contains('cart-items')) {
+      this.cartItems.className = 'cart-items';
+      this.cartPanel.appendChild(this.cartItems);
+    }
     
-    // Create cart total
-    const cartTotalDiv = document.createElement('div');
-    cartTotalDiv.className = 'cart-total';
-    cartTotalDiv.innerHTML = '<span>Total:</span>';
-    this.totalAmount = document.createElement('span');
-    this.totalAmount.className = 'total-amount';
+    // Create cart total if it doesn't exist
+    let cartTotalDiv = this.cartPanel.querySelector('.cart-total');
+    if (!cartTotalDiv) {
+      cartTotalDiv = document.createElement('div');
+      cartTotalDiv.className = 'cart-total';
+      cartTotalDiv.innerHTML = '<span>Total:</span>';
+      this.totalAmount = document.createElement('span');
+      this.totalAmount.className = 'total-amount';
+      cartTotalDiv.appendChild(this.totalAmount);
+      this.cartPanel.appendChild(cartTotalDiv);
+    } else {
+      this.totalAmount = cartTotalDiv.querySelector('.total-amount');
+    }
     this.totalAmount.textContent = '$' + this.getCartTotal().toFixed(2);
-    cartTotalDiv.appendChild(this.totalAmount);
-    this.cartPanel.appendChild(cartTotalDiv);
     
-    // Create checkout button
-    this.checkoutBtn = document.createElement('button');
-    this.checkoutBtn.className = 'checkout-btn';
-    this.checkoutBtn.textContent = 'Checkout';
-    this.cartPanel.appendChild(this.checkoutBtn);
-    
-    // Add to DOM
-    document.body.appendChild(this.cartFloat);
-    document.body.appendChild(this.cartPanel);
+    // Create checkout button if it doesn't exist
+    this.checkoutBtn = this.cartPanel.querySelector('.checkout-btn') || document.createElement('button');
+    if (!this.checkoutBtn.classList.contains('checkout-btn')) {
+      this.checkoutBtn.className = 'checkout-btn';
+      this.checkoutBtn.textContent = 'Checkout';
+      this.cartPanel.appendChild(this.checkoutBtn);
+    }
     
     // Add Font Awesome if not present
     this.addFontAwesome();
     
     // Update cart display
     this.updateCartDisplay();
+    
+    console.log("Cart UI created");
   }
 
   addFontAwesome() {
@@ -89,8 +105,10 @@ class ShoppingCart {
   setupEventListeners() {
     // Cart float click to toggle panel
     this.cartFloat.addEventListener('click', (e) => {
+      e.preventDefault();
       e.stopPropagation();
       this.cartPanel.style.transform = this.cartPanel.style.transform === 'scale(1)' ? 'scale(0)' : 'scale(1)';
+      console.log("Cart panel toggled");
     });
     
     // Close cart panel when clicking outside
@@ -101,7 +119,8 @@ class ShoppingCart {
     });
 
     // Checkout button functionality
-    this.checkoutBtn.addEventListener('click', () => {
+    this.checkoutBtn.addEventListener('click', (e) => {
+      e.preventDefault();
       if (this.items.length === 0) {
         alert('Your cart is empty');
         return;
@@ -109,69 +128,128 @@ class ShoppingCart {
       
       this.showCheckoutForm();
     });
+    
+    // Fix for "Set Booking" button
+    const confirmDatesBtn = document.getElementById('confirmDates');
+    if (confirmDatesBtn) {
+      confirmDatesBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log("Set Booking button clicked, capturing event");
+      });
+    }
   }
 
   setupAddToCartButtons() {
-    // Event delegation for "Add to Cart" buttons
-    document.addEventListener('click', (e) => {
-      if (e.target.classList.contains('btn-AddToCart') || 
-          e.target.classList.contains('add-to-cart-btn') ||
-          e.target.closest('.btn-AddToCart') ||
-          e.target.closest('.add-to-cart-btn')) {
-        
+    // First, handle all existing cart-add-item buttons
+    document.querySelectorAll('.cart-add-item, .btn-AddToCart').forEach(button => {
+      // Remove existing event listeners by cloning and replacing
+      const newButton = button.cloneNode(true);
+      button.parentNode.replaceChild(newButton, button);
+      
+      newButton.addEventListener('click', (e) => {
         e.preventDefault();
-        const button = e.target.classList.contains('btn-AddToCart') || e.target.classList.contains('add-to-cart-btn') 
-                      ? e.target 
-                      : e.target.closest('.btn-AddToCart') || e.target.closest('.add-to-cart-btn');
+        e.stopPropagation();
+        console.log("Add to cart button clicked:", newButton);
         
         // Get product info from the button's data attributes
+        const productId = newButton.dataset.itemId || 'product-' + Date.now();
+        const productName = newButton.dataset.itemName || 'Product';
+        const productPrice = parseFloat(newButton.dataset.itemPrice || 0);
+        const productImg = newButton.dataset.itemImage || '';
+        
+        // Add to cart
+        this.addToCart(productName, productPrice, productImg);
+      });
+    });
+    
+    // Event delegation for dynamically added buttons
+    document.addEventListener('click', (e) => {
+      // Target cart-add-item and btn-AddToCart classes
+      const button = e.target.closest('.cart-add-item, .btn-AddToCart');
+      
+      if (button) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log("Cart button clicked via delegation:", button);
+        
+        // Get product info from the button's data attributes
+        const productId = button.dataset.itemId || 'product-' + Date.now();
         const productName = button.dataset.itemName || 'Product';
         const productPrice = parseFloat(button.dataset.itemPrice || 0);
         const productImg = button.dataset.itemImage || '';
-        
-        // If product info is not in data attributes, try to get from parent container
-        if (!button.dataset.itemName || !button.dataset.itemPrice) {
-          const productBox = button.closest('.package-box') || 
-                            button.closest('.service-package-box') || 
-                            button.closest('.villa-card');
-          
-          if (productBox) {
-            // Get product name
-            const nameElement = productBox.querySelector('h3');
-            if (nameElement && !productName) {
-              productName = nameElement.textContent.trim();
-            }
-            
-            // Get product price from various possible locations
-            if (!productPrice) {
-              // Try from strong element
-              if (productBox.querySelector('p strong')) {
-                const priceText = productBox.querySelector('p strong').textContent;
-                productPrice = parseFloat(priceText.replace(/[^0-9.]/g, ''));
-              }
-              // Try from a div with class price
-              else if (productBox.querySelector('.price')) {
-                const priceElement = productBox.querySelector('.price');
-                const priceText = priceElement.textContent;
-                productPrice = parseFloat(priceText.replace(/[^0-9.]/g, ''));
-              }
-            }
-            
-            // Get product image
-            const imgElement = productBox.querySelector('img');
-            if (imgElement && !productImg) {
-              productImg = imgElement.src;
-            }
-          }
-        }
         
         // Add to cart
         this.addToCart(productName, productPrice, productImg);
       }
     });
+    
+    // Special handler for booking confirmation button
+    const confirmDatesBtn = document.getElementById('confirmDates');
+    if (confirmDatesBtn) {
+      confirmDatesBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Get booking details from the calendar modal
+        const packageId = window.currentPackage || '';
+        const checkInDate = window.checkInDate;
+        const checkOutDate = window.checkOutDate;
+        
+        if (!packageId || !checkInDate || !checkOutDate) {
+          console.log("Missing booking details");
+          return;
+        }
+        
+        // Find property details
+        let propertyName = packageId.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        let basePrice = 0;
+        
+        // Try to find price from packagePrices object or from DOM
+        try {
+          if (window.packagePrices && window.packagePrices[packageId]) {
+            basePrice = window.packagePrices[packageId].basePrice;
+          } else {
+            // Find price in DOM
+            const packageElement = document.querySelector(`[data-package="${packageId}"]`);
+            if (packageElement) {
+              const priceElement = packageElement.closest('.package-box, .villa-card').querySelector('strong, .price');
+              if (priceElement) {
+                const priceText = priceElement.textContent;
+                basePrice = parseFloat(priceText.replace(/[^0-9.]/g, ''));
+              }
+            }
+          }
+        } catch (error) {
+          console.error("Error finding price:", error);
+        }
+        
+        // Calculate total price
+        const nights = Math.round(Math.abs((checkOutDate - checkInDate) / (24 * 60 * 60 * 1000)));
+        const totalPrice = basePrice * nights;
+        
+        // Add to cart
+        this.addToCart(
+          `${propertyName} (${nights} nights)`,
+          totalPrice,
+          ''
+        );
+        
+        // Close the calendar modal
+        const calendarModal = document.getElementById('calendarModal');
+        if (calendarModal) {
+          calendarModal.classList.remove('active');
+        }
+        
+        // Show confirmation
+        alert(`${propertyName} has been added to your cart!`);
+      });
+    }
   }
 
   addToCart(name, price, imgSrc) {
+    console.log("Adding to cart:", name, price, imgSrc);
+    
     // Check if item already exists in cart
     const existingItem = this.items.find(item => item.name === name);
     
@@ -230,7 +308,7 @@ class ShoppingCart {
       itemElement.className = 'cart-item';
       
       itemElement.innerHTML = `
-        <img class="cart-item-img" src="${item.imgSrc || '/images/placeholder.jpg'}" alt="${item.name}">
+        <img class="cart-item-img" src="${item.imgSrc || './public/Pictures/villas/alhambra.jpg'}" alt="${item.name}" style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;">
         <div class="cart-item-details">
           <div class="cart-item-name">${item.name}</div>
           <div class="cart-item-price">$${item.price.toFixed(2)} × ${item.quantity}</div>
@@ -244,6 +322,7 @@ class ShoppingCart {
     // Add event listeners to remove buttons
     document.querySelectorAll('.remove-item').forEach(button => {
       button.addEventListener('click', (e) => {
+        e.preventDefault();
         e.stopPropagation();
         const index = parseInt(button.dataset.index);
         this.removeItem(index);
@@ -282,9 +361,13 @@ class ShoppingCart {
   }
   
   showCheckoutForm() {
-    // Create checkout modal
-    const modal = document.createElement('div');
-    modal.className = 'checkout-modal';
+    // Create checkout modal if it doesn't exist
+    let modal = document.querySelector('.checkout-modal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.className = 'checkout-modal';
+      document.body.appendChild(modal);
+    }
     
     // Create checkout form content
     const checkoutForm = `
@@ -303,7 +386,7 @@ class ShoppingCart {
           ${this.items.map(item => `
             <div style="display: flex; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #eee;">
               <div style="width: 50px; height: 50px; margin-right: 10px;">
-                <img src="${item.imgSrc || '/images/placeholder.jpg'}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;">
+                <img src="${item.imgSrc || './public/Pictures/villas/alhambra.jpg'}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;">
               </div>
               <div>
                 <div style="font-weight: bold;">${item.name}</div>
@@ -367,10 +450,10 @@ class ShoppingCart {
     `;
     
     modal.innerHTML = checkoutForm;
-    document.body.appendChild(modal);
     
     // Add event listeners
-    modal.querySelector('.cancel-checkout').addEventListener('click', () => {
+    modal.querySelector('.cancel-checkout').addEventListener('click', (e) => {
+      e.preventDefault();
       modal.remove();
     });
     
@@ -410,52 +493,56 @@ class ShoppingCart {
       </div>
     `;
     
-    modal.querySelector('.close-confirmation').addEventListener('click', () => {
+    modal.querySelector('.close-confirmation').addEventListener('click', (e) => {
+      e.preventDefault();
       modal.remove();
       // Clear cart after successful order
       this.items = [];
       this.updateCart();
     });
   }
-  
-  // Method to process bookings (from booking.js)
-  processBooking(bookingDetails) {
-    if (!bookingDetails || !bookingDetails.propertyId) {
-      console.error('Invalid booking details');
-      return false;
-    }
-    
-    try {
-      // Add booking to cart as a product
-      this.addToCart(
-        bookingDetails.propertyName || 'Property Booking',
-        bookingDetails.total || 0,
-        bookingDetails.imgSrc || ''
-      );
-      
-      return true;
-    } catch (error) {
-      console.error('Error processing booking:', error);
-      return false;
-    }
-  }
 }
 
-// Export a function to initialize the cart
-export const initializeCart = () => {
-  const cart = new ShoppingCart();
-  cart.initialize();
+// Initialize the cart when the script loads
+document.addEventListener('DOMContentLoaded', () => {
+  console.log("DOM loaded, initializing cart...");
+  window.usviCart = new ShoppingCart().initialize();
   
-  // Make cart globally accessible for other components
-  window.usviCart = cart;
+  // Fix submission behaviors
+  document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', (e) => {
+      // Prevent default form submission that causes page refresh
+      e.preventDefault();
+      console.log("Form submission prevented for:", form);
+    });
+  });
   
-  return cart;
-};
-
-// Handle integration with booking system
-export const processBooking = (bookingDetails) => {
-  if (window.usviCart) {
-    return window.usviCart.processBooking(bookingDetails);
+  // Fix for buttons inside forms
+  document.querySelectorAll('button').forEach(button => {
+    // Skip submit buttons
+    if (button.type !== 'submit') {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+      });
+    }
+  });
+  
+  // Fix for the booking functionality
+  const confirmDatesBtn = document.getElementById('confirmDates');
+  if (confirmDatesBtn) {
+    // Make global properties available
+    window.currentPackage = '';
+    window.checkInDate = null;
+    window.checkOutDate = null;
+    
+    document.querySelectorAll('.booking-btn').forEach(button => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.currentPackage = button.dataset.package;
+        console.log("Current package set to:", window.currentPackage);
+      });
+    });
   }
-  return false;
-};
+});
+
+export { ShoppingCart };

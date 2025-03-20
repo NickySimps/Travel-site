@@ -14,7 +14,7 @@ export const initializeBooking = () => {
     const checkOutDisplay = document.getElementById('checkOutDisplay');
     const confirmButton = document.getElementById('confirmDates');
     const inquiryForm = document.getElementById('inquiryForm');
-    
+
 
     let currentDate = new Date();
     let currentMonth = currentDate.getMonth();
@@ -23,6 +23,8 @@ export const initializeBooking = () => {
     let checkOutDate = null;
     let currentPackage = null;
     let currentBookingDetails = null;
+
+
 
     const bookedDates = {
         'villa-alhambra': [
@@ -102,7 +104,7 @@ export const initializeBooking = () => {
 
     const isDateBooked = (date) => {
         if (!currentPackage || !bookedDates[currentPackage]) return false;
-        
+
         return bookedDates[currentPackage].some(booking => {
             const bookingStart = new Date(booking.start);
             const bookingEnd = new Date(booking.end);
@@ -115,18 +117,18 @@ export const initializeBooking = () => {
 
         const hasCatering = document.getElementById('cateringService').checked;
         const hasTransport = document.getElementById('transportService').checked;
-        
+
         let price = packagePrices[currentPackage];
         let baseTotal = price.basePrice;
-        
+
         // Calculate total nights
         const nights = calculateNights(checkInDate, checkOutDate);
-        
+
         // If price is per night, multiply by number of nights
         if (price.perNight) {
             baseTotal = baseTotal * nights;
         }
-        
+
         // Add services costs
         let serviceCost = 0;
         if (hasCatering && hasTransport) {
@@ -136,15 +138,15 @@ export const initializeBooking = () => {
         } else if (hasTransport) {
             serviceCost = price.withTransport;
         }
-        
+
         const finalPrice = baseTotal + serviceCost;
-        
+
         // Update the displayed total
         const totalElement = document.getElementById('totalAmount');
         if (totalElement) {
             totalElement.textContent = `$${finalPrice.toLocaleString()}`;
         }
-        
+
         return finalPrice;
     };
 
@@ -165,7 +167,7 @@ export const initializeBooking = () => {
         checkInDate = clickedDate;
         checkOutDate = new Date(clickedDate);
         checkOutDate.setDate(checkOutDate.getDate() + 3);
-        
+
         updateDateDisplay();
         createCalendar();
     };
@@ -211,17 +213,17 @@ export const initializeBooking = () => {
                 dayElement.classList.add('booked');
             } else {
                 dayElement.onclick = () => handleDateClick(day);
-                
+
                 // Add hover effects
                 dayElement.addEventListener('mouseenter', () => {
                     if (!checkInDate) {
                         dayNumber.classList.add('hover');
-                        
+
                         // Show potential range
                         const hoverDate = new Date(currentYear, currentMonth, day);
                         const potentialEndDate = new Date(hoverDate);
                         potentialEndDate.setDate(potentialEndDate.getDate() + 2);
-                        
+
                         // Find and highlight potential range days
                         const allDays = document.querySelectorAll('.calendar-day');
                         allDays.forEach(dayEl => {
@@ -266,10 +268,10 @@ export const initializeBooking = () => {
     const addBookingToCart = (bookingDetails) => {
         // Debug logs
         console.log("Adding to cart:", bookingDetails);
-        
+
         // Try to find a button matching the property ID
         let addToCartButton = document.querySelector(`[data-item-id="${bookingDetails.propertyId}"]`);
-        
+
         // If not found, create a new button
         if (!addToCartButton) {
             console.log("Button not found, creating a custom button");
@@ -281,15 +283,15 @@ export const initializeBooking = () => {
             addToCartButton.dataset.itemUrl = window.location.href;
             document.body.appendChild(addToCartButton);
         }
-        
+
         try {
             // Format dates for cart
             const checkInFormatted = bookingDetails.checkIn.toISOString().split('T')[0];
             const checkOutFormatted = bookingDetails.checkOut.toISOString().split('T')[0];
-            
+
             // Calculate nights
             const nights = calculateNights(bookingDetails.checkIn, bookingDetails.checkOut);
-            
+
             // Update button attributes with all form data
             addToCartButton.dataset.itemPrice = bookingDetails.total.toFixed(2);
             addToCartButton.dataset.itemDescription = `${bookingDetails.propertyName} - ${nights} nights`;
@@ -299,7 +301,7 @@ export const initializeBooking = () => {
             addToCartButton.dataset.itemCustom2Value = checkOutFormatted;
             addToCartButton.dataset.itemCustom3Name = "Guests";
             addToCartButton.dataset.itemCustom3Value = bookingDetails.guests;
-            
+
             // Add services as a custom field
             let servicesText = "";
             if (bookingDetails.services && bookingDetails.services.length > 0) {
@@ -307,10 +309,10 @@ export const initializeBooking = () => {
             } else {
                 servicesText = "None";
             }
-            
+
             addToCartButton.dataset.itemCustom4Name = "Services";
             addToCartButton.dataset.itemCustom4Value = servicesText;
-            
+
             console.log("Cart button configured with properties:", {
                 id: addToCartButton.dataset.itemId,
                 name: addToCartButton.dataset.itemName,
@@ -320,18 +322,18 @@ export const initializeBooking = () => {
                 guests: addToCartButton.dataset.itemCustom3Value,
                 services: addToCartButton.dataset.itemCustom4Value
             });
-            
+
             // Trigger click on the button to add to cart
             addToCartButton.click();
             console.log("Item added to cart via button click");
-            
+
             return true;
         } catch (error) {
             console.error('Error adding booking to cart:', error);
             return false;
         }
     };
-    
+
 
     const showInquiryModal = (bookingDetails) => {
         if (!document.getElementById('bookingInquiryModal')) {
@@ -367,22 +369,22 @@ export const initializeBooking = () => {
                     </div>
                 </div>`;
             document.body.insertAdjacentHTML('beforeend', modalHTML);
-            
+
             // Initialize new modal's event listeners
             const newModal = document.getElementById('bookingInquiryModal');
             const closeBtn = newModal.querySelector('.close-inquiry');
             const form = newModal.querySelector('#inquiryForm');
             const addToCartBtn = newModal.querySelector('#addToCartBtn');
-            
+
             closeBtn.addEventListener('click', () => newModal.classList.remove('active'));
-            
+
             addToCartBtn.addEventListener('click', (e) => {
                 e.preventDefault(); // Prevent any form submission
                 console.log("Add to cart button clicked in modal");
-                
+
                 // First close the modal to prevent it from interfering
                 newModal.classList.remove('active');
-                
+
                 // Short delay to ensure modal is closed before cart action
                 setTimeout(() => {
                     if (addBookingToCart(currentBookingDetails)) {
@@ -394,7 +396,7 @@ export const initializeBooking = () => {
                     }
                 }, 100);
             });
-            
+
             initializeInquiryForm(form);
         } else {
             // Modal exists, just update content and add event listener
@@ -415,7 +417,7 @@ export const initializeBooking = () => {
         currentBookingDetails = bookingDetails;
         const summary = document.getElementById('bookingSummary');
         const inquiryModal = document.getElementById('bookingInquiryModal');
-        
+
         if (summary) {
             summary.innerHTML = `
                 <p><strong>Property:</strong> ${bookingDetails.propertyName}</p>
@@ -519,12 +521,12 @@ export const initializeBooking = () => {
                                     </div>
                                 </form>
                             `;
-                            
+
                             // Reinitialize event listeners
                             const newCloseBtn = modalContent.querySelector('.close-inquiry');
                             const newForm = modalContent.querySelector('#inquiryForm');
                             const newAddToCartBtn = modalContent.querySelector('#addToCartBtn');
-                            
+
                             if (newCloseBtn) {
                                 newCloseBtn.addEventListener('click', () => inquiryModal.classList.remove('active'));
                             }
@@ -564,29 +566,31 @@ export const initializeBooking = () => {
 
     // Event Listeners
     checkAvailabilityButtons.forEach(button => {
-        button.addEventListener('click', () => {
+        button.addEventListener('click', (e) => {
+
+            e.preventDefault();
             currentPackage = button.dataset.package;
             checkInDate = null;
             checkOutDate = null;
-            
+
             // Reset form values
             if (document.getElementById('guestCount')) {
                 document.getElementById('guestCount').max = maxGuests[currentPackage] || 6;
                 document.getElementById('guestCount').value = 1;
             }
-            
+
             if (document.getElementById('roomCount')) {
                 document.getElementById('roomCount').value = 1;
             }
-            
+
             if (document.getElementById('cateringService')) {
                 document.getElementById('cateringService').checked = false;
             }
-            
+
             if (document.getElementById('transportService')) {
                 document.getElementById('transportService').checked = false;
             }
-            
+
             updateDateDisplay();
             calendarModal.classList.add('active');
             createCalendar();
@@ -616,41 +620,18 @@ export const initializeBooking = () => {
 
     // Confirm booking
     confirmButton?.addEventListener('click', (e) => {
-        // Prevent default form submission behavior which might be causing the refresh
+        // Prevent default form submission behavior
         e.preventDefault();
         e.stopPropagation();
-        
+
         if (!checkInDate || !checkOutDate) {
             console.log("Missing dates, cannot proceed");
             return;
         }
-    
-        // Logging to debug
-        console.log("Set Booking clicked for package:", currentPackage);
-    
-        // Find property name
-        let propertyName = currentPackage;
-        
-        // Try to get a more user-friendly name by searching the DOM
-        try {
-            const packageButtons = document.querySelectorAll(`[data-package="${currentPackage}"]`);
-            for (const button of packageButtons) {
-                const closestBox = button.closest('.package-box, .villa-card');
-                if (closestBox) {
-                    const nameElement = closestBox.querySelector('h3');
-                    if (nameElement) {
-                        propertyName = nameElement.textContent.trim();
-                        break;
-                    }
-                }
-            }
-        } catch (error) {
-            console.warn("Could not find property name in DOM:", error);
-        }
-    
-        // Calculate booking total with all services
+
+        // Calculate booking total
         const totalPrice = updateTotal();
-        
+
         // Get services
         const services = [];
         if (document.getElementById('cateringService')?.checked) {
@@ -659,31 +640,40 @@ export const initializeBooking = () => {
         if (document.getElementById('transportService')?.checked) {
             services.push('Transport');
         }
-        
-        // Prepare the complete booking details
+
+        // Format property name better
+        let propertyName = currentPackage;
+        try {
+            propertyName = currentPackage.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        } catch (error) {
+            console.log("Error formatting property name:", error);
+        }
+
+        // Create booking details
+        const nights = calculateNights(checkInDate, checkOutDate);
         const bookingDetails = {
             propertyId: currentPackage,
             propertyName: propertyName,
             checkIn: checkInDate,
             checkOut: checkOutDate,
+            nights: nights,
             guests: document.getElementById('guestCount')?.value || 1,
             services: services,
             total: totalPrice
         };
-    
-        console.log("Booking details prepared:", bookingDetails);
-        
-        // Try to add booking directly to cart
-        if (addBookingToCart(bookingDetails)) {
-            console.log("Successfully added to cart!");
+
+        // Add to cart
+        if (window.usviCart) {
+            const formattedName = `${propertyName} (${nights} nights${services.length ? ', with ' + services.join(' & ') : ''})`;
+            window.usviCart.addToCart(formattedName, totalPrice, '');
+
             // Close the calendar modal
             calendarModal.classList.remove('active');
+
             // Show confirmation
-            alert('Your booking has been added to the cart!');
+            alert(`${propertyName} has been added to your cart!`);
         } else {
-            console.error("Failed to add booking to cart directly");
-            // If direct cart add fails, show the inquiry modal as fallback
-            showInquiryModal(bookingDetails);
+            alert("Cart system not initialized. Please refresh the page and try again.");
         }
     });
 
@@ -691,7 +681,7 @@ export const initializeBooking = () => {
     if (calendarGrid) {
         createCalendar();
     }
-    
+
     // Create a direct cart addition function for debugging
     // This can be exposed on the window for testing in console
     window.directAddToCart = (packageId) => {
@@ -699,18 +689,18 @@ export const initializeBooking = () => {
             alert("Please specify a package ID");
             return;
         }
-        
+
         // Set up basic booking details
         currentPackage = packageId;
         const today = new Date();
         checkInDate = new Date(today);
         checkInDate.setDate(today.getDate() + 7); // A week from today
-        
+
         checkOutDate = new Date(checkInDate);
         checkOutDate.setDate(checkInDate.getDate() + 3); // 3 night stay
-        
+
         const propertyName = packageId.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-        
+
         const bookingDetails = {
             propertyId: packageId,
             propertyName: propertyName,
@@ -720,9 +710,9 @@ export const initializeBooking = () => {
             services: [],
             total: packagePrices[packageId]?.basePrice * 3 || 1500 * 3
         };
-        
+
         console.log("Direct add to cart triggered for:", bookingDetails);
-        
+
         const success = addBookingToCart(bookingDetails);
         if (success) {
             alert(`${propertyName} added to cart for dates ${formatDate(checkInDate)} to ${formatDate(checkOutDate)}`);
@@ -730,14 +720,14 @@ export const initializeBooking = () => {
             alert("Failed to add to cart directly. Check console for details.");
         }
     };
-    
+
     // Optional: Add debugging helper
     const addDebugOverlay = () => {
         // Only add in development
         if (window.location.hostname !== 'localhost' && !window.location.hostname.includes('127.0.0.1')) {
             return;
         }
-        
+
         const debugDiv = document.createElement('div');
         debugDiv.className = 'debug-info';
         debugDiv.innerHTML = `
@@ -748,7 +738,13 @@ export const initializeBooking = () => {
         `;
         document.body.appendChild(debugDiv);
     };
-    
+    // Make booking state accessible to cart
+    window.bookingState = {
+        currentPackage,
+        checkInDate: null,
+        checkOutDate: null,
+        updateTotal
+    };
     // Uncomment to enable debug overlay in development
     // addDebugOverlay();
 };
