@@ -1,4 +1,4 @@
-// Enhanced booking.js with proper cart integration
+// Enhanced booking.js with proper cart integration and image handling
 
 export const initializeBooking = () => {
     const calendarModal = document.getElementById('calendarModal');
@@ -24,7 +24,14 @@ export const initializeBooking = () => {
     let currentPackage = null;
     let currentBookingDetails = null;
 
-
+    // Map for property base names matching the actual file names with spaces
+    const propertyImageMap = {
+        'villa-alhambra': 'Villa Alhambra',
+        'pool-villa': 'Pool Villa',
+        'guest-villa': 'Guest Villa',
+        'tower-villa': 'Tower Villa',
+        'garden-villa': 'Garden Villa'
+    };
 
     const bookedDates = {
         'villa-alhambra': [
@@ -110,6 +117,11 @@ export const initializeBooking = () => {
             const bookingEnd = new Date(booking.end);
             return date >= bookingStart && date <= bookingEnd;
         });
+    };
+
+    const getBasePropertyName = (packageId) => {
+        // Return the exact file name for image paths
+        return propertyImageMap[packageId] || packageId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
     };
 
     const updateTotal = () => {
@@ -313,10 +325,15 @@ export const initializeBooking = () => {
             addToCartButton.dataset.itemCustom4Name = "Services";
             addToCartButton.dataset.itemCustom4Value = servicesText;
 
+            // Set the image path with the exact filename format
+            const imageName = getBasePropertyName(bookingDetails.propertyId);
+            addToCartButton.dataset.itemImage = `./public/Pictures/villas/${imageName}.jpg`;
+
             console.log("Cart button configured with properties:", {
                 id: addToCartButton.dataset.itemId,
                 name: addToCartButton.dataset.itemName,
                 price: addToCartButton.dataset.itemPrice,
+                image: addToCartButton.dataset.itemImage, // Log the image path
                 checkin: addToCartButton.dataset.itemCustom1Value,
                 checkout: addToCartButton.dataset.itemCustom2Value,
                 guests: addToCartButton.dataset.itemCustom3Value,
@@ -664,8 +681,15 @@ export const initializeBooking = () => {
 
         // Add to cart
         if (window.usviCart) {
+            // Get the exact image name for the property
+            const imageName = getBasePropertyName(currentPackage);
+            const imagePath = `./public/Pictures/villas/${imageName}.jpg`;
+            
+            // Create a formatted name for display but use the image path directly
             const formattedName = `${propertyName} (${nights} nights${services.length ? ', with ' + services.join(' & ') : ''})`;
-            window.usviCart.addToCart(formattedName, totalPrice, '');
+            
+            // Add to cart with the correct image path
+            window.usviCart.addToCart(formattedName, totalPrice, imagePath);
 
             // Close the calendar modal
             calendarModal.classList.remove('active');
@@ -738,6 +762,7 @@ export const initializeBooking = () => {
         `;
         document.body.appendChild(debugDiv);
     };
+    
     // Make booking state accessible to cart
     window.bookingState = {
         currentPackage,
@@ -745,7 +770,7 @@ export const initializeBooking = () => {
         checkOutDate: null,
         updateTotal
     };
+    
     // Uncomment to enable debug overlay in development
     // addDebugOverlay();
 };
-
