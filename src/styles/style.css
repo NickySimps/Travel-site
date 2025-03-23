@@ -1480,16 +1480,74 @@ button:hover,
   font-style: italic;
 }
 
-/* Mobile responsive adjustments */
-@media (max-width: 768px) {
-  .cart-panel {
-    width: 250px;
-    right: 10px;
-    bottom: 70px;
+/* Calendar CSS Fixes */
+
+/* Make sure the day number container fills the calendar day cell */
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.calendar-day .day-number {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+/* Distinct styling for check-in date */
+.calendar-day .day-number.selected-checkin {
+  background-color: #87ceeb; /* Primary blue */
+  color: white;
+  font-weight: bold;
+}
+
+/* Distinct styling for check-out date */
+.calendar-day .day-number.selected-checkout {
+  background-color: #ffdda9; /* Primary orange */
+  color: black;
+  font-weight: bold;
+}
+
+/* Styling for dates in the range */
+.calendar-day .day-number.in-range {
+  background-color: rgba(135, 206, 235, 0.2);
+}
+
+/* Hover effect for available dates */
+.calendar-day:not(.empty):not(.header):not(.past):not(.booked):hover .day-number {
+  background-color: rgba(135, 206, 235, 0.5);
+  transform: scale(1.1);
+}
+
+/* Styling for past dates */
+.calendar-day.past .day-number {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Styling for booked dates */
+.calendar-day.booked .day-number {
+  background-color: #ffcdd2;
+  cursor: not-allowed;
+}
+
+/* Make the calendar cells responsive */
+@media screen and (max-width: 768px) {
+  .calendar-grid {
+    gap: 2px;
   }
   
-  .cart-float {
-    right: 10px;
-    bottom: 10px;
+  .calendar-day {
+    padding: 0.3rem;
   }
 }

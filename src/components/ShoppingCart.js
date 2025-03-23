@@ -118,18 +118,69 @@ class ShoppingCart {
         this.cartPanel.classList.add('open');
         this.cartPanel.style.transform = 'scale(1)';
       }
+    });
+    
+    // Add mouseenter event to show the cart panel
+    this.cartFloat.addEventListener('mouseenter', () => {
+      this.cartPanel.classList.add('open');
+      this.cartPanel.style.transform = 'scale(1)';
+    });
+    
+    // Add mouseleave event to hide the cart panel when mouse leaves both cart float and panel
+    const hideCartPanel = () => {
+      // Use a setTimeout to allow the mouse to move between elements
+      this.hideTimeout = setTimeout(() => {
+        if (!this.isMouseOverCart) {
+          this.cartPanel.classList.remove('open');
+          this.cartPanel.style.transform = 'scale(0)';
+        }
+      }, 300); // short delay to allow mouse movement between elements
     };
     
-    // Add click event listener for cart float button
-    this.cartFloat.addEventListener('click', toggleCartPanel);
+    // Track mouse position for both cart float and panel
+    this.isMouseOverCart = false;
+    
+    this.cartFloat.addEventListener('mouseleave', () => {
+      this.isMouseOverCart = false;
+      hideCartPanel();
+    });
+    
+    this.cartPanel.addEventListener('mouseenter', () => {
+      this.isMouseOverCart = true;
+      clearTimeout(this.hideTimeout);
+    });
+    
+    this.cartPanel.addEventListener('mouseleave', () => {
+      this.isMouseOverCart = false;
+      hideCartPanel();
+    });
     
     // Also handle the cart-checkout buttons in the navbar
     document.querySelectorAll('.cart-checkout').forEach(button => {
-      // Remove any existing listeners by cloning and replacing
-      const newButton = button.cloneNode(true);
-      button.parentNode.replaceChild(newButton, button);
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Toggle the cart panel visibility
+        if (this.cartPanel.classList.contains('open')) {
+          this.cartPanel.classList.remove('open');
+          this.cartPanel.style.transform = 'scale(0)';
+        } else {
+          this.cartPanel.classList.add('open');
+          this.cartPanel.style.transform = 'scale(1)';
+        }
+      });
       
-      newButton.addEventListener('click', toggleCartPanel);
+      // Add mouseenter and mouseleave events to cart-checkout buttons
+      button.addEventListener('mouseenter', () => {
+        this.cartPanel.classList.add('open');
+        this.cartPanel.style.transform = 'scale(1)';
+      });
+      
+      button.addEventListener('mouseleave', () => {
+        this.isMouseOverCart = false;
+        hideCartPanel();
+      });
     });
     
     // Close cart panel when clicking outside
@@ -240,8 +291,11 @@ class ShoppingCart {
     this.cartPanel.classList.add('open');
     this.cartPanel.style.transform = 'scale(1)';
     setTimeout(() => {
-      this.cartPanel.classList.remove('open');
-      this.cartPanel.style.transform = 'scale(0)';
+      // Only close if mouse is not over cart elements
+      if (!this.isMouseOverCart) {
+        this.cartPanel.classList.remove('open');
+        this.cartPanel.style.transform = 'scale(0)';
+      }
     }, 3000);
   }
 
@@ -276,7 +330,7 @@ class ShoppingCart {
       itemElement.className = 'cart-item';
       
       // Use a default image if none is provided
-      const imgSrc = item.imgSrc || './public/Pictures/villas/alhambra.jpg';
+const imgSrc = item.imgSrc || `./public/Pictures/villas/${item.name}.jpg`;
       
       itemElement.innerHTML = `
         <div style="width: 40px; height: 40px; margin-right: 10px;">
@@ -359,7 +413,7 @@ class ShoppingCart {
           ${this.items.map(item => `
             <div style="display: flex; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #eee;">
               <div style="width: 50px; height: 50px; margin-right: 10px;">
-                <img src="${item.imgSrc || './public/Pictures/villas/alhambra.jpg'}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;">
+                <img src="${item.imgSrc || `./public/Pictures/villas/${item.name}.jpg`}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;">
               </div>
               <div>
                 <div style="font-weight: bold;">${item.name}</div>
