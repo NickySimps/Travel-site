@@ -1357,30 +1357,37 @@ button:hover,
   }
 }
 
+/* Add these styles to your style.css file */
+
+/* ======= CART FIXES ======= */
+/* Fixed cart positioning */
 .cart-float {
   position: fixed;
   bottom: 20px;
-  left: 20px;      /* Change from right to left */
-  right: auto;     /* Clear right position */
-  /* other styles... */
+  right: 20px;
+  left: auto;
+  z-index: 1000;
+  background-color: #87ceeb;
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+/* Fixed cart panel styling */
 .cart-panel {
   position: fixed;
   bottom: 80px;
-  left: 20px;       /* Change from right to left */
-  right: auto;      /* Clear right position */
-  /* other styles... */
-  transform-origin: bottom left;  /* Change from bottom right to bottom left */
-}
-
-/* Add these styles to your existing style.css file */
-
-/* Make sure the cart panel has a proper transition */
-.cart-panel {
-  position: fixed;
-  bottom: 80px;
-  left: 20px;
+  right: 20px;
+  left: auto;
   background: white;
   border-radius: 10px;
   width: 300px;
@@ -1388,28 +1395,18 @@ button:hover,
   overflow-y: auto;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
   transform: scale(0);
-  transform-origin: bottom left;
+  transform-origin: bottom right;
   transition: transform 0.3s ease;
   z-index: 999;
   padding: 15px;
 }
+
+/* Fix cart opening/closing animation */
 .cart-panel.open {
   transform: scale(1);
 }
 
-/* Keep the cart visible when hovering the cart button */
-.cart-float:hover + .cart-panel,
-.cart-panel:hover {
-  transform: scale(1);
-}
-
-/* Add a visible hover state to the cart button */
-.cart-float:hover {
-  background-color: #ffdda9;
-  transform: scale(1.1);
-}
-
-/* Make cart items easier to read */
+/* Cart item styling improvements */
 .cart-item {
   display: flex;
   align-items: center;
@@ -1433,7 +1430,7 @@ button:hover,
   font-size: 0.9rem;
 }
 
-/* Improve the remove button */
+/* Improved remove button styling */
 .remove-item {
   background: none;
   border: none;
@@ -1450,10 +1447,49 @@ button:hover,
   color: #ff0000;
 }
 
-/* Empty cart message */
+/* Animation for cart button */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.pulse {
+  animation: pulse 0.5s ease-in-out;
+}
+
+/* Cart checkout form modal */
+.checkout-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+/* Empty cart message styling */
 .empty-cart {
   color: #999;
   text-align: center;
   padding: 10px 0;
   font-style: italic;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .cart-panel {
+    width: 250px;
+    right: 10px;
+    bottom: 70px;
+  }
+  
+  .cart-float {
+    right: 10px;
+    bottom: 10px;
+  }
 }

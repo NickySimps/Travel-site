@@ -1,4 +1,4 @@
-// Final Updated ShoppingCart.js implementation
+// Updated ShoppingCart.js implementation with fixes
 // Save this file to src/components/ShoppingCart.js
 
 class ShoppingCart {
@@ -104,12 +104,13 @@ class ShoppingCart {
   }
 
   setupEventListeners() {
-    // Cart float click to toggle panel
-    this.cartFloat.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
+    // Cart float click to toggle panel - FIXED: properly toggle open class and use direct style manipulation
+    const toggleCartPanel = (e) => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
       
-      // Toggle the cart panel visibility using classList instead of style
       if (this.cartPanel.classList.contains('open')) {
         this.cartPanel.classList.remove('open');
         this.cartPanel.style.transform = 'scale(0)';
@@ -117,23 +118,18 @@ class ShoppingCart {
         this.cartPanel.classList.add('open');
         this.cartPanel.style.transform = 'scale(1)';
       }
-    });
+    };
     
-    // Also handle the cart-checkout buttons
+    // Add click event listener for cart float button
+    this.cartFloat.addEventListener('click', toggleCartPanel);
+    
+    // Also handle the cart-checkout buttons in the navbar
     document.querySelectorAll('.cart-checkout').forEach(button => {
-      button.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        // Toggle the cart panel visibility
-        if (this.cartPanel.classList.contains('open')) {
-          this.cartPanel.classList.remove('open');
-          this.cartPanel.style.transform = 'scale(0)';
-        } else {
-          this.cartPanel.classList.add('open');
-          this.cartPanel.style.transform = 'scale(1)';
-        }
-      });
+      // Remove any existing listeners by cloning and replacing
+      const newButton = button.cloneNode(true);
+      button.parentNode.replaceChild(newButton, button);
+      
+      newButton.addEventListener('click', toggleCartPanel);
     });
     
     // Close cart panel when clicking outside
@@ -141,7 +137,8 @@ class ShoppingCart {
       if (this.cartPanel.classList.contains('open') && 
           !this.cartPanel.contains(e.target) && 
           e.target !== this.cartFloat &&
-          !e.target.closest('.cart-checkout')) {
+          !e.target.closest('.cart-checkout') &&
+          !e.target.closest('.cart-float')) {
         this.cartPanel.classList.remove('open');
         this.cartPanel.style.transform = 'scale(0)';
       }
@@ -157,6 +154,16 @@ class ShoppingCart {
       
       this.showCheckoutForm();
     });
+    
+    // Remove any hover-based cart opening from CSS by adding inline style
+    const style = document.createElement('style');
+    style.textContent = `
+      .cart-float:hover + .cart-panel,
+      .cart-panel:hover {
+        transform: none !important;
+      }
+    `;
+    document.head.appendChild(style);
   }
 
   setupAddToCartButtons() {
@@ -427,6 +434,9 @@ class ShoppingCart {
       e.preventDefault();
       this.completeOrder(modal);
     });
+
+    // Show the modal by setting display style
+    modal.style.display = 'flex';
   }
 
   completeOrder(modal) {
@@ -442,6 +452,7 @@ class ShoppingCart {
         width: 90%;
         max-width: 500px;
         text-align: center;
+        position: relative;
       ">
         <h2>Thank You!</h2>
         <p>Your order has been placed successfully.</p>
@@ -461,7 +472,7 @@ class ShoppingCart {
     
     modal.querySelector('.close-confirmation').addEventListener('click', (e) => {
       e.preventDefault();
-      modal.remove();
+      modal.style.display = 'none';
       // Clear cart after successful order
       this.items = [];
       this.updateCart();
