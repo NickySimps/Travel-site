@@ -1,18 +1,22 @@
-// src/components/login-handler.js
-function updateStatus(message) {
-    console.log(message);
-    document.getElementById('status-message').textContent = message;
-}
-
+// src/components/login-handler.js - Fixed version
 document.addEventListener('DOMContentLoaded', () => {
+    const statusElement = document.getElementById('status-message');
+    
+    function updateStatus(message) {
+        console.log(message);
+        if (statusElement) {
+            statusElement.textContent = message;
+        }
+    }
+    
     updateStatus("DOM loaded, starting authentication process...");
     
-    // Firebase configuration from your config
+    // Firebase configuration - use same config as in config.js for consistency
     const firebaseConfig = {
         apiKey: "AIzaSyAvKfaFzdlTzodxD2jQSLExl2haQSxvkiw",
-        authDomain: "usvi-retreats.firebaseapp.com",
-        projectId: "usvi-retreats",
-        storageBucket: "usvi-retreats.appspot.com",
+        authDomain: "travel-site-c65a7.firebaseapp.com",
+        projectId: "travel-site-c65a7",
+        storageBucket: "travel-site-c65a7.appspot.com",
         messagingSenderId: "515419394066",
         appId: "1:515419394066:web:26dfc4f17f41bf205e08cb"
     };
@@ -50,8 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         updateStatus("Sign-in successful! Redirecting...");
                         localStorage.removeItem('emailForSignIn');
                         setTimeout(() => {
-                            window.location.href = '/'; // Adjust path as needed
-                        }, 1000);
+                            window.location.href = window.location.origin + '/index.html';
+                        }, 1500);
                     })
                     .catch((error) => {
                         updateStatus(`Error signing in: ${error.message}`);
@@ -61,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateStatus("No email provided, cannot complete sign-in");
             }
         } else {
-            updateStatus("Not a valid sign-in link. URL: " + window.location.href.substring(0, 50) + "...");
+            updateStatus("Not a valid sign-in link. This page is only for completing the email login process.");
         }
     } catch (error) {
         updateStatus(`Initialization error: ${error.message}`);

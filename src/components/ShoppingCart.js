@@ -118,7 +118,7 @@ class ShoppingCart {
         this.cartPanel.classList.add('open');
         this.cartPanel.style.transform = 'scale(1)';
       }
-    });
+    };
     
     // Add mouseenter event to show the cart panel
     this.cartFloat.addEventListener('mouseenter', () => {
