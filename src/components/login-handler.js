@@ -1,4 +1,5 @@
-// src/components/login-handler.js - Fixed version
+import { CONFIG } from './config.js'; 
+
 document.addEventListener('DOMContentLoaded', () => {
     const statusElement = document.getElementById('status-message');
     
@@ -11,21 +12,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
     updateStatus("DOM loaded, starting authentication process...");
     
-    // Firebase configuration - use same config as in config.js for consistency
-    const firebaseConfig = {
-        apiKey: "AIzaSyAvKfaFzdlTzodxD2jQSLExl2haQSxvkiw",
-        authDomain: "travel-site-c65a7.firebaseapp.com",
-        projectId: "travel-site-c65a7",
-        storageBucket: "travel-site-c65a7.appspot.com",
-        messagingSenderId: "515419394066",
-        appId: "1:515419394066:web:26dfc4f17f41bf205e08cb"
-    };
     
     try {
         // Initialize Firebase
         if (!firebase.apps.length) {
             updateStatus("Initializing Firebase...");
-            firebase.initializeApp(firebaseConfig);
+            firebase.initializeApp(CONFIG.FIREBASE);
         } else {
             updateStatus("Firebase already initialized");
         }

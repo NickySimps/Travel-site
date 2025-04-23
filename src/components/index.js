@@ -35,24 +35,28 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('Error initializing navigation:', error);
   }
   
-  // Initialize Firebase auth - FIXED
-  try {
-    // Wait 500ms to ensure Firebase scripts have loaded
-    setTimeout(() => {
-      if (typeof firebase !== 'undefined') {
-        // Check if Firebase is already initialized
-        console.log('Firebase is available, initializing auth');
-        initializeAuth(firebase.apps.length > 0);
-        console.log('Authentication initialized');
+  // Initialize Firebase auth - IMPROVED
+try {
+  const attemptAuthInit = () => {
+      if (typeof firebase !== 'undefined' && firebase.apps) {
+          console.log('Firebase is available, initializing auth');
+          // Pass true if Firebase was already initialized (though this check might be redundant now)
+          initializeAuth(firebase.apps.length > 0);
+          console.log('Authentication initialized');
       } else {
-        console.warn('Firebase scripts not loaded, auth will not function!');
-        // Try to add Firebase scripts dynamically as fallback
-        addFirebaseScripts();
+          console.warn('Firebase scripts not loaded yet, retrying...');
+          // Retry after a short delay if Firebase isn't ready
+          setTimeout(attemptAuthInit, 500);
+          // Or, consider dynamically adding scripts if needed (as in your fallback)
+          // addFirebaseScripts(); // Make sure this function also checks before adding
       }
-    }, 500);
-  } catch (error) {
-    console.error('Error initializing authentication:', error);
-  }
+  };
+  // Start the first attempt
+  attemptAuthInit();
+
+} catch (error) {
+  console.error('Error initializing authentication:', error);
+}
   
   // Initialize other components
   try {

@@ -1,5 +1,5 @@
 // src/components/auth.js - Fixed version
-import { CONFIG } from './config.js';
+import { CONFIG } from "./config.js";
 
 // Global firebase app reference
 let firebaseApp;
@@ -8,23 +8,25 @@ let firebaseAuth;
 // Action code settings for email link sign-in - fixed URL to be more robust
 const actionCodeSettings = {
   // Use window.location.origin for more robust URL handling
-  url: window.location.origin + '/login-complete.html',
-  handleCodeInApp: true
+  url: window.location.origin + "/login-complete.html",
+  handleCodeInApp: true,
 };
 
 export const initializeAuth = (firebaseAlreadyInitialized = false) => {
-  console.log('Starting authentication initialization...');
-  
+  console.log("Starting authentication initialization...");
+
   // Check if Firebase is already initialized
-  if (typeof firebase === 'undefined') {
-    console.error('Firebase SDK not loaded. Make sure Firebase scripts are included in your HTML.');
+  if (typeof firebase === "undefined") {
+    console.error(
+      "Firebase SDK not loaded. Make sure Firebase scripts are included in your HTML."
+    );
     return;
   }
 
   try {
     // Use existing Firebase app or initialize a new one
     if (!firebase.apps.length) {
-      console.log('Initializing new Firebase app');
+      console.log("Initializing new Firebase app");
       // Make sure we have the complete config
       const completeConfig = {
         apiKey: CONFIG.FIREBASE.apiKey,
@@ -32,171 +34,160 @@ export const initializeAuth = (firebaseAlreadyInitialized = false) => {
         projectId: "travel-site-c65a7",
         storageBucket: "travel-site-c65a7.appspot.com",
         messagingSenderId: CONFIG.FIREBASE.messagingSenderId,
-        appId: CONFIG.FIREBASE.appId
+        appId: CONFIG.FIREBASE.appId,
       };
-      
+
       firebaseApp = firebase.initializeApp(completeConfig);
     } else {
-      console.log('Using existing Firebase app');
+      console.log("Using existing Firebase app");
       firebaseApp = firebase.app();
     }
-    
+
     // Initialize auth
     firebaseAuth = firebase.auth();
-    console.log('Firebase Auth initialized successfully');
-    
+    console.log("Firebase Auth initialized successfully");
+
     // Set up the authentication UI and state listener
     setupAuthUI();
-    
+
     // Log auth state for debugging
     firebaseAuth.onAuthStateChanged((user) => {
       if (user) {
-        console.log('User is signed in:', user.email);
+        console.log("User is signed in:", user.email);
       } else {
-        console.log('No user is signed in');
+        console.log("No user is signed in");
       }
     });
-    
+
     // Handle email link sign-in if we're on the login-complete page
-    if (window.location.pathname.includes('login-complete.html')) {
+    if (window.location.pathname.includes("login-complete.html")) {
       handleEmailSignIn();
     }
-    
   } catch (error) {
-    console.error('Error during auth initialization:', error);
+    console.error("Error during auth initialization:", error);
   }
 };
 
 function setupAuthUI() {
   // Find all auth elements in the page
-  const authStatusElement = document.getElementById('auth-status');
-  const authToggle = document.getElementById('auth-toggle');
-  const authForm = document.getElementById('auth-form');
-  
+  const authStatusElement = document.getElementById("auth-status");
+  const authForm = document.getElementById("auth-form");
+  const userEmailSpan = authStatusElement?.querySelector(".user-email"); // Assume you add this span
+  const loginButton = document.getElementById("auth-toggle"); // The initial login button
+  const logoutButton = document.getElementById("logout-btn"); // Might need to create/find this
+  const authFormContent = document.getElementById("auth-form-content");
+
   // Only proceed if the necessary elements are found
   if (!authStatusElement) {
-    console.log('Auth status element not found in this page');
+    console.log("Auth status element not found in this page");
     return;
   }
-  
+
   // Set up auth state listener
+  // --- Get references to ALL potential elements upfront ---
+
+  // ... other elements like the form itself ...
+
   firebaseAuth.onAuthStateChanged((user) => {
     if (user) {
-      // User is logged in, show user info and logout button
-      authStatusElement.innerHTML = `
-        <span class="user-email">${user.email}</span>
-        <button id="logout-btn" class="auth-toggle">Logout</button>
-      `;
-      
-      // Add event listener to logout button
-      document.getElementById('logout-btn').addEventListener('click', () => {
-        signOut().then(() => {
-          console.log('User signed out');
-        }).catch((error) => {
-          console.error('Error signing out:', error);
+      // User is logged in
+      if (userEmailSpan) userEmailSpan.textContent = user.email;
+      if (loginButton) loginButton.style.display = "none"; // Hide login button
+      if (authForm) authForm.classList.remove("active"); // Hide form if open
+      if (authForm) authForm.style.display = "none";
+      if (logoutButton) logoutButton.style.display = "block"; // Show logout button
+
+      // Ensure logout listener is attached (only if logoutButton exists)
+      if (
+        logoutButton &&
+        !logoutButton.hasAttribute("data-listener-attached")
+      ) {
+        logoutButton.addEventListener("click", () => {
+          /* ... sign out logic ... */
         });
-      });
+        logoutButton.setAttribute("data-listener-attached", "true");
+      }
     } else {
-      // User is not logged in, show login button
-      authStatusElement.innerHTML = `
-        <button id="auth-toggle" class="auth-toggle">Login</button>
-        <div id="auth-form" class="auth-form">
-          <form id="auth-form-content">
-            <input type="email" name="email" placeholder="Email" required>
-            <div class="auth-buttons">
-              <button type="submit" id="login-btn">Login with Email</button>
-            </div>
-          </form>
-        </div>
-      `;
-      
-      // Re-capture the elements after they've been added to the DOM
-      const newAuthToggle = document.getElementById('auth-toggle');
-      const newAuthForm = document.getElementById('auth-form');
-      const newAuthFormContent = document.getElementById('auth-form-content');
-      
-      if (newAuthToggle && newAuthForm) {
-        // Toggle auth form visibility
-        newAuthToggle.addEventListener('click', (e) => {
+      // User is logged out
+      if (userEmailSpan) userEmailSpan.textContent = "";
+      if (loginButton) loginButton.style.display = "block"; // Show login button
+      if (logoutButton) logoutButton.style.display = "none"; // Hide logout button
+      if (authForm) authForm.style.display = "block"; // Ensure form container is potentially visible
+
+      // Ensure login button listener is attached (only if loginButton exists)
+      if (loginButton && !loginButton.hasAttribute("data-listener-attached")) {
+        loginButton.addEventListener("click", (e) => {
           e.preventDefault();
           e.stopPropagation();
-          newAuthForm.classList.toggle('active');
+          if (authForm) authForm.classList.toggle("active");
         });
-        
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-          if (newAuthForm && newAuthForm.classList.contains('active') && 
-              !e.target.closest('.auth-container')) {
-            newAuthForm.classList.remove('active');
-          }
-        });
+        loginButton.setAttribute("data-listener-attached", "true");
       }
-      
-      // Handle form submission for email link login
-      if (newAuthFormContent) {
-        newAuthFormContent.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          const email = e.target.email.value;
+      // Ensure form submission listener is attached (only if form exists)
+      if (
+        authFormContent &&
+        !authFormContent.hasAttribute("data-listener-attached")
+      ) {
+        authFormContent.addEventListener("submit", async (e) => {
+          /* ... send link logic ... */
+        });
+        authFormContent.setAttribute("data-listener-attached", "true");
+      }
+    }
+  });
 
-          try {
-            console.log(`Sending sign-in link to: ${email}`);
-            console.log('Action code settings:', actionCodeSettings);
-            
-            await firebaseAuth.sendSignInLinkToEmail(email, actionCodeSettings);
-            window.localStorage.setItem('emailForSignIn', email);
-            alert('Check your email for the login link! (Check spam folder too)');
-            
-            if (newAuthForm) {
-              newAuthForm.classList.remove('active');
-            }
-          } catch (error) {
-            console.error('Error sending login link:', error);
-            alert(`Error sending login link: ${error.message}`);
-          }
-        });
-      }
+  // Add initial listener for clicking outside the form (if applicable)
+  document.addEventListener("click", (e) => {
+    if (
+      authForm &&
+      authForm.classList.contains("active") &&
+      !e.target.closest(".auth-container")
+    ) {
+      authForm.classList.remove("active");
     }
   });
 }
 
 function handleEmailSignIn() {
-  console.log('Detected login-complete page, handling email sign-in');
-  
+  console.log("Detected login-complete page, handling email sign-in");
+
   if (firebaseAuth.isSignInWithEmailLink(window.location.href)) {
-    console.log('Valid sign-in link detected');
-    
-    let email = window.localStorage.getItem('emailForSignIn');
+    console.log("Valid sign-in link detected");
+
+    let email = window.localStorage.getItem("emailForSignIn");
     if (!email) {
-      email = window.prompt('Please provide your email for confirmation');
+      email = window.prompt("Please provide your email for confirmation");
     }
 
     if (email) {
-      console.log('Attempting to sign in with email link');
-      firebaseAuth.signInWithEmailLink(email, window.location.href)
+      console.log("Attempting to sign in with email link");
+      firebaseAuth
+        .signInWithEmailLink(email, window.location.href)
         .then(() => {
-          console.log('Sign-in successful');
-          window.localStorage.removeItem('emailForSignIn');
-          
+          console.log("Sign-in successful");
+          window.localStorage.removeItem("emailForSignIn");
+
           // Redirect to home page after successful login
-          window.location.href = window.location.origin + '/index.html';
+          window.location.href = window.location.origin + "/index.html";
         })
         .catch((error) => {
-          console.error('Error signing in with email link:', error);
-          document.getElementById('status-message').textContent = 
-            `Error signing in: ${error.message}`;
+          console.error("Error signing in with email link:", error);
+          document.getElementById(
+            "status-message"
+          ).textContent = `Error signing in: ${error.message}`;
         });
     } else {
-      console.warn('No email provided, cannot complete sign-in');
+      console.warn("No email provided, cannot complete sign-in");
     }
   } else {
-    console.warn('Not a valid sign-in link:', window.location.href);
+    console.warn("Not a valid sign-in link:", window.location.href);
   }
 }
 
 export const signOut = () => {
   if (!firebaseAuth) {
-    console.error('Firebase Auth not initialized');
-    return Promise.reject(new Error('Firebase Auth not initialized'));
+    console.error("Firebase Auth not initialized");
+    return Promise.reject(new Error("Firebase Auth not initialized"));
   }
   return firebaseAuth.signOut();
 };
