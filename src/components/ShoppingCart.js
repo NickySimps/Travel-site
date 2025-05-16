@@ -10,6 +10,9 @@ class ShoppingCart {
     this.cartItems = null;
     this.totalAmount = null;
     this.checkoutBtn = null;
+
+    this.isMouseOverCart = false; // Tracks if mouse is over cart elements
+    this.hideTimeout = null;      // Timeout ID for hiding panel
     
     // Load cart from localStorage if available
     this.loadCart();
@@ -22,6 +25,14 @@ class ShoppingCart {
     
     // Add event listeners
     this.setupEventListeners();
+    
+    // Add icons to existing cart-checkout buttons in the DOM
+    document.querySelectorAll('.cart-checkout').forEach(button => {
+        // Check if it's a simple "Cart" button and doesn't already have an icon
+        if (button.textContent.trim().toLowerCase() === 'cart' && !button.querySelector('i.fa, i.fas')) {
+            button.innerHTML = '<i class="fas fa-shopping-cart"></i> Cart';
+        }
+    });
     
     // Set up event delegation for "Add to Cart" buttons
     this.setupAddToCartButtons();
@@ -103,115 +114,129 @@ class ShoppingCart {
     }
   }
 
-  setupEventListeners() {
-    // Cart float click to toggle panel - FIXED: properly toggle open class and use direct style manipulation
-    const toggleCartPanel = (e) => {
-      if (e) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-      
-      if (this.cartPanel.classList.contains('open')) {
-        this.cartPanel.classList.remove('open');
-        this.cartPanel.style.transform = 'scale(0)';
-      } else {
-        this.cartPanel.classList.add('open');
-        this.cartPanel.style.transform = 'scale(1)';
-      }
-    };
-    
-    // Add mouseenter event to show the cart panel
-    this.cartFloat.addEventListener('mouseenter', () => {
+  showPanel() {
+    clearTimeout(this.hideTimeout);
+    if (this.cartPanel) {
       this.cartPanel.classList.add('open');
       this.cartPanel.style.transform = 'scale(1)';
-    });
-    
-    // Add mouseleave event to hide the cart panel when mouse leaves both cart float and panel
-    const hideCartPanel = () => {
-      // Use a setTimeout to allow the mouse to move between elements
-      this.hideTimeout = setTimeout(() => {
-        if (!this.isMouseOverCart) {
-          this.cartPanel.classList.remove('open');
-          this.cartPanel.style.transform = 'scale(0)';
-        }
-      }, 300); // short delay to allow mouse movement between elements
+    }
+  }
+
+  hidePanel(useDelay = true) {
+    const performHide = () => {
+      if (!this.isMouseOverCart && this.cartPanel) {
+        this.cartPanel.classList.remove('open');
+        this.cartPanel.style.transform = 'scale(0)';
+      }
     };
+
+    clearTimeout(this.hideTimeout);
+    if (useDelay) {
+      this.hideTimeout = setTimeout(performHide, 300);
+    } else {
+      performHide();
+    }
+  }
+
+  togglePanel() {
+    if (this.cartPanel) {
+      if (this.cartPanel.classList.contains('open')) {
+        this.isMouseOverCart = false; // Force close intent
+        this.hidePanel(false);
+      } else {
+        this.isMouseOverCart = true; // Assume intent to open and keep open
+        this.showPanel();
+      }
+    }
+  }
+
+  setupEventListeners() {
+    // --- Cart Float (the floating button) ---
+    if (this.cartFloat) {
+      this.cartFloat.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.togglePanel();
+      });
+
+      this.cartFloat.addEventListener('mouseenter', () => {
+        this.isMouseOverCart = true;
+        this.showPanel();
+      });
+
+      this.cartFloat.addEventListener('mouseleave', () => {
+        this.isMouseOverCart = false;
+        this.hidePanel(true);
+      });
+    }
+
+    // --- Cart Panel (the dropdown/slide-out) ---
+    if (this.cartPanel) {
+      this.cartPanel.addEventListener('mouseenter', () => {
+        this.isMouseOverCart = true;
+        clearTimeout(this.hideTimeout);
+      });
+
+      this.cartPanel.addEventListener('mouseleave', () => {
+        this.isMouseOverCart = false;
+        this.hidePanel(true);
+      });
+    }
     
-    // Track mouse position for both cart float and panel
-    this.isMouseOverCart = false;
-    
-    this.cartFloat.addEventListener('mouseleave', () => {
-      this.isMouseOverCart = false;
-      hideCartPanel();
-    });
-    
-    this.cartPanel.addEventListener('mouseenter', () => {
-      this.isMouseOverCart = true;
-      clearTimeout(this.hideTimeout);
-    });
-    
-    this.cartPanel.addEventListener('mouseleave', () => {
-      this.isMouseOverCart = false;
-      hideCartPanel();
-    });
-    
-    // Also handle the cart-checkout buttons in the navbar
-    document.querySelectorAll('.cart-checkout').forEach(button => {
+    // --- Navbar Cart Buttons ('.cart-checkout' or '.custom-cart-toggle') ---
+    const navCartButtons = document.querySelectorAll('.cart-checkout, header nav ul button.custom-cart-toggle');
+    navCartButtons.forEach(button => {
       button.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        
-        // Toggle the cart panel visibility
-        if (this.cartPanel.classList.contains('open')) {
-          this.cartPanel.classList.remove('open');
-          this.cartPanel.style.transform = 'scale(0)';
-        } else {
-          this.cartPanel.classList.add('open');
-          this.cartPanel.style.transform = 'scale(1)';
-        }
+        this.togglePanel();
       });
-      
-      // Add mouseenter and mouseleave events to cart-checkout buttons
+
       button.addEventListener('mouseenter', () => {
-        this.cartPanel.classList.add('open');
-        this.cartPanel.style.transform = 'scale(1)';
+        this.isMouseOverCart = true;
+        this.showPanel();
       });
-      
+
       button.addEventListener('mouseleave', () => {
         this.isMouseOverCart = false;
-        hideCartPanel();
+        this.hidePanel(true);
       });
     });
     
-    // Close cart panel when clicking outside
+    // --- Close cart panel when clicking outside ---
     document.addEventListener('click', (e) => {
-      if (this.cartPanel.classList.contains('open') && 
-          !this.cartPanel.contains(e.target) && 
-          e.target !== this.cartFloat &&
-          !e.target.closest('.cart-checkout') &&
-          !e.target.closest('.cart-float')) {
-        this.cartPanel.classList.remove('open');
-        this.cartPanel.style.transform = 'scale(0)';
+      if (this.cartPanel && this.cartPanel.classList.contains('open')) {
+        const isClickInsideCartFloat = this.cartFloat && this.cartFloat.contains(e.target);
+        const isClickInsideCartPanel = this.cartPanel.contains(e.target);
+        const isClickOnNavButton = e.target.closest('.cart-checkout, header nav ul button.custom-cart-toggle');
+
+        if (!isClickInsideCartFloat && !isClickInsideCartPanel && !isClickOnNavButton) {
+          this.isMouseOverCart = false;
+          this.hidePanel(false); // Hide immediately
+        }
       }
     });
   
-    // Checkout button functionality
-    this.checkoutBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (this.items.length === 0) {
-        alert('Your cart is empty');
-        return;
-      }
-      
-      this.showCheckoutForm();
-    });
+    // --- Checkout Button (inside the cart panel) ---
+    if (this.checkoutBtn) {
+      this.checkoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (this.items.length === 0) {
+          alert('Your cart is empty');
+          return;
+        }
+        this.showCheckoutForm();
+      });
+    }
     
     // Remove any hover-based cart opening from CSS by adding inline style
+    // This ensures our JS-controlled hover logic takes precedence.
     const style = document.createElement('style');
     style.textContent = `
-      .cart-float:hover + .cart-panel,
-      .cart-panel:hover {
-        transform: none !important;
+      .cart-float:hover + .cart-panel, /* In case CSS tries to show panel on float hover */
+      .cart-panel:hover { /* In case CSS tries to keep panel open on its own hover */
+        transform: none !important; /* Override CSS hover effects for transform */
+        /* Add other properties if CSS hover affects them, e.g., visibility, display */
       }
     `;
     document.head.appendChild(style);
@@ -246,6 +271,15 @@ class ShoppingCart {
       const button = e.target.closest('.cart-add-item, .btn-AddToCart');
       
       if (button) {
+        // Check if this click was already handled by the direct listeners above
+        // This is a simple check; more robust solutions might involve flags or checking event path.
+        if (e.target !== button) { // If the click was on a child of the button
+          // Potentially do nothing if the direct listener on `button` already fired.
+          // However, current setup replaces buttons, so direct listeners are on new cloned buttons.
+          // This delegated listener will catch clicks on original buttons if not properly replaced,
+          // or on buttons added after initial setup.
+        }
+
         e.preventDefault();
         e.stopPropagation();
         console.log("Cart button clicked via delegation:", button);
@@ -284,18 +318,18 @@ class ShoppingCart {
     this.updateCart();
     
     // Visual feedback
-    this.cartFloat.classList.add('pulse');
-    setTimeout(() => this.cartFloat.classList.remove('pulse'), 500);
+    if (this.cartFloat) {
+      this.cartFloat.classList.add('pulse');
+      setTimeout(() => this.cartFloat.classList.remove('pulse'), 500);
+    }
     
     // Show the cart panel briefly for visual feedback
-    this.cartPanel.classList.add('open');
-    this.cartPanel.style.transform = 'scale(1)';
+    this.isMouseOverCart = true; // Temporarily set to true to allow showPanel
+    this.showPanel();
     setTimeout(() => {
-      // Only close if mouse is not over cart elements
-      if (!this.isMouseOverCart) {
-        this.cartPanel.classList.remove('open');
-        this.cartPanel.style.transform = 'scale(0)';
-      }
+      // Only close if mouse is not over cart elements after the feedback duration
+      this.isMouseOverCart = false;
+      this.hidePanel(true); // Attempt to hide with delay, respecting mouse position
     }, 3000);
   }
 
@@ -312,10 +346,14 @@ class ShoppingCart {
 
   updateCartDisplay() {
     // Update count
-    this.cartCount.textContent = this.getTotalItems();
+    if (this.cartCount) {
+      this.cartCount.textContent = this.getTotalItems();
+    }
     
     // Update total
-    this.totalAmount.textContent = '$' + this.getCartTotal().toFixed(2);
+    if (this.totalAmount) {
+      this.totalAmount.textContent = '$' + this.getCartTotal().toFixed(2);
+    }
     
     // Update items list
     this.cartItems.innerHTML = '';
@@ -534,17 +572,4 @@ const imgSrc = item.imgSrc || `./public/Pictures/villas/${item.name}.jpg`;
   }
 }
 
-// Initialize the cart when the script loads
-document.addEventListener('DOMContentLoaded', () => {
-  console.log("DOM loaded, initializing cart...");
-  window.usviCart = new ShoppingCart().initialize();
-  
-  // Add icons to the cart-checkout buttons if they don't have any
-  document.querySelectorAll('.cart-checkout').forEach(button => {
-    if (button.textContent.trim() === 'Cart' && !button.querySelector('i')) {
-      button.innerHTML = '<i class="fas fa-shopping-cart"></i> Cart';
-    }
-  });
-});
-
-export { ShoppingCart };
+export { ShoppingCart }; 

@@ -393,9 +393,7 @@ export const initializeBooking = () => {
                 
                 // Add to cart with the correct image path
                 window.usviCart.addToCart(formattedName, totalPrice, imagePath);
-
-                // Show confirmation
-                alert(`${propertyName} has been added to your cart!`);
+                
             } else {
                 alert("Cart system not initialized. Please refresh the page and try again.");
             }

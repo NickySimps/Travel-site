@@ -73,6 +73,10 @@ header .container {
   color: var(--primary-blue);
 }
 
+#branding a {
+  text-decoration: none;
+}
+
 nav ul {
   display: flex;
   flex-wrap: wrap;
@@ -1550,4 +1554,23 @@ button:hover,
   .calendar-day {
     padding: 0.3rem;
   }
+}
+.cart-panel {
+  /* Your existing styles for position, width, height, background, etc. */
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 300px; /* Example width */
+  height: 100%;
+  background-color: white;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000; /* Ensure it's above other content */
+  transform: translateX(100%); /* Hidden off-screen to the right */
+  transition: transform 0.1s ease-in-out;
+  visibility: hidden; /* Hide from accessibility tree and prevent interaction when closed */
+}
+
+.cart-panel.open {
+  transform: translateX(0); /* Slide into view */
+  visibility: visible;
 }

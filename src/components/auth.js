@@ -112,7 +112,24 @@ function setupAuthUI() {
       if (userEmailSpan) userEmailSpan.textContent = "";
       if (loginButton) loginButton.style.display = "block"; // Show login button
       if (logoutButton) logoutButton.style.display = "none"; // Hide logout button
-      if (authForm) authForm.style.display = "block"; // Ensure form container is potentially visible
+      if (authForm) authForm.style.display = "none"; // Ensure form container is potentially visible
+      // Ensure form is hidden initially
+      if (authForm) authForm.style.display = "none";
+
+      // Add hover effect to show form on mouseover of login button
+      if (loginButton) {
+        loginButton.addEventListener("mouseover", () => {
+          if (authForm && !firebaseAuth.currentUser) {
+            authForm.style.display = "block";
+          }
+        });
+
+        loginButton.addEventListener("mouseout", () => {
+          if (authForm && !firebaseAuth.currentUser && !authForm.classList.contains("active")) {
+            authForm.style.display = "none";
+          }
+        });
+      }
 
       // Ensure login button listener is attached (only if loginButton exists)
       if (loginButton && !loginButton.hasAttribute("data-listener-attached")) {
@@ -142,7 +159,7 @@ function setupAuthUI() {
       authForm &&
       authForm.classList.contains("active") &&
       !e.target.closest(".auth-container")
-    ) {
+      && !e.target.closest("#auth-toggle")) {
       authForm.classList.remove("active");
     }
   });
