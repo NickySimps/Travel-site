@@ -34,11 +34,9 @@
                             <button id="auth-toggle" class="auth-toggle">Login</button>
                             <div id="auth-form" class="auth-form">
                                 <form id="auth-form-content">
-                                    <input type="email" name="email" placeholder="Email" required>
-                                    <input type="password" name="password" placeholder="Password" required>
+                                    <input type="email" name="email" placeholder="Enter your email" required>
                                     <div class="auth-buttons">
-                                        <button type="submit" id="login-btn">Login</button>
-                                        <button type="button" id="signup-btn">Sign Up</button>
+                                        <button type="submit" id="send-link-btn">Send Login Link</button>
                                     </div>
                                 </form>
                             </div>
@@ -561,32 +559,22 @@
     <!-- Auth Modal -->
     <div id="auth-modal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <form id="auth-form">
+            <span class="close" onclick="document.getElementById('auth-modal').style.display='none'">&times;</span>
+            <form id="modal-auth-form-content"> {/* Changed ID to avoid conflict */}
                 <div id="login-section">
-                    <h2>Login</h2>
+                    <h2>Login with Email Link</h2>
                     <div class="form-group">
-                        <input type="email" name="email" placeholder="Email" required>
+                        <input type="email" name="email" placeholder="Enter your email" required>
                     </div>
-                    <div class="form-group">
-                        <input type="password" name="password" placeholder="Password" required>
-                    </div>
-                    <button type="submit">Login</button>
-                    <p>Don't have an account? <a href="#" id="switch-to-signup">Sign up</a></p>
-                </div>
-
-                <div id="signup-section" style="display: none;">
-                    <h2>Sign Up</h2>
-                    <div class="form-group">
-                        <input type="email" name="email" placeholder="Email" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="password" name="password" placeholder="Password" required>
-                    </div>
-                    <button type="submit">Sign Up</button>
-                    <p>Already have an account? <a href="#" id="switch-to-login">Login</a></p>
+                    <button type="submit">Send Login Link</button>
                 </div>
             </form>
+            <script>
+                // Basic modal close functionality if not already handled elsewhere
+                // document.querySelector('#auth-modal .close').addEventListener('click', () => {
+                // document.getElementById('auth-modal').style.display = 'none';
+                // });
+            </script>
         </div>
     </div>
 

@@ -146,13 +146,54 @@ function setupAuthUI() {
         !authFormContent.hasAttribute("data-listener-attached")
       ) {
         authFormContent.addEventListener("submit", async (e) => {
-          /* ... send link logic ... */
+          e.preventDefault(); // Prevent default form submission
+          const emailInput = authFormContent.querySelector('input[type="email"]');
+          
+          if (!emailInput) {
+            console.error("Email input not found in auth form content.");
+            alert("An error occurred. Email field is missing.");
+            return;
+          }
+          const email = emailInput.value.trim();
+
+          if (!email) {
+            alert("Please enter your email address.");
+            emailInput.focus();
+            return;
+          }
+
+          const submitButton = authFormContent.querySelector('button[type="submit"]');
+          if (submitButton) submitButton.disabled = true;
+          // You could add a message like "Sending link..." to the UI here
+
+          try {
+            console.log(`Attempting to send sign-in link to ${email}`);
+            await firebaseAuth.sendSignInLinkToEmail(email, actionCodeSettings);
+            window.localStorage.setItem("emailForSignIn", email); // Store email for login-complete.html
+            
+            alert("A login link has been sent to your email. Please check your inbox (and spam folder) to complete sign-in.");
+            
+            emailInput.value = ""; // Clear the input
+            if (authForm) { // authForm is the div container for the header form
+                authForm.classList.remove("active"); // Hide form dropdown
+                authForm.style.display = "none"; // Ensure it's hidden
+            }
+
+          } catch (error) {
+            console.error("Error sending sign-in link:", error);
+            let errorMessage = "Failed to send login link.";
+            if (error.code === 'auth/invalid-email') {
+                errorMessage = "The email address is not valid. Please enter a valid email.";
+            }
+            alert(`${errorMessage} Please try again. Details: ${error.message}`);
+          } finally {
+            if (submitButton) submitButton.disabled = false; // Re-enable button
+          }
         });
         authFormContent.setAttribute("data-listener-attached", "true");
       }
     }
   });
-
   // Add initial listener for clicking outside the form (if applicable)
   document.addEventListener("click", (e) => {
     if (
