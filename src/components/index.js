@@ -38,17 +38,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize Firebase auth - IMPROVED
 try {
   const attemptAuthInit = () => {
-      if (typeof firebase !== 'undefined' && firebase.apps) {
+      // Check if firebase is globally available and the app is initialized
+      if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length > 0) {
           console.log('Firebase is available, initializing auth');
-          // Pass true if Firebase was already initialized (though this check might be redundant now)
-          initializeAuth(firebase.apps.length > 0);
+          initializeAuth(); // No need to pass the initialized state, initializeAuth handles it
           console.log('Authentication initialized');
       } else {
           console.warn('Firebase scripts not loaded yet, retrying...');
           // Retry after a short delay if Firebase isn't ready
           setTimeout(attemptAuthInit, 500);
-          // Or, consider dynamically adding scripts if needed (as in your fallback)
-          // addFirebaseScripts(); // Make sure this function also checks before adding
       }
   };
   // Start the first attempt
@@ -88,39 +86,3 @@ try {
   
   console.log('All components initialized');
 });
-
-// Function to dynamically add Firebase scripts if they're missing
-function addFirebaseScripts() {
-  const scripts = [
-    'https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js',
-    'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js',
-    'https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js'
-  ];
-  
-  let scriptsLoaded = 0;
-  
-  scripts.forEach(src => {
-    const script = document.createElement('script');
-    script.src = src;
-    script.async = true;
-    
-    script.onload = () => {
-      scriptsLoaded++;
-      console.log(`Firebase script loaded: ${src}`);
-      
-      // Once all scripts are loaded, try initializing auth again
-      if (scriptsLoaded === scripts.length) {
-        console.log('All Firebase scripts loaded, initializing auth');
-        setTimeout(() => {
-          initializeAuth(false);
-        }, 500);
-      }
-    };
-    
-    script.onerror = () => {
-      console.error(`Failed to load Firebase script: ${src}`);
-    };
-    
-    document.head.appendChild(script);
-  });
-}

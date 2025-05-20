@@ -1,7 +1,7 @@
 // src/components/auth.js - Fixed version
 import { CONFIG } from "./config.js";
 
-// Global firebase app reference
+// Global firebase app and auth references
 let firebaseApp;
 let firebaseAuth;
 
@@ -24,20 +24,11 @@ export const initializeAuth = (firebaseAlreadyInitialized = false) => {
   }
 
   try {
-    // Use existing Firebase app or initialize a new one
+    // Initialize Firebase app if not already done
     if (!firebase.apps.length) {
       console.log("Initializing new Firebase app");
-      // Make sure we have the complete config
-      const completeConfig = {
-        apiKey: CONFIG.FIREBASE.apiKey,
-        authDomain: "travel-site-c65a7.firebaseapp.com", // Make sure this is correct
-        projectId: "travel-site-c65a7",
-        storageBucket: "travel-site-c65a7.appspot.com",
-        messagingSenderId: CONFIG.FIREBASE.messagingSenderId,
-        appId: CONFIG.FIREBASE.appId,
-      };
-
-      firebaseApp = firebase.initializeApp(completeConfig);
+      // Use the config directly
+      firebaseApp = firebase.initializeApp(CONFIG.FIREBASE);
     } else {
       console.log("Using existing Firebase app");
       firebaseApp = firebase.app();
@@ -50,150 +41,155 @@ export const initializeAuth = (firebaseAlreadyInitialized = false) => {
     // Set up the authentication UI and state listener
     setupAuthUI();
 
-    // Log auth state for debugging
-    firebaseAuth.onAuthStateChanged((user) => {
-      if (user) {
-        console.log("User is signed in:", user.email);
-      } else {
-        console.log("No user is signed in");
-      }
-    });
+    // Attach event listeners once on initialization
+    attachAuthListeners();
 
-    // Handle email link sign-in if we're on the login-complete page
-    if (window.location.pathname.includes("login-complete.html")) {
-      handleEmailSignIn();
-    }
+    // NOTE: The logic for handling the email sign-in link is now exclusively in login-handler.js,
+    // which runs on the login-complete.html page.
   } catch (error) {
     console.error("Error during auth initialization:", error);
   }
 };
 
 function setupAuthUI() {
-  // Find all auth elements in the page
+  // Get references to ALL potential auth elements upfront
   const authStatusElement = document.getElementById("auth-status");
   const authForm = document.getElementById("auth-form");
   const userEmailSpan = authStatusElement?.querySelector(".user-email"); // Assume you add this span
   const loginButton = document.getElementById("auth-toggle"); // The initial login button
   const logoutButton = document.getElementById("logout-btn"); // Might need to create/find this
-  const authFormContent = document.getElementById("auth-form-content");
-
-  // Only proceed if the necessary elements are found
-  if (!authStatusElement) {
-    console.log("Auth status element not found in this page");
-    return;
-  }
+  const authFormContent = document.getElementById("auth-form-content"); // The form itself
 
   // Set up auth state listener
-  // --- Get references to ALL potential elements upfront ---
-
-  // ... other elements like the form itself ...
-
   firebaseAuth.onAuthStateChanged((user) => {
     if (user) {
       // User is logged in
+      console.log("Auth State Changed: User is signed in:", user.email);
       if (userEmailSpan) userEmailSpan.textContent = user.email;
-      if (loginButton) loginButton.style.display = "none"; // Hide login button
-      if (authForm) authForm.classList.remove("active"); // Hide form if open
-      if (authForm) authForm.style.display = "none";
-      if (logoutButton) logoutButton.style.display = "block"; // Show logout button
+      if (loginButton) loginButton.style.display = "none"; // Hide the 'Login' button
+      if (authForm) authForm.classList.remove("active"); // Hide the login form dropdown
+      if (authForm) authForm.style.display = "none"; // Ensure the form container is hidden
+      if (logoutButton) logoutButton.style.display = "block"; // Show the 'Logout' button
+      // You might also want to show the user's email or name here
+      const userDisplay = document.getElementById('user-display');
+      if (userDisplay) userDisplay.textContent = `Welcome, ${user.email}`; // Or user.displayName
 
-      // Ensure logout listener is attached (only if logoutButton exists)
-      if (
-        logoutButton &&
-        !logoutButton.hasAttribute("data-listener-attached")
-      ) {
-        logoutButton.addEventListener("click", () => {
-          /* ... sign out logic ... */
-        });
-        logoutButton.setAttribute("data-listener-attached", "true");
-      }
     } else {
       // User is logged out
+      console.log("Auth State Changed: No user is signed in");
       if (userEmailSpan) userEmailSpan.textContent = "";
-      if (loginButton) loginButton.style.display = "block"; // Show login button
-      if (logoutButton) logoutButton.style.display = "none"; // Hide logout button
-      if (authForm) authForm.style.display = "none"; // Ensure form container is potentially visible
-      // Ensure form is hidden initially
-      if (authForm) authForm.style.display = "none";
-
-      // Add hover effect to show form on mouseover of login button
-      if (loginButton) {
-        loginButton.addEventListener("mouseover", () => {
-          if (authForm && !firebaseAuth.currentUser) {
-            authForm.style.display = "block";
-          }
-        });
-
-        loginButton.addEventListener("mouseout", () => {
-          if (authForm && !firebaseAuth.currentUser && !authForm.classList.contains("active")) {
-            authForm.style.display = "none";
-          }
-        });
-      }
-
-      // Ensure login button listener is attached (only if loginButton exists)
-      if (loginButton && !loginButton.hasAttribute("data-listener-attached")) {
-        loginButton.addEventListener("click", (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          if (authForm) authForm.classList.toggle("active");
-        });
-        loginButton.setAttribute("data-listener-attached", "true");
-      }
-      // Ensure form submission listener is attached (only if form exists)
-      if (
-        authFormContent &&
-        !authFormContent.hasAttribute("data-listener-attached")
-      ) {
-        authFormContent.addEventListener("submit", async (e) => {
-          e.preventDefault(); // Prevent default form submission
-          const emailInput = authFormContent.querySelector('input[type="email"]');
-          
-          if (!emailInput) {
-            console.error("Email input not found in auth form content.");
-            alert("An error occurred. Email field is missing.");
-            return;
-          }
-          const email = emailInput.value.trim();
-
-          if (!email) {
-            alert("Please enter your email address.");
-            emailInput.focus();
-            return;
-          }
-
-          const submitButton = authFormContent.querySelector('button[type="submit"]');
-          if (submitButton) submitButton.disabled = true;
-          // You could add a message like "Sending link..." to the UI here
-
-          try {
-            console.log(`Attempting to send sign-in link to ${email}`);
-            await firebaseAuth.sendSignInLinkToEmail(email, actionCodeSettings);
-            window.localStorage.setItem("emailForSignIn", email); // Store email for login-complete.html
-            
-            alert("A login link has been sent to your email. Please check your inbox (and spam folder) to complete sign-in.");
-            
-            emailInput.value = ""; // Clear the input
-            if (authForm) { // authForm is the div container for the header form
-                authForm.classList.remove("active"); // Hide form dropdown
-                authForm.style.display = "none"; // Ensure it's hidden
-            }
-
-          } catch (error) {
-            console.error("Error sending sign-in link:", error);
-            let errorMessage = "Failed to send login link.";
-            if (error.code === 'auth/invalid-email') {
-                errorMessage = "The email address is not valid. Please enter a valid email.";
-            }
-            alert(`${errorMessage} Please try again. Details: ${error.message}`);
-          } finally {
-            if (submitButton) submitButton.disabled = false; // Re-enable button
-          }
-        });
-        authFormContent.setAttribute("data-listener-attached", "true");
-      }
+      if (loginButton) loginButton.style.display = "block"; // Show the 'Login' button
+      if (logoutButton) logoutButton.style.display = "none"; // Hide the 'Logout' button
+      if (authForm) authForm.classList.remove("active"); // Ensure form dropdown is hidden
+      if (authForm) authForm.style.display = "none"; // Ensure form container is hidden
+      const userDisplay = document.getElementById('user-display');
+      if (userDisplay) userDisplay.textContent = ''; // Clear user display
     }
   });
+
+  // Initial check to set UI state correctly on page load
+  const initialUser = firebaseAuth.currentUser;
+  if (initialUser) {
+    console.log("Initial Auth State: User is signed in:", initialUser.email);
+    if (loginButton) loginButton.style.display = "none";
+    if (logoutButton) logoutButton.style.display = "block";
+    const userDisplay = document.getElementById('user-display');
+    if (userDisplay) userDisplay.textContent = `Welcome, ${initialUser.email}`;
+  } else {
+    console.log("Initial Auth State: No user is signed in");
+    if (loginButton) loginButton.style.display = "block";
+    if (logoutButton) logoutButton.style.display = "none";
+  }
+}
+
+function attachAuthListeners() {
+  const authForm = document.getElementById("auth-form"); // The dropdown container
+  const loginButton = document.getElementById("auth-toggle"); // The initial login button
+  const logoutButton = document.getElementById("logout-btn"); // The logout button
+  const authFormContent = document.getElementById("auth-form-content"); // The form itself
+
+  // Listener for the Login button click to toggle form visibility
+  if (loginButton) {
+    loginButton.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (authForm) {
+        authForm.classList.toggle("active");
+        // Use style.display as a fallback or for initial state, but prefer CSS class for toggle
+        if (authForm.classList.contains("active")) {
+            authForm.style.display = "block";
+        } else {
+            authForm.style.display = "none";
+        }
+      }
+    });
+  }
+
+  // Listener for the form submission (sending email link)
+  if (authFormContent) {
+    authFormContent.addEventListener("submit", async (e) => {
+      e.preventDefault(); // Prevent default form submission
+      const emailInput = authFormContent.querySelector('input[type="email"]');
+
+      if (!emailInput) {
+        console.error("Email input not found in auth form content.");
+        alert("An error occurred. Email field is missing.");
+        return;
+      }
+      const email = emailInput.value.trim();
+
+      if (!email) {
+        alert("Please enter your email address.");
+        emailInput.focus();
+        return;
+      }
+
+      const submitButton = authFormContent.querySelector('button[type="submit"]');
+      if (submitButton) submitButton.disabled = true;
+      // You could add a message like "Sending link..." to the UI here
+
+      try {
+        console.log(`Attempting to send sign-in link to ${email}`);
+        await firebaseAuth.sendSignInLinkToEmail(email, actionCodeSettings);
+        window.localStorage.setItem("emailForSignIn", email); // Store email for login-complete.html
+
+        alert("A login link has been sent to your email. Please check your inbox (and spam folder) to complete sign-in.");
+
+        emailInput.value = ""; // Clear the input
+        if (authForm) { // authForm is the div container for the header form
+            authForm.classList.remove("active"); // Hide form dropdown
+            authForm.style.display = "none"; // Ensure it's hidden
+        }
+
+      } catch (error) {
+        console.error("Error sending sign-in link:", error);
+        let errorMessage = "Failed to send login link.";
+        if (error.code === 'auth/invalid-email') {
+            errorMessage = "The email address is not valid. Please enter a valid email.";
+        } else if (error.code === 'auth/missing-action-code') {
+             errorMessage = "Invalid or expired login link. Please request a new one.";
+        }
+        alert(`${errorMessage} Please try again. Details: ${error.message}`);
+      } finally {
+        if (submitButton) submitButton.disabled = false; // Re-enable button
+      }
+    });
+  }
+
+  // Listener for the Logout button click
+  if (logoutButton) {
+    logoutButton.addEventListener("click", async () => {
+      try {
+        await signOut();
+        console.log("User signed out successfully");
+        // UI will be updated by the onAuthStateChanged listener
+      } catch (error) {
+        console.error("Error signing out:", error);
+        alert("Failed to sign out. Please try again.");
+      }
+    });
+  }
+
   // Add initial listener for clicking outside the form (if applicable)
   document.addEventListener("click", (e) => {
     if (
@@ -204,42 +200,6 @@ function setupAuthUI() {
       authForm.classList.remove("active");
     }
   });
-}
-
-function handleEmailSignIn() {
-  console.log("Detected login-complete page, handling email sign-in");
-
-  if (firebaseAuth.isSignInWithEmailLink(window.location.href)) {
-    console.log("Valid sign-in link detected");
-
-    let email = window.localStorage.getItem("emailForSignIn");
-    if (!email) {
-      email = window.prompt("Please provide your email for confirmation");
-    }
-
-    if (email) {
-      console.log("Attempting to sign in with email link");
-      firebaseAuth
-        .signInWithEmailLink(email, window.location.href)
-        .then(() => {
-          console.log("Sign-in successful");
-          window.localStorage.removeItem("emailForSignIn");
-
-          // Redirect to home page after successful login
-          window.location.href = window.location.origin + "/index.html";
-        })
-        .catch((error) => {
-          console.error("Error signing in with email link:", error);
-          document.getElementById(
-            "status-message"
-          ).textContent = `Error signing in: ${error.message}`;
-        });
-    } else {
-      console.warn("No email provided, cannot complete sign-in");
-    }
-  } else {
-    console.warn("Not a valid sign-in link:", window.location.href);
-  }
 }
 
 export const signOut = () => {

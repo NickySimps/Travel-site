@@ -1,8 +1,9 @@
 import { CONFIG } from './config.js'; 
 
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('login-complete.html DOM loaded, starting handler...');
     const statusElement = document.getElementById('status-message');
-    
+
     function updateStatus(message) {
         console.log(message);
         if (statusElement) {
@@ -15,11 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     try {
         // Initialize Firebase
+        updateStatus("Checking Firebase initialization...");
         if (!firebase.apps.length) {
             updateStatus("Initializing Firebase...");
             firebase.initializeApp(CONFIG.FIREBASE);
-        } else {
-            updateStatus("Firebase already initialized");
         }
         
         const auth = firebase.auth();
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateStatus("Email not found in local storage, requesting input...");
                 email = window.prompt('Please provide your email for confirmation');
             } else {
-                updateStatus(`Email found in storage: ${email.substring(0, 3)}...`);
+                updateStatus(`Email found in storage: ${email}`);
             }
             
             if (email) {
@@ -50,7 +50,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         }, 1500);
                     })
                     .catch((error) => {
-                        updateStatus(`Error signing in: ${error.message}`);
+                        let errorMessage = `Error signing in: ${error.message}`;
+                        if (error.code === 'auth/invalid-action-code') {
+                            errorMessage = 'Invalid or expired login link. Please request a new one.';
+                        } else if (error.code === 'auth/user-disabled') {
+                             errorMessage = 'Your account has been disabled.';
+                        }
+                        updateStatus(errorMessage);
                         console.error('SignIn Error:', error);
                     });
             } else {
@@ -58,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else {
             updateStatus("Not a valid sign-in link. This page is only for completing the email login process.");
-        }
+        } // No else needed here, the page is specifically for the link
     } catch (error) {
         updateStatus(`Initialization error: ${error.message}`);
         console.error('Overall Error:', error);
