@@ -411,7 +411,7 @@ button:hover,
   position: relative;
 }
 
-.auth-form {
+#auth-form {
   display: none;
   position: absolute;
   top: 100%;
@@ -424,7 +424,7 @@ button:hover,
   z-index: 1000;
 }
 
-.auth-form.active {
+#auth-form.active {
   display: block;
   animation: slideDown 0.3s ease-out;
 }

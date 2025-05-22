@@ -35,26 +35,17 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('Error initializing navigation:', error);
   }
   
-  // Initialize Firebase auth - IMPROVED
-try {
-  const attemptAuthInit = () => {
-      // Check if firebase is globally available and the app is initialized
-      if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length > 0) {
-          console.log('Firebase is available, initializing auth');
-          initializeAuth(); // No need to pass the initialized state, initializeAuth handles it
-          console.log('Authentication initialized');
-      } else {
-          console.warn('Firebase scripts not loaded yet, retrying...');
-          // Retry after a short delay if Firebase isn't ready
-          setTimeout(attemptAuthInit, 500);
-      }
-  };
-  // Start the first attempt
-  attemptAuthInit();
-
-} catch (error) {
-  console.error('Error initializing authentication:', error);
-}
+  // Initialize Firebase auth
+  try {
+    // initializeAuth (from auth.js) will handle Firebase SDK and app initialization checks internally.
+    // With 'defer' on Firebase SDKs in HTML and this script running on DOMContentLoaded,
+    // Firebase should be available.
+    initializeAuth();
+    // The console logs within initializeAuth will indicate the progress and success.
+    console.log('Authentication initialization process started from index.js');
+  } catch (error) {
+    console.error('Error calling initializeAuth from index.js:', error);
+  }
   
   // Initialize other components
   try {
