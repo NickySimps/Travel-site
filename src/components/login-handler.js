@@ -46,7 +46,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         updateStatus("Sign-in successful! Redirecting...");
                         localStorage.removeItem('emailForSignIn');
                         setTimeout(() => {
-                            window.location.href = window.location.origin + '/index.html';
+                            // Determine the correct base path for redirection
+                            // e.g., if current URL is https://nickysimps.github.io/Travel-site/login-complete.html
+                            // we want to redirect to https://nickysimps.github.io/Travel-site/index.html
+                            const currentDir = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+                            const redirectUrl = window.location.origin + currentDir + 'index.html';
+                            window.location.href = redirectUrl;
                         }, 1500);
                     })
                     .catch((error) => {
@@ -63,7 +68,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateStatus("No email provided, cannot complete sign-in");
             }
         } else {
-            updateStatus("Not a valid sign-in link. This page is only for completing the email login process.");
+            updateStatus("This link is not valid for signing in, or it may have expired. Please request a new login link from the main site.");
+            // Optionally, provide a link back to the homepage or login page
+            // statusElement.innerHTML += '<br><a href="/">Go to Homepage</a>';
         } // No else needed here, the page is specifically for the link
     } catch (error) {
         updateStatus(`Initialization error: ${error.message}`);

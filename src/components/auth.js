@@ -5,12 +5,6 @@ import { CONFIG } from "./config.js";
 let firebaseApp;
 let firebaseAuth;
 
-// Action code settings for email link sign-in - fixed URL to be more robust
-const actionCodeSettings = {
-  // Use window.location.origin for more robust URL handling
-  url: window.location.origin + "/login-complete.html",
-  handleCodeInApp: true,
-};
 
 // Module-level helper function to handle sending the sign-in link
 async function sendSignInLinkToEmailHandler(formElement, emailInputElement, submitButtonElement) {
@@ -24,8 +18,20 @@ async function sendSignInLinkToEmailHandler(formElement, emailInputElement, subm
 
   if (submitButtonElement) submitButtonElement.disabled = true;
 
+  // Dynamically construct the URL for actionCodeSettings to ensure it works
+  // correctly with GitHub Pages (or any hosting where the site might be in a subdirectory).
+  const currentPath = window.location.pathname; // e.g., /Travel-site/index.html or /index.html
+  // Get the base directory path. e.g., /Travel-site/ or /
+  const basePath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
+  const loginCompleteUrl = window.location.origin + basePath + 'login-complete.html';
+
+  const actionCodeSettings = {
+    url: loginCompleteUrl,
+    handleCodeInApp: true,
+  };
+
   try {
-    console.log(`Attempting to send sign-in link to ${email}`);
+    console.log(`Attempting to send sign-in link to ${email} with redirect to ${actionCodeSettings.url}`);
     await firebaseAuth.sendSignInLinkToEmail(email, actionCodeSettings);
     window.localStorage.setItem("emailForSignIn", email);
 
