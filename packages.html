@@ -38,7 +38,7 @@
                         </div>
                     </li>
                     <li>
-                        <button class="cart-checkout">Cart</button>
+                        <button type="button" class="cart-checkout">Cart</button>
                     </li>
                 </ul>
             </nav>
@@ -62,7 +62,7 @@
       <div class="villa-grid">
         <!-- Villa Alhambra -->
         <div class="villa-card">
-          <img src="public/Pictures/villas/alhambra.jpg" alt="Villa Alhambra">
+          <img src="public/Pictures/villas/Villa Alhambra.jpg" alt="Villa Alhambra">
           <div class="villa-content">
             <h3>Villa Alhambra</h3>
             <p>Main villa with great room and luxury suites</p>
@@ -74,16 +74,19 @@
               <li>Luxury furnishings from around the world</li>
             </ul>
             <div class="price">$2,500/night</div>
-            <button class="btn-book cart-add-item"
+            <button type="button" class="btn-book cart-add-item"
               data-item-id="villa-alhambra"
               data-item-name="Villa Alhambra"
-              data-item-price="12438.00"
+              data-item-price="2500.00"
               data-item-url="/packages.html#villa-alhambra"
               data-item-description="Main villa with great room and luxury suites"
               data-item-custom1-name="Check-in"
               data-item-custom2-name="Check-out"
               data-item-custom3-name="Guests"
               data-item-custom4-name="Additional Services"
+              data-item-custom5-options="None[+0]|Catering (+$3000)[+3000]|Airport Transport & Insurance (+$550)[+550]|Both (+$3550)[+3550]">
+              data-item-custom4-value="1" <!-- Assuming default 1 room -->
+              data-item-custom5-name="Services"
               data-item-custom5-options="None[+0]|Catering (+$3000)[+3000]|Airport Transport & Insurance (+$550)[+550]|Both (+$3550)[+3550]">
               Add to Cart
             </button>
@@ -105,7 +108,7 @@
               <li>Direct access to pool and hot tub</li>
             </ul>
             <div class="price">$1,800/night</div>
-            <button class="btn-book cart-add-item"
+            <button type="button" class="btn-book cart-add-item"
               data-item-id="pool-villa"
               data-item-name="Pool Villa"
               data-item-price="1800.00"
@@ -114,7 +117,10 @@
               data-item-custom1-name="Check-in"
               data-item-custom2-name="Check-out"
               data-item-custom3-name="Guests"
-              data-item-custom4-name="Additional Services"
+              data-item-custom3-value="1"
+              data-item-custom4-name="Rooms"
+              data-item-custom4-value="1"
+              data-item-custom5-name="Services"
               data-item-custom5-options="None[+0]|Catering (+$3000)[+3000]|Airport Transport & Insurance (+$550)[+550]|Both (+$3550)[+3550]">
               Add to Cart
             </button>
@@ -123,7 +129,7 @@
     
         <!-- Guest Villa -->
         <div class="villa-card">
-          <img src="public/Pictures/villas/guest.jpg" alt="Guest Villa">
+          <img src="public/Pictures/villas/Guest Villa.jpg" alt="Guest Villa">
           <div class="villa-content">
             <h3>Guest Villa</h3>
             <p>Adjacent to second pool with outdoor bar</p>
@@ -136,7 +142,7 @@
               <li>Outdoor bar and grill area</li>
             </ul>
             <div class="price">$1,500/night</div>
-            <button class="btn-book cart-add-item"
+            <button type="button" class="btn-book cart-add-item"
               data-item-id="guest-villa"
               data-item-name="Guest Villa"
               data-item-price="1500.00"
@@ -145,7 +151,10 @@
               data-item-custom1-name="Check-in"
               data-item-custom2-name="Check-out"
               data-item-custom3-name="Guests"
-              data-item-custom4-name="Additional Services"
+              data-item-custom3-value="1"
+              data-item-custom4-name="Rooms"
+              data-item-custom4-value="1"
+              data-item-custom5-name="Services"
               data-item-custom5-options="None[+0]|Catering (+$3000)[+3000]|Airport Transport & Insurance (+$550)[+550]|Both (+$3550)[+3550]">
               Add to Cart
             </button>
@@ -154,7 +163,7 @@
     
         <!-- Tower Villa -->
         <div class="villa-card">
-          <img src="public/Pictures/villas/tower.jpg" alt="Tower Villa">
+          <img src="public/Pictures/villas/Tower Villa.jpg" alt="Tower Villa">
           <div class="villa-content">
             <h3>Tower Villa</h3>
             <p>Featuring 360° rooftop views of USVI and BVI</p>
@@ -166,8 +175,8 @@
               <li>Private hot tub</li>
               <li>Outdoor grill</li>
             </ul>
-            <div class="price">$1,600/night</div>
-            <button class="btn-book cart-add-item"
+            <div class="price">$3,300/night</div>
+            <button type="button" class="btn-book cart-add-item"
               data-item-id="tower-villa"
               data-item-name="Tower Villa"
               data-item-price="3300.00"
@@ -176,7 +185,10 @@
               data-item-custom1-name="Check-in"
               data-item-custom2-name="Check-out"
               data-item-custom3-name="Guests"
-              data-item-custom4-name="Additional Services"
+              data-item-custom3-value="1"
+              data-item-custom4-name="Rooms"
+              data-item-custom4-value="1"
+              data-item-custom5-name="Services"
               data-item-custom5-options="None[+0]|Catering (+$3000)[+3000]|Airport Transport & Insurance (+$550)[+550]|Both (+$3550)[+3550]">
               Add to Cart
             </button>
@@ -185,7 +197,7 @@
     
         <!-- Garden Villa -->
         <div class="villa-card">
-          <img src="public/Pictures/villas/garden.jpg" alt="Garden Villa">
+          <img src="public/Pictures/villas/Garden Villa.jpg" alt="Garden Villa">
           <div class="villa-content">
             <h3>Garden Villa</h3>
             <p>Private cottage with garden views</p>
@@ -197,8 +209,8 @@
               <li>Front door parking</li>
               <li>Charming cottage atmosphere</li>
             </ul>
-            <div class="price">$1,200/night</div>
-            <button class="btn-book cart-add-item"
+            <div class="price">$2,800/night</div>
+            <button type="button" class="btn-book cart-add-item"
               data-item-id="garden-villa"
               data-item-name="Garden Villa"
               data-item-price="2800.00"
@@ -207,7 +219,10 @@
               data-item-custom1-name="Check-in"
               data-item-custom2-name="Check-out"
               data-item-custom3-name="Guests"
-              data-item-custom4-name="Additional Services"
+              data-item-custom3-value="1"
+              data-item-custom4-name="Rooms"
+              data-item-custom4-value="1"
+              data-item-custom5-name="Services"
               data-item-custom5-options="None[+0]|Catering (+$3000)[+3000]|Airport Transport & Insurance (+$550)[+550]|Both (+$3550)[+3550]">
               Add to Cart
             </button>
@@ -266,7 +281,7 @@
       </div>
     </section>
 
-    <button id="backToTop" title="Go to top">↑</button>
+    <button type="button" id="backToTop" title="Go to top">↑</button>
 
     </div>
 

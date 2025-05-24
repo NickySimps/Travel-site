@@ -21,7 +21,11 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Initialize cart system
   try {
-    window.usviCart = new ShoppingCart().initialize();
+    // Ensure ShoppingCart class is correctly imported and instantiated.
+    // The .initialize() method should return the instance if it's part of a fluent interface,
+    // or just be called on the instance.
+    const cartInstance = new ShoppingCart();
+    window.shoppingCart = cartInstance.initialize(); // Assign the initialized cart to window
     console.log('Shopping cart initialized');
   } catch (error) {
     console.error('Error initializing shopping cart:', error);

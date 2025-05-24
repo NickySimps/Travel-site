@@ -278,9 +278,7 @@ button,
 .btn-service,
 .booking-btn,
 .btn-book,
-.service-add-cart,
 .submit-inquiry,
-.add-to-cart-btn,
 .direct-cart-button,
 .btn-quote{
   background-color: var(--primary-blue);
@@ -299,19 +297,11 @@ button:hover,
 .btn-service:hover,
 .booking-btn:hover,
 .btn-book:hover,
-.service-add-cart:hover,
 .submit-inquiry:hover,
-.add-to-cart-btn:hover,
 .direct-cart-button:hover,
 .btn-quote:hover {
   background-color: var(--primary-orange);
   color: var(--black);
-}
-
-.btn-AddToCart {
-  width: 90%;
-  color: var(--black);
-  background-color: var(--primary-orange);
 }
 
 .btn-service.selected {
@@ -822,14 +812,6 @@ button:hover,
   display: flex;
   gap: 1rem;
   margin-top: 1rem;
-}
-
-.add-to-cart-btn {
-  flex: 1;
-  padding: 1rem;
-  background: var(--primary-orange);
-  color: var(--black);
-  font-size: 1.1rem;
 }
 
 .submit-inquiry {
@@ -1475,7 +1457,37 @@ button:hover,
   align-items: center;
   z-index: 2000;
 }
+/* Add these styles to your existing style.css file */
 
+/* Styles for Newsletter Form from index.html */
+.newsletter-grid-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.newsletter-contact-row {
+    margin-top: 1rem;
+}
+
+.newsletter-agreement-row {
+    margin-top: 1rem;
+}
+
+.newsletter-submit-btn {
+    margin-top: 1rem;
+}
+
+/* Styles for Footer from index.html */
+.footer-grid {
+    padding: 2rem 0;
+}
+
+/* General utility or component styles if needed */
+.flavor-textList { /* If you want to standardize list appearance */
+    list-style: disc; /* Or your preferred style */
+    padding-left: 20px; /* Adjust as needed */
+}
 /* Empty cart message styling */
 .empty-cart {
   color: #999;

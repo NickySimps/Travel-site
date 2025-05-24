@@ -41,7 +41,7 @@
                       </div>
                   </li>
                   <li>
-                      <button class="cart-checkout">Cart</button>
+                      <button type="button" class="cart-checkout">Cart</button>
                   </li>
               </ul>
           </nav>
@@ -73,31 +73,31 @@
           <div class="mission-statement">
               Join our community to receive exclusive offers and updates about our luxury properties and services.
           </div>
-          <form class="newsletter-form">
+          <form id="newsletter-form" class="newsletter-form">
               <div class="package-grid">
                   <div class="package-box">
                       <div class="flavor-content active">
                           <h2>Stay Connected</h2>
-                          <div class="flavor-textList">
+                          <ul class="flavor-textList">
                               <li>Special seasonal promotions</li>
                               <li>Exclusive villa access</li>
                               <li>Local event invitations</li>
                               <li>Travel tips and guides</li>
-                          </div>
-                          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                          </ul>
+                          <div class="newsletter-grid-row">
                               <input type="text" name="firstName" id="firstName" placeholder="First Name" required>
                               <input type="text" name="lastName" id="lastName" placeholder="Last Name" required>
                           </div>
-                          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
-                              <input type="tel" name="phone" id="phone" placeholder="Phone Number" required>
-                              <input type="email" name="email" id="email" placeholder="Email Address" required>
+                          <div class="newsletter-grid-row newsletter-contact-row">
+                              <input type="tel" name="phone" id="newsletter-phone" placeholder="Phone Number" required>
+                              <input type="email" name="email" id="newsletter-email" placeholder="Email Address" required>
                           </div>
-                          <div class="service-option" style="margin-top: 1rem;">
+                          <div class="service-option newsletter-agreement-row">
                               <input type="checkbox" id="preferences" required>
                               <label for="preferences">I agree to receive updates about USVI Retreats properties and
                                   services</label>
                           </div>
-                          <button type="submit" class="btn-book" style="margin-top: 1rem;">Subscribe to
+                          <button type="submit" class="btn-book newsletter-submit-btn">Subscribe to
                               Updates</button>
                       </div>
                   </div>
@@ -107,7 +107,7 @@
   </section>
   <footer>
       <div class="container">
-          <div class="package-grid" style="padding: 2rem 0;">
+          <div class="package-grid footer-grid">
               <!-- Company Info -->
               <div class="flavor-content active">
                   <h3>USVI Retreats</h3>
@@ -158,8 +158,8 @@
           </div>
       </div>
   </footer>
-  <button id="backToTop" title="Go to top">↑</button>
+  <button type="button" id="backToTop" title="Go to top">↑</button>
   </body>
-  <script src="/src/components/index.js"></script>
+  <script type="module" src="./src/components/index.js"></script>
   
 </html>

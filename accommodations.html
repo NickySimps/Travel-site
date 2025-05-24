@@ -40,7 +40,7 @@
                         </div>
                     </li>
                     <li>
-                        <button class="cart-checkout">Cart</button>
+                        <button type="button" class="cart-checkout">Cart</button>
                     </li>
                 </ul>
             </nav>
@@ -68,7 +68,7 @@
                         <h3>Private Chef & Catering</h3>
                         <p>Personalized dining experience in your villa</p>
                         <p><strong>$750 per day / $3,000 per stay </strong></p> 
-                        <button class="btn btn-info" data-toggle="collapse">More Info</button>
+                        <button type="button" class="btn btn-info" data-toggle="collapse">More Info</button>
                         
                         <div class="flavor-content"> 
                             <p>Enjoy gourmet meals prepared in the comfort of your villa.</p> 
@@ -78,25 +78,17 @@
                                 <li>Breakfast, lunch, and dinner options</li>
                                 <li>Full service including setup and cleanup</li>
                             </ul>
-                            <button class="cart-add-item"
-                                data-item-id="catering-service"
-                                data-item-name="Private Chef & Catering"
-                                data-item-price="3000.00" 
-                                data-item-url="/accommodations.html"
-                                data-item-description="Full-service catering for your entire stay"
-                                data-item-image="/public/Pictures/accommodations/catering.jpg"> 
-                                Add to Cart
-                            </button>
+                            <button type="button" class="btn booking-btn" data-package="catering-service">Book Service</button>
                         </div>
+                        <!-- Removed direct Add to Cart button. Booking is now handled via "Book Service" and modal -->
                     </div>
-        
                     <!-- Airport Transfer & Insurance -->
                     <div class="package-box">
                         <img src="public/Pictures/accommodations/transport.jpg" alt="Airport Transfer">
                         <h3>Airport Transfer & Insurance</h3>
                         <p>Seamless travel experience with complete coverage</p>
                         <p><strong>$550 flat rate</strong></p>
-                        <button class="btn btn-info" data-toggle="collapse">More Info</button>
+                        <button type="button" class="btn btn-info" data-toggle="collapse">More Info</button>
                         <div class="flavor-content">
                             <ul class="flavor-textList">
                                 <li>Round-trip airport transfers</li>
@@ -105,28 +97,17 @@
                                 <li>Luggage handling</li>
                                 <li>Flight monitoring</li>
                             </ul>
-                            <button class="cart-add-item"
-                                data-item-id="transport-insurance"
-                                data-item-name="Airport Transfer & Insurance"
-                                data-item-price="550.00"
-                                data-item-url="/accommodations.html"
-                                data-item-description="Round-trip transfer and insurance"
-                                data-item-image="/public/Pictures/accommodations/transport.jpg"
-                                data-item-custom1-name="Arrival Date"
-                                data-item-custom2-name="Flight Number"
-                                data-item-custom3-name="Number of Passengers">
-                                Add to Cart
-                            </button>
+                            <button type="button" class="btn booking-btn" data-package="transport-insurance">Book Service</button>
                         </div>
+                        <!-- Removed direct Add to Cart button. Booking is now handled via "Book Service" and modal -->
                     </div>
-        
                     <!-- Concierge Service -->
                     <div class="package-box">
                         <img src="public/Pictures/accommodations/concierge.jpg" alt="Concierge Service">
                         <h3>Premium Concierge Service</h3>
                         <p>Your personal assistant in paradise</p>
                         <p><strong>$200 per day</strong></p>
-                        <button class="btn btn-info" data-toggle="collapse">More Info</button>
+                        <button type="button" class="btn btn-info" data-toggle="collapse">More Info</button>
                         <div class="flavor-content">
                             <ul class="flavor-textList">
                                 <li>24/7 personal assistance</li>
@@ -135,28 +116,17 @@
                                 <li>Local recommendations</li>
                                 <li>Special event arrangements</li>
                             </ul>
-                            <button class="cart-add-item"
-                                data-item-id="concierge-service"
-                                data-item-name="Premium Concierge Service"
-                                data-item-price="200.00"
-                                data-item-url="/accommodations.html"
-                                data-item-description="24/7 personal concierge"
-                                data-item-image="/public/Pictures/accommodations/concierge.jpg"
-                                data-item-custom1-name="Start Date"
-                                data-item-custom2-name="Number of Days"
-                                data-item-custom3-name="Special Requests">
-                                Add to Cart
-                            </button>
+                            <button type="button" class="btn booking-btn" data-package="concierge-service">Book Service</button>
                         </div>
+                        <!-- Removed direct Add to Cart button. Booking is now handled via "Book Service" and modal -->
                     </div>
-        
                     <!-- Additional Services Package -->
                     <div class="package-box">
                         <img src="public/Pictures/accommodations/premium.jpg" alt="Premium Package">
                         <h3>Complete Service Package</h3>
                         <p>All-inclusive luxury experience</p>
                         <p><strong>Special Package Rate</strong></p>
-                        <button class="btn btn-info" data-toggle="collapse">More Info</button>
+                        <button type="button" class="btn btn-info" data-toggle="collapse">More Info</button>
                         <div class="flavor-content">
                             <ul class="flavor-textList">
                                 <li>Daily catering service</li>
@@ -165,22 +135,12 @@
                                 <li>Priority reservations</li>
                                 <li>VIP amenities</li>
                             </ul>
-                            <button class="cart-add-item"
-                                data-item-id="complete-package"
-                                data-item-name="Complete Service Package"
-                                data-item-price="1000.00"
-                                data-item-url="/accommodations.html"
-                                data-item-description="All-inclusive service package"
-                                data-item-image="/public/Pictures/accommodations/premium.jpg"
-                                data-item-custom1-name="Start Date"
-                                data-item-custom2-name="Number of Days"
-                                data-item-custom3-name="Special Requests">
-                                Add to Cart
-                            </button>
+                            <button type="button" class="btn booking-btn" data-package="complete-package">Book Package</button>
                         </div>
+                        <!-- Removed direct Add to Cart button. Booking is now handled via "Book Package" and modal -->
                     </div>
                 </div>
-        
+
                 <!-- Service Features Section -->
                 <div class="estate-amenities">
                     <h2>Service Features</h2>
@@ -236,31 +196,31 @@
             <div class="mission-statement">
                 Join our community to receive exclusive offers and updates about our luxury properties and services.
             </div>
-            <form class="newsletter-form">
+            <form id="newsletter-form" class="newsletter-form">
                 <div class="package-grid">
                     <div class="package-box">
                         <div class="flavor-content active">
                             <h2>Stay Connected</h2>
-                            <div class="flavor-textList">
+                            <ul class="flavor-textList">
                                 <li>Special seasonal promotions</li>
                                 <li>Exclusive villa access</li>
                                 <li>Local event invitations</li>
                                 <li>Travel tips and guides</li>
-                            </div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            </ul>
+                            <div class="newsletter-grid-row">
                                 <input type="text" name="firstName" id="firstName" placeholder="First Name" required>
                                 <input type="text" name="lastName" id="lastName" placeholder="Last Name" required>
                             </div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
-                                <input type="tel" name="phone" id="phone" placeholder="Phone Number" required>
-                                <input type="email" name="email" id="email" placeholder="Email Address" required>
+                            <div class="newsletter-grid-row newsletter-contact-row">
+                                <input type="tel" name="phone" id="newsletter-phone" placeholder="Phone Number" required>
+                                <input type="email" name="email" id="newsletter-email" placeholder="Email Address" required>
                             </div>
-                            <div class="service-option" style="margin-top: 1rem;">
+                            <div class="service-option newsletter-agreement-row">
                                 <input type="checkbox" id="preferences" required>
                                 <label for="preferences">I agree to receive updates about USVI Retreats properties and
                                     services</label>
                             </div>
-                            <button type="submit" class="btn-book" style="margin-top: 1rem;">Subscribe to
+                            <button type="submit" class="btn-book newsletter-submit-btn">Subscribe to
                                 Updates</button>
                         </div>
                     </div>
@@ -323,8 +283,54 @@
     </footer>
     <button id="backToTop" title="Go to top">↑</button>
 
+    <!-- Cart Panel (Shared with other pages, structure assumed from index.html) -->
+    <button type="button" class="cart-float">
+        <i class="fa fa-shopping-cart"></i>
+        <span class="cart-count">0</span>
+    </button>
+    <div class="cart-panel">
+        <div class="cart-items"></div>
+        <div class="cart-total">
+            <span>Total:</span>
+            <span class="total-amount">$0.00</span>
+        </div>
+        <button type="button" class="checkout-btn">Checkout</button>
     </div>
-    
+
+    <!-- Booking Calendar Modal (Shared with other pages, structure assumed from index.html) -->
+    <div id="calendarModal" class="calendar-modal">
+        <div class="calendar-content">
+            <button type="button" class="close-calendar">&times;</button>
+            <h3 class="calendar-title">Book Your Service</h3>
+            <div id="selectedDates">
+                <span id="checkInDisplay">Start Date: Not selected</span>
+                <span id="checkOutDisplay">End Date: Not selected</span>
+            </div>
+            <div class="calendar-header">
+                <button type="button" id="prevMonth">&larr;</button>
+                <h3 id="currentMonth"></h3>
+                <button type="button" id="nextMonth">&rarr;</button>
+            </div>
+            <div class="calendar-grid" id="calendarGrid"></div>
+            <div class="booking-options">
+                 <!-- Options like guests, services will be dynamically shown/hidden by booking.js -->
+                <div class="guests-rooms-section" style="display:none;">
+                    <!-- Guest/Room count might be irrelevant for some services -->
+                </div>
+                <div class="services-section" style="display:none;">
+                    <!-- Additional villa services are not applicable when booking a standalone service -->
+                </div>
+                <div class="total-section">
+                    <span class="total-label">Estimated Total:</span>
+                    <span class="total-amount" id="totalAmount">$0</span>
+                </div>
+            </div>
+            <button type="button" id="confirmDates" class="confirm-dates" disabled>Set Booking</button>
+        </div>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js" defer></script>
     <script type="module" src="./src/components/index.js"></script>
 </body>
 

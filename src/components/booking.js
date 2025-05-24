@@ -1,6 +1,5 @@
-// Fixed booking.js with proper date highlighting
-
 export const initializeBooking = () => {
+    // Modal and general UI elements
     const calendarModal = document.getElementById('calendarModal');
     const inquiryModal = document.getElementById('bookingInquiryModal');
     const checkAvailabilityButtons = document.querySelectorAll('.booking-btn');
@@ -14,23 +13,27 @@ export const initializeBooking = () => {
     const checkOutDisplay = document.getElementById('checkOutDisplay');
     const confirmButton = document.getElementById('confirmDates');
     const inquiryForm = document.getElementById('inquiryForm');
+    const calendarTitle = calendarModal ? calendarModal.querySelector('.calendar-title') : null;
 
+    // Modal dynamic sections
+    const modalGuestRoomSection = calendarModal ? calendarModal.querySelector('.guests-rooms-section') : null;
+    const modalServicesSection = calendarModal ? calendarModal.querySelector('.services-section') : null;
+    const guestCountInput = document.getElementById('guestCount');
+    const modalGuestContainer = document.getElementById('modalGuestContainer');
+    const modalGuestLabel = document.getElementById('modalGuestLabel');
+    const roomCountInput = document.getElementById('roomCount');
+    const modalRoomContainer = document.getElementById('modalRoomContainer');
+    const numberInputControls = calendarModal.querySelectorAll('.number-input button');
     let currentDate = new Date();
     let currentMonth = currentDate.getMonth();
     let currentYear = currentDate.getFullYear();
     let checkInDate = null;
     let checkOutDate = null;
     let currentPackage = null;
-    let currentBookingDetails = null;
+    let currentPackageDetails = null; // Will hold details for the currently selected package
 
-    // Map for property base names matching the actual file names with spaces
-    const propertyImageMap = {
-        'villa-alhambra': 'Villa Alhambra',
-        'pool-villa': 'Pool Villa',
-        'guest-villa': 'Guest Villa',
-        'tower-villa': 'Tower Villa',
-        'garden-villa': 'Garden Villa'
-    };
+    const cateringServiceCheckbox = document.getElementById('cateringService');
+    const transportServiceCheckbox = document.getElementById('transportService');
 
     const bookedDates = {
         'villa-alhambra': [
@@ -43,41 +46,119 @@ export const initializeBooking = () => {
         // Add more booked dates as needed
     };
 
-    const packagePrices = {
+    // Centralized package details
+    const packageDetailsStore = {
+        // Villas
         'villa-alhambra': {
+            type: 'villa',
+            name: 'Villa Alhambra',
             basePrice: 2500,
             perNight: true,
-            withCatering: 3000,
-            withTransport: 550,
-            withBoth: 3550
+            services: { catering: 750, transport: 550, both: 1300 }, // Daily/flat rates for modal services
+            maxGuests: 6,
+            imageName: 'Villa Alhambra', // Filename without extension for villas, assuming .jpg
+            description: "Main villa with great room and luxury suites"
         },
         'pool-villa': {
+            type: 'villa',
+            name: 'Pool Villa',
             basePrice: 1800,
             perNight: true,
-            withCatering: 3000,
-            withTransport: 550,
-            withBoth: 3550
+            services: { catering: 750, transport: 550, both: 1300 },
+            maxGuests: 4,
+            imageName: 'Pool Villa',
+            description: "Pool-side villa with direct deck access"
         },
         'guest-villa': {
+            type: 'villa',
+            name: 'Guest Villa',
             basePrice: 1500,
             perNight: true,
-            withCatering: 3000,
-            withTransport: 550,
-            withBoth: 3550
+            services: { catering: 750, transport: 550, both: 1300 },
+            maxGuests: 4,
+            imageName: 'Guest Villa',
+            description: "Adjacent to second pool with outdoor bar"
         },
         'tower-villa': {
+            type: 'villa',
+            name: 'Tower Villa',
             basePrice: 3300,
             perNight: true,
-            withCatering: 3000,
-            withTransport: 550,
-            withBoth: 3550
+            services: { catering: 750, transport: 550, both: 1300 },
+            maxGuests: 4,
+            imageName: 'Tower Villa',
+            description: "Featuring 360° rooftop views"
         },
         'garden-villa': {
+            type: 'villa',
+            name: 'Garden Villa',
             basePrice: 2800,
             perNight: true,
-            withCatering: 3000,
-            withTransport: 550,
-            withBoth: 3550
+            services: { catering: 750, transport: 550, both: 1300 },
+            maxGuests: 2,
+            imageName: 'Garden Villa',
+            description: "Private cottage with garden views"
+        },
+        // Yachts
+        'luxury-yacht': {
+            type: 'yacht',
+            name: 'Luxury Yacht',
+            basePrice: 2500,
+            perNight: true, // true means per day for yachts/services
+            maxGuests: 8, // Represents passengers
+            imageName: 'yacht1.webp', // Filename with extension
+            description: "Ultimate luxury sailing experience"
+        },
+        'catamaran': {
+            type: 'yacht',
+            name: 'Catamaran',
+            basePrice: 1800,
+            perNight: true,
+            maxGuests: 10,
+            imageName: 'yacht2.webp',
+            description: "Stable and spacious sailing"
+        },
+        'speedboat': {
+            type: 'yacht',
+            name: 'Speedboat',
+            basePrice: 1200,
+            perNight: true,
+            maxGuests: 6,
+            imageName: 'yacht3.webp',
+            description: "Fast and thrilling experience"
+        },
+        // Services
+        'catering-service': {
+            type: 'service',
+            name: 'Private Chef & Catering',
+            basePrice: 750, // Daily rate
+            perNight: true, // Per day
+            imageName: 'catering.jpg', // Filename with extension
+            description: "Personalized dining experience in your villa"
+        },
+        'transport-insurance': {
+            type: 'service',
+            name: 'Airport Transfer & Insurance',
+            basePrice: 550, // Flat rate
+            perNight: false,
+            imageName: 'transport.jpg',
+            description: "Seamless travel experience with complete coverage"
+        },
+        'concierge-service': { // Added based on accommodations.html
+            type: 'service',
+            name: 'Premium Concierge Service',
+            basePrice: 200, // Daily rate
+            perNight: true,
+            imageName: 'concierge.jpg',
+            description: "Your personal assistant in paradise"
+        },
+        'complete-package': { // Added based on accommodations.html
+            type: 'service',
+            name: 'Complete Service Package',
+            basePrice: 1000, // Assuming flat rate, adjust if per day
+            perNight: false,
+            imageName: 'premium.jpg',
+            description: "All-inclusive luxury experience"
         }
     };
 
@@ -95,11 +176,13 @@ export const initializeBooking = () => {
     ];
 
     const formatDate = (date) => {
-        return date ? date.toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric'
-        }) : 'Not selected';
+        if (!date) return 'Not selected';
+        // Ensure date is a Date object
+        const d = date instanceof Date ? date : new Date(date);
+        if (isNaN(d.getTime())) return 'Invalid date';
+
+        return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
     };
 
     const calculateNights = (checkIn, checkOut) => {
@@ -118,59 +201,82 @@ export const initializeBooking = () => {
         });
     };
 
-    const getBasePropertyName = (packageId) => {
-        // Return the exact file name for image paths
-        return propertyImageMap[packageId] || packageId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    const getImagePath = (pkgId) => {
+        const details = packageDetailsStore[pkgId];
+        if (!details || !details.imageName) return './public/Pictures/default.jpg'; // Fallback
+
+        switch (details.type) {
+            case 'villa':
+                return `./public/Pictures/villas/${details.imageName}.jpg`;
+            case 'yacht':
+                return `./public/Pictures/yachts/${details.imageName}`;
+            case 'service':
+                return `./public/Pictures/accommodations/${details.imageName}`;
+            default:
+                return './public/Pictures/default.jpg';
+        }
     };
 
     const updateTotal = () => {
-        if (!currentPackage || !checkInDate || !checkOutDate) return 0;
-
-        const hasCatering = document.getElementById('cateringService')?.checked || false;
-        const hasTransport = document.getElementById('transportService')?.checked || false;
-
-        let price = packagePrices[currentPackage];
-        let baseTotal = price.basePrice;
-
-        // Calculate total nights
-        const nights = calculateNights(checkInDate, checkOutDate);
-
-        // If price is per night, multiply by number of nights
-        if (price.perNight) {
-            baseTotal = baseTotal * nights;
+        if (!currentPackageDetails || !checkInDate) { // Only checkInDate needed for flat rates
+            if (document.getElementById('totalAmount')) document.getElementById('totalAmount').textContent = '$0';
+            return 0;
         }
 
-        // Add services costs
+        let total = 0;
+        const nights = (checkOutDate && checkInDate) ? calculateNights(checkInDate, checkOutDate) : 1; // Default to 1 night/day if no checkout
+
+        if (currentPackageDetails.perNight) {
+            total = currentPackageDetails.basePrice * (nights > 0 ? nights : 1);
+        } else {
+            total = currentPackageDetails.basePrice; // Flat rate
+        }
+
+        // Add costs for modal-selected services (only for villas)
         let serviceCost = 0;
-        if (hasCatering && hasTransport) {
-            serviceCost = price.withBoth;
-        } else if (hasCatering) {
-            serviceCost = price.withCatering;
-        } else if (hasTransport) {
-            serviceCost = price.withTransport;
-        }
+        if (currentPackageDetails.type === 'villa' && currentPackageDetails.services) {
+            const hasCatering = cateringServiceCheckbox?.checked || false;
+            const hasTransport = transportServiceCheckbox?.checked || false;
 
-        const finalPrice = baseTotal + serviceCost;
+            if (hasCatering && hasTransport) {
+                // If 'both' is a combined rate for the duration, use it. Otherwise, sum daily rates.
+                // Assuming services.both is a combined flat addon, or services.catering/transport are daily
+                serviceCost += (currentPackageDetails.services.both || (currentPackageDetails.services.catering + currentPackageDetails.services.transport)) * (currentPackageDetails.services.catering ? nights : 1);
+            } else if (hasCatering) {
+                serviceCost += currentPackageDetails.services.catering * nights;
+            } else if (hasTransport) {
+                // Transport might be flat or per-stay, adjust if it's daily
+                serviceCost += currentPackageDetails.services.transport; // Assuming flat for transport if selected alone
+            }
+        }
+        total += serviceCost;
 
         // Update the displayed total
         const totalElement = document.getElementById('totalAmount');
         if (totalElement) {
-            totalElement.textContent = `$${finalPrice.toLocaleString()}`;
+            totalElement.textContent = `$${total.toLocaleString()}`;
         }
-
-        return finalPrice;
+        return total;
     };
 
     const updateDateDisplay = () => {
         if (checkInDisplay && checkOutDisplay) {
             checkInDisplay.textContent = `Check-in: ${formatDate(checkInDate)}`;
             checkOutDisplay.textContent = `Check-out: ${formatDate(checkOutDate)}`;
+            if (currentPackageDetails && (currentPackageDetails.type === 'service' && !currentPackageDetails.perNight)) {
+                 checkInDisplay.textContent = `Service Date: ${formatDate(checkInDate)}`;
+                 checkOutDisplay.textContent = `Ends: ${formatDate(checkInDate)}`; // For flat rate services, start and end are same
+            } else if (currentPackageDetails && (currentPackageDetails.type === 'yacht' || currentPackageDetails.type === 'service')) {
+                checkInDisplay.textContent = `Start Date: ${formatDate(checkInDate)}`;
+                checkOutDisplay.textContent = `End Date: ${formatDate(checkOutDate)}`;
+            }
         }
         
         if (confirmButton) {
-            confirmButton.disabled = !(checkInDate && checkOutDate);
+            // For flat rate services, only checkInDate is needed. For others, both.
+            const needsCheckout = !(currentPackageDetails && currentPackageDetails.type === 'service' && !currentPackageDetails.perNight);
+            confirmButton.disabled = !(checkInDate && (needsCheckout ? checkOutDate : true));
         }
-        
         updateTotal();
     };
 
@@ -181,12 +287,44 @@ export const initializeBooking = () => {
 
         if (clickedDate < today || isDateBooked(clickedDate)) return;
 
-        // FIX: Set check-in date first
-        checkInDate = clickedDate;
-        
-        // Set check-out date to 3 days later
-        checkOutDate = new Date(clickedDate);
-        checkOutDate.setDate(checkOutDate.getDate() + 3);
+        // For flat-rate services, only one date selection is needed.
+        if (currentPackageDetails && currentPackageDetails.type === 'service' && !currentPackageDetails.perNight) {
+            checkInDate = clickedDate;
+            checkOutDate = clickedDate; // Set checkout same as checkin for single day/flat rate
+            console.log('Service date selected:', formatDate(checkInDate));
+        } else if (!checkInDate || (checkInDate && checkOutDate)) {
+            // First click (select check-in) or restarting selection
+            checkInDate = clickedDate;
+            checkOutDate = null;
+            console.log('Check-in selected:', formatDate(checkInDate));
+        } else if (checkInDate && !checkOutDate) {
+            // Second click (select check-out)
+            if (clickedDate > checkInDate) {
+
+                // Check for booked dates within the selected range
+                let tempDate = new Date(checkInDate);
+                tempDate.setDate(tempDate.getDate() + 1); // Start checking from day after check-in
+                let rangeIsClear = true;
+                while (tempDate < clickedDate) {
+                    if (isDateBooked(tempDate)) {
+                        rangeIsClear = false;
+                        break;
+                    }
+                    tempDate.setDate(tempDate.getDate() + 1);
+                }
+
+                if (rangeIsClear) {
+                    checkOutDate = clickedDate;
+                    console.log('Check-out selected:', formatDate(checkOutDate));
+                } else {
+                    alert('The selected date range includes booked dates. Please choose a different check-out date.');
+                }
+            } else {
+                // Clicked date is before or same as current check-in, so treat as new check-in
+                checkInDate = clickedDate;
+                checkOutDate = null;
+            }
+        }
 
         updateDateDisplay();
         createCalendar(); // Refresh the calendar to show the selection
@@ -239,15 +377,14 @@ export const initializeBooking = () => {
 
                 // Add hover effects for available dates
                 dayElement.addEventListener('mouseenter', () => {
-                    if (!checkInDate) {
+                    if (!dayElement.classList.contains('past') && !dayElement.classList.contains('booked')) {
                         dayNumber.classList.add('hover');
                     }
                 });
 
                 dayElement.addEventListener('mouseleave', () => {
-                    if (!checkInDate) {
-                        dayNumber.classList.remove('hover');
-                    }
+                    // No need to check checkInDate, just remove hover if it was added
+                    dayNumber.classList.remove('hover');
                 });
             }
 
@@ -275,32 +412,68 @@ export const initializeBooking = () => {
         checkAvailabilityButtons.forEach(button => {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 currentPackage = button.dataset.package;
+                currentPackageDetails = packageDetailsStore[currentPackage];
+
+                if (!currentPackageDetails) {
+                    console.error("Package details not found for:", currentPackage);
+                    return;
+                }
+
                 checkInDate = null;
                 checkOutDate = null;
 
-                // Reset form values
-                if (document.getElementById('guestCount')) {
-                    document.getElementById('guestCount').max = maxGuests[currentPackage] || 6;
-                    document.getElementById('guestCount').value = 1;
+                // Update modal title
+                if (calendarTitle) {
+                    calendarTitle.textContent = `Book Your ${currentPackageDetails.type === 'villa' ? 'Stay' : currentPackageDetails.name}`;
                 }
 
-                if (document.getElementById('roomCount')) {
-                    document.getElementById('roomCount').value = 1;
-                }
+                // Configure modal sections based on package type
+                if (modalGuestRoomSection) modalGuestRoomSection.style.display = 'none';
+                if (modalServicesSection) modalServicesSection.style.display = 'none';
+                if (modalGuestContainer) modalGuestContainer.style.display = 'none';
+                if (modalRoomContainer) modalRoomContainer.style.display = 'none';
 
-                if (document.getElementById('cateringService')) {
-                    document.getElementById('cateringService').checked = false;
-                }
 
-                if (document.getElementById('transportService')) {
-                    document.getElementById('transportService').checked = false;
+                if (currentPackageDetails.type === 'villa') {
+                    if (modalGuestRoomSection) modalGuestRoomSection.style.display = 'flex'; // Or 'block'
+                    if (modalServicesSection) modalServicesSection.style.display = 'block';
+                    if (modalGuestContainer && modalGuestLabel) {
+                        modalGuestContainer.style.display = 'block';
+                        modalGuestLabel.textContent = 'Guests';
+                    }
+                    if (modalRoomContainer) modalRoomContainer.style.display = 'block';
+
+                    if (guestCountInput) {
+                        guestCountInput.max = currentPackageDetails.maxGuests || 6;
+                        guestCountInput.value = 1;
+                    }
+                    if (roomCountInput) roomCountInput.value = 1; // Default for villas
+                    if (cateringServiceCheckbox) cateringServiceCheckbox.checked = false;
+                    if (transportServiceCheckbox) transportServiceCheckbox.checked = false;
+
+                } else if (currentPackageDetails.type === 'yacht') {
+                    if (modalGuestRoomSection) modalGuestRoomSection.style.display = 'flex';
+                     if (modalGuestContainer && modalGuestLabel) {
+                        modalGuestContainer.style.display = 'block';
+                        modalGuestLabel.textContent = 'Passengers';
+                    }
+                    if (guestCountInput) {
+                        guestCountInput.max = currentPackageDetails.maxGuests || 8;
+                        guestCountInput.value = 1;
+                    }
+                } else if (currentPackageDetails.type === 'service') {
+                    // For services, guest/room/additional villa services are usually not applicable in this modal
+                    // The date selection (single or range) is primary.
+                    // If a service has a guest limit (e.g. group catering), it could be enabled here.
                 }
 
                 updateDateDisplay();
                 
                 if (calendarModal) {
                     calendarModal.classList.add('active');
+                    calendarModal.setAttribute('data-current-package-type', currentPackageDetails.type);
                 }
                 
                 createCalendar();
@@ -308,6 +481,27 @@ export const initializeBooking = () => {
         });
     }
 
+    // Guest and Room Counters
+    if (numberInputControls) {
+        numberInputControls.forEach(button => {
+            button.addEventListener('click', () => {
+                const inputField = button.parentElement.querySelector('input');
+                if (!inputField) return;
+
+                let currentValue = parseInt(inputField.value);
+                const min = parseInt(inputField.min);
+                const max = parseInt(inputField.max);
+
+                if (button.classList.contains('increase')) {
+                    if (currentValue < max) currentValue++;
+                } else if (button.classList.contains('decrease')) {
+                    if (currentValue > min) currentValue--;
+                }
+                inputField.value = currentValue;
+                updateTotal(); // Recalculate total if guest/room count affects price (or for future-proofing)
+            });
+        });
+    }
     // Modal controls
     if (closeBtn) {
         closeBtn.addEventListener('click', () => {
@@ -343,15 +537,12 @@ export const initializeBooking = () => {
     }
 
     // Service toggles
-    const cateringCheckbox = document.getElementById('cateringService');
-    const transportCheckbox = document.getElementById('transportService');
-    
-    if (cateringCheckbox) {
-        cateringCheckbox.addEventListener('change', updateTotal);
+    if (cateringServiceCheckbox) {
+        cateringServiceCheckbox.addEventListener('change', updateTotal);
     }
     
-    if (transportCheckbox) {
-        transportCheckbox.addEventListener('change', updateTotal);
+    if (transportServiceCheckbox) {
+        transportServiceCheckbox.addEventListener('change', updateTotal);
     }
 
     // Confirm booking
@@ -360,39 +551,46 @@ export const initializeBooking = () => {
             e.preventDefault();
             e.stopPropagation();
 
-            if (!checkInDate || !checkOutDate) return;
+            if (!currentPackageDetails || !checkInDate) return;
+            // For items that require a date range, checkOutDate is also needed
+            if (currentPackageDetails.perNight && !checkOutDate) return;
 
             // Calculate booking total
             const totalPrice = updateTotal();
+            const nights = (checkInDate && checkOutDate) ? calculateNights(checkInDate, checkOutDate) : 1;
 
             // Get services
-            const services = [];
-            if (document.getElementById('cateringService')?.checked) {
-                services.push('Catering');
+            let itemName = currentPackageDetails.name;
+            if (currentPackageDetails.type === 'villa') {
+                const selectedServices = [];
+                if (cateringServiceCheckbox?.checked) selectedServices.push('Catering');
+                if (transportServiceCheckbox?.checked) selectedServices.push('Transport');
+                if (selectedServices.length > 0) {
+                    itemName += ` (${nights} nights, with ${selectedServices.join(' & ')})`;
+                } else {
+                    itemName += ` (${nights} nights)`;
+                }
+            } else if (currentPackageDetails.perNight) { // Yachts or per-day services
+                 itemName += ` (${nights} day${nights > 1 ? 's' : ''})`;
             }
-            if (document.getElementById('transportService')?.checked) {
-                services.push('Transport');
-            }
-
-            // Format property name
-            const propertyName = currentPackage ? 
-                currentPackage.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : '';
+            // For flat rate services, itemName is just currentPackageDetails.name
 
             if (calendarModal) {
                 calendarModal.classList.remove('active');
             }
 
-            // Add to cart if cart exists
-            if (window.usviCart) {
-                const nights = calculateNights(checkInDate, checkOutDate);
-                const imageName = getBasePropertyName(currentPackage);
-                const imagePath = `./public/Pictures/villas/${imageName}.jpg`;
-                
-                // Create a formatted name for display
-                const formattedName = `${propertyName} (${nights} nights${services.length ? ', with ' + services.join(' & ') : ''})`;
-                
-                // Add to cart with the correct image path
-                window.usviCart.addToCart(formattedName, totalPrice, imagePath);
+            if (window.shoppingCart) {
+                const imagePath = getImagePath(currentPackage);
+                const itemDescription = currentPackageDetails.description || itemName;
+
+                // Create a unique ID for the booking item, incorporating dates to allow re-booking same package for different dates
+                let itemIdSuffix = checkInDate.toISOString().split('T')[0];
+                if (checkOutDate && checkInDate.toISOString() !== checkOutDate.toISOString()) {
+                    itemIdSuffix += '_' + checkOutDate.toISOString().split('T')[0];
+                }
+                const itemId = `${currentPackage}-${itemIdSuffix}`;
+
+                window.shoppingCart.addToCart(itemName, totalPrice, imagePath, itemId, itemDescription);
                 
             } else {
                 alert("Cart system not initialized. Please refresh the page and try again.");

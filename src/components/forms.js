@@ -3,27 +3,64 @@ import { validateEmail, validatePhone } from './utils.js';
 
 export const initializeForms = () => {
   const newsletterForm = document.querySelector(CONFIG.UI.newsletterForm);
-  const retreatForm = document.querySelector(CONFIG.UI.retreatForm);
+  // Assuming CONFIG.UI.retreatForm points to the inquiry form, e.g., '#inquiryForm'
+  // If not, ensure CONFIG.UI.retreatForm is correctly defined in config.js
+  // For this example, let's assume it's the bookingInquiryModal's form
+  const retreatForm = document.getElementById('inquiryForm'); // More specific if ID is static
 
   newsletterForm?.addEventListener('submit', (e) => {
     e.preventDefault();
-    const email = document.getElementById('email') || document.getElementById('newsletter-email');
-    const phone = document.getElementById('phone') || document.getElementById('newsletter-phone');
-    const emailValue = email ? email.value : '';
-    const phoneValue = phone ? phone.value : '';
+    // Use specific IDs for newsletter form inputs
+    const emailInput = newsletterForm.querySelector('#newsletter-email');
+    const phoneInput = newsletterForm.querySelector('#newsletter-phone');
+    const firstNameInput = newsletterForm.querySelector('#firstName');
+    const lastNameInput = newsletterForm.querySelector('#lastName');
 
-    if (!validateEmail(email) || !validatePhone(phone)) {
-      alert('Please check your email and phone number.');
+    let isValid = true;
+    let errorMessages = [];
+
+    if (!firstNameInput || !firstNameInput.value.trim()) {
+        isValid = false;
+        errorMessages.push('First name is required.');
+    }
+    if (!lastNameInput || !lastNameInput.value.trim()) {
+        isValid = false;
+        errorMessages.push('Last name is required.');
+    }
+
+    if (!emailInput || !validateEmail(emailInput.value)) {
+      isValid = false;
+      errorMessages.push('Please enter a valid email address.');
+    }
+    if (!phoneInput || !validatePhone(phoneInput.value)) {
+      isValid = false;
+      errorMessages.push('Please enter a valid phone number.');
+    }
+
+    if (!isValid) {
+      alert('Please correct the following errors:\n- ' + errorMessages.join('\n- '));
       return;
     }
+
     alert('Thank you for subscribing!');
+    newsletterForm.reset(); // Optionally reset the form
   });
 
   retreatForm?.addEventListener('submit', (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const emailBody = `Start Date: ${formData.get('startDate')}\nEnd Date: ${formData.get('endDate')}\nGuests: ${formData.get('guests')}\nRooms: ${formData.get('rooms')}\nCatering: ${formData.get('catering')}`;
-    
-    window.location.href = `mailto:admin@usviretreats.com?subject=Retreat Inquiry&body=${encodeURIComponent(emailBody)}`;
+    const inquiryDetails = {
+      fullName: formData.get('fullName'),
+      email: formData.get('email'),
+      phone: formData.get('phone'),
+      specialRequests: formData.get('specialRequests'),
+      // You would also include bookingSummary details here, passed from booking.js or retrieved
+    };
+
+    console.log('Retreat Inquiry Submitted:', inquiryDetails);
+    alert('Thank you for your inquiry! We will get back to you soon.');
+    // TODO: Replace mailto with an actual backend submission (e.g., to a Firebase Cloud Function)
+    // Example: sendInquiryToBackend(inquiryDetails);
+    retreatForm.reset(); // Optionally reset the form
   });
 };

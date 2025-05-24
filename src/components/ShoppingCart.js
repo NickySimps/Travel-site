@@ -34,9 +34,6 @@ class ShoppingCart {
         }
     });
     
-    // Set up event delegation for "Add to Cart" buttons
-    this.setupAddToCartButtons();
-    
     return this;
   }
 
@@ -242,87 +239,48 @@ class ShoppingCart {
     document.head.appendChild(style);
   }
 
-  setupAddToCartButtons() {
-    // First, handle all existing cart-add-item buttons
-    document.querySelectorAll('.cart-add-item, .btn-AddToCart').forEach(button => {
-      // Remove existing event listeners by cloning and replacing
-      const newButton = button.cloneNode(true);
-      button.parentNode.replaceChild(newButton, button);
-      
-      newButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        console.log("Add to cart button clicked:", newButton);
-        
-        // Get product info from the button's data attributes
-        const productId = newButton.dataset.itemId || 'product-' + Date.now();
-        const productName = newButton.dataset.itemName || 'Product';
-        const productPrice = parseFloat(newButton.dataset.itemPrice || 0);
-        const productImg = newButton.dataset.itemImage || '';
-        
-        // Add to cart
-        this.addToCart(productName, productPrice, productImg);
-      });
-    });
+  addToCart(name, price, imgSrc, itemId = null, description = '') { // Added itemId and description parameters
+    console.log("Adding to cart:", { name, price, imgSrc, itemId, description });
     
-    // Event delegation for dynamically added buttons
-    document.addEventListener('click', (e) => {
-      // Target cart-add-item and btn-AddToCart classes
-      const button = e.target.closest('.cart-add-item, .btn-AddToCart');
-      
-      if (button) {
-        // Check if this click was already handled by the direct listeners above
-        // This is a simple check; more robust solutions might involve flags or checking event path.
-        if (e.target !== button) { // If the click was on a child of the button
-          // Potentially do nothing if the direct listener on `button` already fired.
-          // However, current setup replaces buttons, so direct listeners are on new cloned buttons.
-          // This delegated listener will catch clicks on original buttons if not properly replaced,
-          // or on buttons added after initial setup.
-        }
+    let existingItem = null;
+    if (itemId) {
+      existingItem = this.items.find(item => item.id === itemId);
+    } else {
+      // Fallback for items without a specific ID, match by name
+      // This part might become dead code if all additions use an itemId
+      existingItem = this.items.find(item => item.name === name && !item.id);
+    }
 
-        e.preventDefault();
-        e.stopPropagation();
-        console.log("Cart button clicked via delegation:", button);
-        
-        // Get product info from the button's data attributes
-        const productId = button.dataset.itemId || 'product-' + Date.now();
-        const productName = button.dataset.itemName || 'Product';
-        const productPrice = parseFloat(button.dataset.itemPrice || 0);
-        const productImg = button.dataset.itemImage || '';
-        
-        // Add to cart
-        this.addToCart(productName, productPrice, productImg);
-      }
-    });
-  }
-
-  addToCart(name, price, imgSrc) {
-    console.log("Adding to cart:", name, price, imgSrc);
-    
-    // Check if item already exists in cart
-    const existingItem = this.items.find(item => item.name === name);
-    
     if (existingItem) {
-      existingItem.quantity += 1;
-      existingItem.subtotal = existingItem.quantity * existingItem.price;
+      // For items with specific IDs (like bookings for specific dates),
+      // we typically don't increment quantity. We assume it's a unique booking.
+      // If you want to allow quantity updates for such items, this logic would need to change.
+      // For now, if an item with the same ID exists, we log it and don't add a duplicate or increment.
+      if (itemId) {
+          console.log(`Item ${itemId} ( ${name} ) already in cart. Price: ${price}`);
+          // Optionally, you could update the item's details here if they might change.
+          // For now, we'll just ensure it's in the cart and not change quantity.
+      }
     } else {
       this.items.push({
+        id: itemId, // Store the itemId
         name: name,
         price: price,
         imgSrc: imgSrc,
         quantity: 1,
+        description: description, // Store description
         subtotal: price
       });
     }
-    
+
     this.updateCart();
-    
+
     // Visual feedback
     if (this.cartFloat) {
       this.cartFloat.classList.add('pulse');
       setTimeout(() => this.cartFloat.classList.remove('pulse'), 500);
     }
-    
+
     // Show the cart panel briefly for visual feedback
     this.isMouseOverCart = true; // Temporarily set to true to allow showPanel
     this.showPanel();
@@ -376,7 +334,7 @@ const imgSrc = item.imgSrc || `./public/Pictures/villas/${item.name}.jpg`;
         </div>
         <div class="cart-item-details">
           <div class="cart-item-name">${item.name}</div>
-          <div class="cart-item-price">$${item.price.toFixed(2)} × ${item.quantity}</div>
+          <div class="cart-item-price">$${parseFloat(item.price).toFixed(2)} × ${item.quantity}</div>
         </div>
         <button class="remove-item" data-index="${index}">×</button>
       `;
@@ -455,10 +413,10 @@ const imgSrc = item.imgSrc || `./public/Pictures/villas/${item.name}.jpg`;
               </div>
               <div>
                 <div style="font-weight: bold;">${item.name}</div>
-                <div>$${item.price.toFixed(2)} x ${item.quantity}</div>
+                <div>$${parseFloat(item.price).toFixed(2)} x ${item.quantity}</div>
               </div>
               <div style="margin-left: auto; font-weight: bold;">
-                $${(item.price * item.quantity).toFixed(2)}
+                $${(parseFloat(item.price) * item.quantity).toFixed(2)}
               </div>
             </div>
           `).join('')}
@@ -531,11 +489,8 @@ const imgSrc = item.imgSrc || `./public/Pictures/villas/${item.name}.jpg`;
     modal.style.display = 'flex';
   }
 
-  completeOrder(modal) {
-    // Create order reference number
-    const orderRef = 'USVI-' + Math.floor(Math.random() * 1000000);
-    
-    // Show order confirmation
+  async completeOrder(modal) {
+    // Show "Processing..." message
     modal.innerHTML = `
       <div style="
         background-color: white;
@@ -544,31 +499,76 @@ const imgSrc = item.imgSrc || `./public/Pictures/villas/${item.name}.jpg`;
         width: 90%;
         max-width: 500px;
         text-align: center;
-        position: relative;
       ">
-        <h2>Thank You!</h2>
-        <p>Your order has been placed successfully.</p>
-        <p>We've sent a confirmation email with your order details.</p>
-        <p>Order reference: ${orderRef}</p>
-        <button class="close-confirmation" style="
-          margin-top: 20px;
-          padding: 10px 20px;
-          background-color: #87ceeb;
-          color: white;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-        ">Close</button>
+        <h2>Processing Your Order...</h2>
+        <p>Please wait.</p>
       </div>
     `;
-    
-    modal.querySelector('.close-confirmation').addEventListener('click', (e) => {
-      e.preventDefault();
-      modal.style.display = 'none';
-      // Clear cart after successful order
-      this.items = [];
+
+    // Create a more unique order reference number
+    const orderRef = 'USVI-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+    const userEmailInput = document.getElementById('checkout-email');
+    const userNameInput = document.getElementById('checkout-name');
+    const userPhoneInput = document.getElementById('checkout-phone');
+    const userAddressInput = document.getElementById('checkout-address');
+    const paymentMethodInput = document.getElementById('checkout-payment');
+
+    const orderDetails = {
+      orderRef: orderRef,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(), // Requires Firestore SDK
+      userName: userNameInput ? userNameInput.value : 'N/A',
+      userEmail: userEmailInput ? userEmailInput.value : 'N/A',
+      userPhone: userPhoneInput ? userPhoneInput.value : 'N/A',
+      userAddress: userAddressInput ? userAddressInput.value : 'N/A',
+      paymentMethod: paymentMethodInput ? paymentMethodInput.value : 'N/A',
+      items: this.items.map(item => ({ // Ensure items are plain objects
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        subtotal: item.subtotal,
+        imgSrc: item.imgSrc
+      })),
+      totalAmount: this.getCartTotal(),
+      status: 'pending_confirmation' // Initial status
+    };
+
+    try {
+      if (!firebase || !firebase.firestore) {
+        throw new Error("Firestore is not initialized. Make sure Firebase SDKs are loaded.");
+      }
+      const db = firebase.firestore();
+      await db.collection('orders').doc(orderRef).set(orderDetails);
+
+      // Show order confirmation
+      modal.innerHTML = `
+        <div style="background-color: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 500px; text-align: center;">
+          <h2>Thank You!</h2>
+          <p>Your order (Ref: ${orderRef}) has been placed successfully.</p>
+          <p>A confirmation email will be sent to ${orderDetails.userEmail} shortly.</p>
+          <button class="close-confirmation" style="margin-top: 20px; padding: 10px 20px; background-color: #87ceeb; color: white; border: none; border-radius: 5px; cursor: pointer;">Close</button>
+        </div>
+      `;
+      this.items = []; // Clear cart
       this.updateCart();
-    });
+    } catch (error) {
+      console.error("Error placing order:", error);
+      modal.innerHTML = `
+        <div style="background-color: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 500px; text-align: center;">
+          <h2>Order Failed</h2>
+          <p>There was an issue placing your order. Please try again or contact support.</p>
+          <p style="font-size: 0.8em; color: grey;">Error: ${error.message}</p>
+          <button class="close-confirmation" style="margin-top: 20px; padding: 10px 20px; background-color: #ccc; border: none; border-radius: 5px; cursor: pointer;">Close</button>
+        </div>
+      `;
+    } finally {
+      modal.querySelector('.close-confirmation')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        modal.style.display = 'none'; // Hide modal
+        if (modal.parentElement) { // Optional: remove modal from DOM if it was dynamically added by class
+            if(modal.classList.contains('checkout-modal')) modal.remove();
+        }
+      });
+    }
   }
 }
 

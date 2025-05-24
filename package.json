@@ -1,6 +1,9 @@
 {
   "dependencies": {
-    "firebase": "^11.4.0"
+    "@sendgrid/mail": "^8.1.5",
+    "firebase": "^11.4.0",
+    "firebase-admin": "^13.4.0",
+    "firebase-functions": "^6.3.2"
   },
   "name": "travel-site",
   "version": "1.0.0",
