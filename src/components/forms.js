@@ -3,10 +3,7 @@ import { validateEmail, validatePhone } from './utils.js';
 
 export const initializeForms = () => {
   const newsletterForm = document.querySelector(CONFIG.UI.newsletterForm);
-  // Assuming CONFIG.UI.retreatForm points to the inquiry form, e.g., '#inquiryForm'
-  // If not, ensure CONFIG.UI.retreatForm is correctly defined in config.js
-  // For this example, let's assume it's the bookingInquiryModal's form
-  const retreatForm = document.getElementById('inquiryForm'); // More specific if ID is static
+  const retreatForm = document.querySelector(CONFIG.UI.retreatForm);
 
   newsletterForm?.addEventListener('submit', (e) => {
     e.preventDefault();

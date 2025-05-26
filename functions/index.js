@@ -19,8 +19,10 @@ let mg; // Declare mg here to be initialized after config is loaded
 // For local testing, you might set it directly (not recommended for production)
 // const API_KEY = "YOUR_MAILGUN_API_KEY";
 // const DOMAIN = "YOUR_MAILGUN_DOMAIN";
+//
+// Also set your admin email:
+// firebase functions:config:set app.admin_email="your-admin-email@example.com"
 
-const ADMIN_EMAIL = "your-admin-email@example.com"; // REPLACE with your admin email
 // Note: For Mailgun sandbox, 'to' emails must be authorized recipients.
 exports.sendOrderConfirmationEmail = functions.firestore
     .document("orders/{orderId}")
@@ -35,6 +37,7 @@ exports.sendOrderConfirmationEmail = functions.firestore
       if (!mg) {
         mg = mailgun.client({
             username: "api",
+            // key: API_KEY, // For local testing if not using firebase config
             key: functions.config().mailgun.key,
         });
       }
@@ -54,6 +57,7 @@ exports.sendOrderConfirmationEmail = functions.firestore
         new Date().toLocaleString();
 
       const mailgunDomain = functions.config().mailgun.domain;
+      const adminEmail = functions.config().app.admin_email || "fallback-admin-email@example.com"; // Fallback just in case
 
       // Email to User
       const userEmailPayload = {
@@ -75,8 +79,8 @@ exports.sendOrderConfirmationEmail = functions.firestore
                 Address: ${orderData.userAddress || "N/A"}<br>
                 Payment Method: ${orderData.paymentMethod || "N/A"}
             </p>
-            <p>Order Placed: ${orderPlacedDate}</p>
-            <p>If you have any questions, please contact us at ${ADMIN_EMAIL}.</p>
+            <p>Order Placed: ${orderPlacedDate}</p>            
+            <p>If you have any questions, please contact us at ${adminEmail}.</p>
             <p>Thanks,<br>The USVI Retreats Team</p>
         `,
       };
@@ -85,7 +89,7 @@ exports.sendOrderConfirmationEmail = functions.firestore
       const adminEmailPayload = {
         from: `USVI Retreats System <postmaster@${mailgunDomain}>`,
         // Ensure ADMIN_EMAIL is an authorized recipient if using Mailgun sandbox
-        to: [ADMIN_EMAIL],
+        to: [adminEmail],
         subject: `New Order Received - #${orderData.orderRef}`,
         html: `
             <h1>New Order Received!</h1>
@@ -110,7 +114,7 @@ exports.sendOrderConfirmationEmail = functions.firestore
         await mg.messages.create(mailgunDomain, userEmailPayload);
         console.log(`User confirmation email sent to ${orderData.userEmail} for order ${orderId}`);
         await mg.messages.create(mailgunDomain, adminEmailPayload);
-        console.log(`Admin notification email sent to ${ADMIN_EMAIL} for order ${orderId}`);
+        console.log(`Admin notification email sent to ${adminEmail} for order ${orderId}`);
         await snap.ref.update({ status: "confirmation_sent", emailSentTimestamp: admin.firestore.FieldValue.serverTimestamp() });
       } catch (error) {
         console.error(`Error sending emails for order ${orderId}:`, error.status, error.message, error.details);

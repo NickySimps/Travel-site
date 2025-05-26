@@ -162,14 +162,6 @@ export const initializeBooking = () => {
         }
     };
 
-    const maxGuests = {
-        'villa-alhambra': 6,
-        'pool-villa': 4,
-        'guest-villa': 4,
-        'tower-villa': 4,
-        'garden-villa': 2
-    };
-
     const months = [
         'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'

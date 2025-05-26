@@ -10,7 +10,7 @@ export const CONFIG = {
     backToTop: '#backToTop',
     header: 'header',
     newsletterForm: '.newsletter-form',
-    retreatForm: '#retreat-form'
+    retreatForm: '#inquiryForm' // Assuming 'inquiryForm' is the ID of the retreat/inquiry form
   },
   CUSTOM_CART: {
     storageKey: 'usviRetreatCart'
