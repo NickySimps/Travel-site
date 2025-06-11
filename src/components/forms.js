@@ -9,6 +9,47 @@ export const initializeForms = () => {
     "creativeRetreatForm"
   );
 
+  // Store API for each multi-step form instance
+  const multiStepInstances = new Map();
+
+  // Helper to insert an error message after/near a field
+  const insertErrorMessage = (fieldElement, message) => {
+    // Remove existing error message for this field first
+    clearErrorMessage(fieldElement);
+
+    const errorElement = document.createElement('span');
+    errorElement.className = 'error-message';
+    errorElement.textContent = message;
+
+    // Try to insert within the form-group if it exists and the field is part of it
+    const formGroup = fieldElement.closest('.form-group');
+    if (formGroup && formGroup.contains(fieldElement)) {
+      // Append to form group, making it appear after all elements in the group or as per CSS flow
+      formGroup.appendChild(errorElement);
+    } else {
+      // Fallback: insert directly after the fieldElement
+      fieldElement.parentNode.insertBefore(errorElement, fieldElement.nextSibling);
+    }
+    fieldElement.classList.add('error'); // Add error class to the field or group container
+  };
+
+  // Helper to clear an error message for a field
+  const clearErrorMessage = (fieldElement) => {
+    const formGroup = fieldElement.closest('.form-group');
+    let errorNode = formGroup ? formGroup.querySelector('.error-message') : null;
+
+    if (!errorNode && fieldElement.nextSibling && fieldElement.nextSibling.classList && fieldElement.nextSibling.classList.contains('error-message')) {
+      errorNode = fieldElement.nextSibling;
+    }
+    errorNode?.remove();
+    fieldElement.classList.remove('error');
+  };
+
+  const clearAllFormErrors = (formElement) => {
+    formElement.querySelectorAll('.error-message').forEach(el => el.remove());
+    formElement.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+  };
+
   newsletterForm?.addEventListener("submit", (e) => {
     e.preventDefault();
     // Use specific IDs for newsletter form inputs
@@ -17,36 +58,36 @@ export const initializeForms = () => {
     const firstNameInput = newsletterForm.querySelector("#firstName");
     const lastNameInput = newsletterForm.querySelector("#lastName");
 
+    clearAllFormErrors(newsletterForm);
     let isValid = true;
-    let errorMessages = [];
 
     if (!firstNameInput || !firstNameInput.value.trim()) {
       isValid = false;
-      errorMessages.push("First name is required.");
+      insertErrorMessage(firstNameInput, "First name is required.");
     }
     if (!lastNameInput || !lastNameInput.value.trim()) {
       isValid = false;
-      errorMessages.push("Last name is required.");
+      insertErrorMessage(lastNameInput, "Last name is required.");
     }
 
     if (!emailInput || !validateEmail(emailInput.value)) {
       isValid = false;
-      errorMessages.push("Please enter a valid email address.");
+      insertErrorMessage(emailInput, "Please enter a valid email address.");
     }
     if (!phoneInput || !validatePhone(phoneInput.value)) {
       isValid = false;
-      errorMessages.push("Please enter a valid phone number.");
+      insertErrorMessage(phoneInput, "Please enter a valid 10-digit phone number.");
     }
 
     if (!isValid) {
-      alert(
-        "Please correct the following errors:\n- " + errorMessages.join("\n- ")
-      );
+      const firstErrorField = newsletterForm.querySelector('.error');
+      firstErrorField?.focus();
       return;
     }
 
     alert("Thank you for subscribing!");
-    newsletterForm.reset(); // Optionally reset the form
+    newsletterForm.reset();
+    clearAllFormErrors(newsletterForm);
   });
 
   retreatForm?.addEventListener("submit", (e) => {
@@ -67,72 +108,94 @@ export const initializeForms = () => {
     retreatForm.reset(); // Optionally reset the form
   });
 
-  // Helper to display errors - for a better UX, this would update the DOM near the field
-  const displayFormErrors = (formElement, errors) => {
-    // For now, using alert. Ideally, this would inject messages into the HTML.
-    // e.g., find a dedicated error container or create error messages next to inputs.
-    if (errors.length > 0) {
-      alert(
-        "Please correct the following errors:\n- " + errors.join("\n- ")
-      );
-      return false;
-    }
-    return true;
-  };
-
+  // Define initializeMultiStepForm before it's used by event listeners that might need its API
   const initializeMultiStepForm = (formElement) => {
     if (!formElement) return;
 
     const steps = Array.from(formElement.querySelectorAll(".form-step"));
     const nextButtons = formElement.querySelectorAll(".btn-next");
     const prevButtons = formElement.querySelectorAll(".btn-prev");
-    let currentStep = 0;
+    // let currentStep = 0; // Replaced by dataset property
+
+    // Initialize current step on the form element itself
+    formElement.dataset.currentStep = "0";
+
+    const getCurrentStepIndex = () => parseInt(formElement.dataset.currentStep || "0");
 
     const showStep = (stepIndex) => {
       steps.forEach((step, index) => {
         step.classList.toggle("active-step", index === stepIndex);
       });
-      currentStep = stepIndex;
+      formElement.dataset.currentStep = stepIndex;
       // Optional: Scroll to the top of the form when changing steps
       formElement.scrollIntoView({ behavior: "smooth" });
     };
 
     const validateStep = (stepIndex) => {
-      const currentStepFields = steps[stepIndex].querySelectorAll("[required]");
+      const currentStepElement = steps[stepIndex];
+      const currentStepFields = currentStepElement.querySelectorAll("[required]");
       let stepIsValid = true;
-      currentStepFields.forEach(field => {
+      let firstErrorFieldInStep = null;
+
+      // Clear previous errors in this step before re-validating
+      currentStepFields.forEach(field => clearErrorMessage(field));
+      // Also clear errors from potential group containers if they got the .error class
+      currentStepElement.querySelectorAll('.form-group.error .error-message').forEach(em => em.remove());
+      currentStepElement.querySelectorAll('.form-group.error').forEach(fg => fg.classList.remove('error'));
+      
+      for (const field of currentStepFields) {
         if ((field.type === "radio" || field.type === "checkbox")) {
           const groupName = field.name;
+          // Check if any radio/checkbox in the group (within the form) is checked
           if (!formElement.querySelector(`input[name="${groupName}"]:checked`)) {
-            // Basic alert, ideally show error near field
-            // alert(`Please make a selection for ${field.closest('.form-group').querySelector('label').textContent.replace('(Required)','').trim()}`);
-            field.focus();
+            const groupLabelElement = field.closest('.form-group')?.querySelector('label');
+            const fieldDisplayName = groupLabelElement ? groupLabelElement.textContent.replace('(Required)','').trim() : groupName;
+            // Attach error to the form-group or the first field of the group
+            const errorTarget = field.closest('.form-group') || field;
+            insertErrorMessage(errorTarget, `Please make a selection for ${fieldDisplayName}.`);            
+            if (!firstErrorFieldInStep) firstErrorFieldInStep = formElement.querySelector(`input[name="${groupName}"]`) || field;
             stepIsValid = false;
           }
         } else if (!field.value.trim()) {
-          // Basic alert, ideally show error near field
-          // alert(`${field.previousElementSibling.textContent.replace('(Required)','').trim()} is required.`);
-          field.focus();
+          let fieldDisplayName = field.name;
+          const labelElement = field.closest('.form-group')?.querySelector(`label[for="${field.id}"]`) || field.previousElementSibling;
+          if (labelElement) {
+            fieldDisplayName = labelElement.textContent.replace('(Required)','').trim();
+          }
+          insertErrorMessage(field, `${fieldDisplayName} is required.`);
+          if (!firstErrorFieldInStep) firstErrorFieldInStep = field;
           stepIsValid = false;
         }
-      });
+        // If we want to stop at the first error within the step:
+        if (!stepIsValid && firstErrorFieldInStep) break; 
+      }
+
+      if (!stepIsValid && firstErrorFieldInStep) {
+        // Only focus if this step (stepIndex) is the one currently displayed (active)
+        // This is primarily for "Next" button clicks.
+        if (stepIndex === getCurrentStepIndex()) {
+            firstErrorFieldInStep.focus();
+        }
+      }
       return stepIsValid;
     };
 
     nextButtons.forEach(button => {
       button.addEventListener("click", () => {
-        // if (validateStep(currentStep)) { // Optional: validate before going to next step
-          if (currentStep < steps.length - 1) {
-            showStep(currentStep + 1);
+        const activeStepIndex = getCurrentStepIndex();
+        if (validateStep(activeStepIndex)) { // Validate current active step
+          if (activeStepIndex < steps.length - 1) {
+            showStep(activeStepIndex + 1);
           }
-        // }
+        }
       });
     });
 
     prevButtons.forEach(button => {
       button.addEventListener("click", () => {
-        if (currentStep > 0) {
-          showStep(currentStep - 1);
+        const activeStepIndex = getCurrentStepIndex();
+        if (activeStepIndex > 0) {
+          showStep(activeStepIndex - 1);
         }
       });
     });
@@ -140,8 +203,22 @@ export const initializeForms = () => {
     showStep(0); // Show the first step initially
   };
 
+  // Initialize the multi-step functionality for the creative retreat form
+  // Do this before setting up the submit listener that might depend on multiStepInstances
+  if (creativeRetreatApplicationForm) {
+    initializeMultiStepForm(creativeRetreatApplicationForm);
+    // Store the API for the creativeRetreatApplicationForm specifically if needed elsewhere,
+    // though the submit handler below will retrieve it via multiStepInstances.get()
+    multiStepInstances.set(creativeRetreatApplicationForm, {
+        showStep: (idx) => steps.forEach((s, i) => s.classList.toggle("active-step", i === idx)), // Simplified showStep for direct use
+        getSteps: () => Array.from(creativeRetreatApplicationForm.querySelectorAll(".form-step")),
+        getCurrentStepIndex: () => parseInt(creativeRetreatApplicationForm.dataset.currentStep || "0")
+    });
+  }
+
   creativeRetreatApplicationForm?.addEventListener("submit", (e) => {
     e.preventDefault();
+    clearAllFormErrors(creativeRetreatApplicationForm);
     const formData = new FormData(e.target);
     const applicationDetails = {
       fullName: formData.get("fullName")?.trim(),
@@ -160,62 +237,130 @@ export const initializeForms = () => {
       anythingElse: formData.get("anythingElse")?.trim(),
     };
 
-    let errorMessages = [];
+    let overallIsValid = true;
+    let fieldToFocus = null;
 
-    // Define required fields and their user-friendly names
-    const requiredFields = {
-      fullName: "Full Name",
-      // email is handled separately due to specific validation
-      location: "Location",
-      retreatDates: "Retreat dates selection",
-      whatYouCreate: 'Response for "What do you create, build or lead?"',
-      craft: 'Response for "What do you consider your craft?"',
-      mostAlive: 'Response for "Where do you feel most alive?"',
-      whyDrawn: 'Response for "Why are you drawn to this retreat?"',
-      connection: 'Response for "What kind of connection are you craving?"',
-      hopeToReturn: 'Response for "What do you hope to return with?"',
-      paymentPreference: "Payment preference",
+    // Helper for unified validation within submit handler
+    const checkField = (value, validatorFn, element, message, isRadioOrCheckboxGroup = false, groupName = null) => {
+        let currentFieldIsValid = true;
+        if (isRadioOrCheckboxGroup) {
+            // For radio/checkbox, 'value' is not used directly; check formData
+            if (!formData.get(groupName)) {
+                currentFieldIsValid = false;
+            }
+        } else if (validatorFn && (value === null || value === undefined || !validatorFn(value))) { // Validator fails or value is null/undefined for validators
+            currentFieldIsValid = false;
+        } else if (!validatorFn && (value === null || value === undefined || value.trim() === "")) { // No validator, check for empty trim
+            currentFieldIsValid = false;
+        }
+
+        if (!currentFieldIsValid) {
+            if (element) insertErrorMessage(element, message);
+            if (!fieldToFocus && element) {
+                // For groups, focus on the first input of the group
+                fieldToFocus = isRadioOrCheckboxGroup ? formElement.querySelector(`input[name="${groupName}"]`) : element;
+            }
+            overallIsValid = false;
+        } else if (element) {
+            clearErrorMessage(element); // Clear error if field is now valid
+        }
     };
 
-    for (const field in requiredFields) {
-      if (!applicationDetails[field]) {
-        errorMessages.push(`${requiredFields[field]} is required.`);
-      }
+    // --- Field Validations ---
+    // Define required fields and their user-friendly names
+    const requiredFieldsMap = {
+      fullName: { name: "Full Name", id: "crFullName" },
+      location: { name: "Location", id: "crLocation" },
+      // retreatDates is handled specially below
+      whatYouCreate: { name: 'Response for "What do you create, build or lead?"', id: "crWhatYouCreate" },
+      craft: { name: 'Response for "What do you consider your craft?"', id: "crCraft" },
+      mostAlive: { name: 'Response for "Where do you feel most alive?"', id: "crMostAlive" },
+      whyDrawn: { name: 'Response for "Why are you drawn to this retreat?"', id: "crWhyDrawn" },
+      connection: { name: 'Response for "What kind of connection are you craving?"', id: "crConnection" },
+      hopeToReturn: { name: 'Response for "What do you hope to return with?"', id: "crHopeToReturn" },
+      // paymentPreference is handled specially below
+    };
+
+    // Validate fields from requiredFieldsMap (mostly text inputs/textareas)
+    for (const fieldKey in requiredFieldsMap) {
+      const fieldDetail = requiredFieldsMap[fieldKey];
+      const formFieldElement = document.getElementById(fieldDetail.id);
+      checkField(applicationDetails[fieldKey], null, formFieldElement, `${fieldDetail.name} is required.`);
     }
 
-    if (!applicationDetails.email || !validateEmail(applicationDetails.email)) {
-      errorMessages.push("A valid Email is required.");
+    // Special handling for retreatDates
+    const retreatDatesValue = formData.get("retreatDates") || formData.get("crHiddenRetreatDates");
+    const crRetreatDatesSelect = document.getElementById('crRetreatDates');
+    const crSelectedDatesFromCartDiv = document.getElementById('crSelectedDatesFromCart');
+    let retreatDatesErrorTargetElement = crRetreatDatesSelect.style.display !== 'none' ?
+                                   crRetreatDatesSelect :
+                                   crSelectedDatesFromCartDiv;
+    // Target the form-group for error message if possible
+    retreatDatesErrorTargetElement = retreatDatesErrorTargetElement?.closest('.form-group') || retreatDatesErrorTargetElement;
+    checkField(retreatDatesValue, (val) => !!val, retreatDatesErrorTargetElement, "Retreat dates selection is required.");
+
+
+    // Special handling for paymentPreference radio group
+    const paymentGroupElement = document.getElementById('paymentPreferenceGroup') || 
+                              creativeRetreatApplicationForm.querySelector('input[name="paymentPreference"]')?.closest('.form-group');
+    checkField(null, null, paymentGroupElement, "Payment preference is required.", true, "paymentPreference");
+
+    // Email validation (required and format)
+    const emailField = document.getElementById("crEmail");
+    if (!applicationDetails.email) {
+        checkField(applicationDetails.email, null, emailField, "Email is required.");
+    } else { // Email is present, check format
+        checkField(applicationDetails.email, validateEmail, emailField, "Please enter a valid email format.");
     }
-    // Optional: Validate phone if a value is provided
+
+    // Phone validation (optional, but format if present)
+    const phoneField = document.getElementById("crPhone");
     if (applicationDetails.phone && !validatePhone(applicationDetails.phone)) {
-      errorMessages.push("Please enter a valid phone number if you choose to provide one.");
+      // This will mark overallIsValid = false and set fieldToFocus if not already set.
+      checkField(applicationDetails.phone, validatePhone, phoneField, "Please enter a valid 10-digit phone number.");
+    } else if (phoneField && applicationDetails.phone) { // If phone is present and valid, ensure no error message
+        clearErrorMessage(phoneField);
     }
 
-    if (!displayFormErrors(creativeRetreatApplicationForm, errorMessages)) {
+
+    if (!overallIsValid) {
+      if (fieldToFocus) {
+        const formApi = multiStepInstances.get(creativeRetreatApplicationForm);
+        if (formApi) {
+            const stepElement = fieldToFocus.closest(".form-step");
+            const allSteps = formApi.getSteps();
+            if (stepElement && allSteps) {
+              const stepIndex = allSteps.indexOf(stepElement);
+              if (stepIndex !== -1 && stepIndex !== formApi.getCurrentStepIndex()) {
+                // Manually call the showStep from the form's specific API instance
+                const stepsNodeList = creativeRetreatApplicationForm.querySelectorAll(".form-step");
+                stepsNodeList.forEach((step, idx) => {
+                    step.classList.toggle("active-step", idx === stepIndex);
+                });
+                creativeRetreatApplicationForm.dataset.currentStep = stepIndex;
+                creativeRetreatApplicationForm.scrollIntoView({ behavior: "smooth" });
+              }
+            }
+        }
+        // Ensure the field is visible before focusing. The step change should handle this.
+        fieldToFocus.focus();
+      }
       return;
     }
 
     console.log("Creative Retreat Application Submitted:", applicationDetails);
-
-    // Here you would typically send the data to a backend service or email
-    // For example, using EmailJS if configured:
-    // emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', applicationDetails)
-    //   .then((response) => {
-    //      console.log('SUCCESS!', response.status, response.text);
-    //      alert('Thank you for your application! We will review it and get back to you soon.');
-    //      creativeRetreatApplicationForm.reset();
-    //   }, (error) => {
-    //      console.log('FAILED...', error);
-    //      alert('Failed to submit application. Please try again or contact us directly.');
-    //   });
     alert(
       "Thank you for your application! We will review it and get back to you soon.\n(Data logged to console)"
     );
     creativeRetreatApplicationForm.reset();
+    clearAllFormErrors(creativeRetreatApplicationForm);
+    const formApi = multiStepInstances.get(creativeRetreatApplicationForm);
+    if (formApi) { // Reset to the first step
+        const stepsNodeList = creativeRetreatApplicationForm.querySelectorAll(".form-step");
+        stepsNodeList.forEach((step, idx) => step.classList.toggle("active-step", idx === 0));
+        creativeRetreatApplicationForm.dataset.currentStep = "0";
+    }
   });
-
-  // Initialize the multi-step functionality for the creative retreat form
-  initializeMultiStepForm(creativeRetreatApplicationForm);
 
   // Pre-fill form data if available
   if (creativeRetreatApplicationForm) {
