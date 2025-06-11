@@ -326,7 +326,7 @@ class ShoppingCart {
       itemElement.className = 'cart-item';
       
       // Use a default image if none is provided
-const imgSrc = item.imgSrc || `./public/Pictures/villas/${item.name}.jpg`;
+const imgSrc = item.imgSrc || `./public/Pictures/villas/${item.name}.webp`;
       
       itemElement.innerHTML = `
         <div style="width: 40px; height: 40px; margin-right: 10px;">
@@ -409,7 +409,7 @@ const imgSrc = item.imgSrc || `./public/Pictures/villas/${item.name}.jpg`;
           ${this.items.map(item => `
             <div style="display: flex; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #eee;">
               <div style="width: 50px; height: 50px; margin-right: 10px;">
-                <img src="${item.imgSrc || `./public/Pictures/villas/${item.name}.jpg`}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;">
+                <img src="${item.imgSrc || `./public/Pictures/villas/${item.name}.webp`}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;">
               </div>
               <div>
                 <div style="font-weight: bold;">${item.name}</div>

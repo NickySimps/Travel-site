@@ -36,69 +36,60 @@ export const initializeBooking = () => {
     const transportServiceCheckbox = document.getElementById('transportService');
 
     const bookedDates = {
-        'villa-alhambra': [
-            { start: new Date(2024, 2, 20), end: new Date(2024, 2, 23) },
-            { start: new Date(2024, 3, 3), end: new Date(2024, 3, 6) }
+        'estate-st-peter': [ // All retreats/estate bookings will use this key
+            { start: new Date(2024, 6, 10), end: new Date(2024, 6, 13) }, // Example: July 10-13, 2024
+            { start: new Date(2024, 7, 5), end: new Date(2024, 7, 10) }   // Example: August 5-10, 2024
         ],
-        'pool-villa': [
-            { start: new Date(2024, 2, 25), end: new Date(2024, 2, 28) }
-        ]
-        // Add more booked dates as needed
     };
 
     // Centralized package details
     const packageDetailsStore = {
-        // Villas
-        'villa-alhambra': {
-            type: 'villa',
-            name: 'Villa Alhambra',
-            basePrice: 2500,
-            perNight: true,
-            services: { catering: 750, transport: 550, both: 1300 }, // Daily/flat rates for modal services
+        // Retreat Packages
+        'artist-retreat': {
+            type: 'retreat',
+            name: 'Artist Retreat',
+            basePrice: 27000,
+            perNight: false, // Package price
             maxGuests: 6,
-            imageName: 'Villa Alhambra', // Filename without extension for villas, assuming .jpg
-            description: "Main villa with great room and luxury suites"
+            fixedDurationNights: 3, // 4 Days, 3 Nights_
+            imageName: 'Villa Alhambra.webp',
+            description: "St Thomas Villa (6 Guests/4 Day, 3 Nights). Includes Yacht, Catering, Airport Transport/Insurance.",
+            uiSections: {
+                guestCount: true,
+                roomCount: false, 
+                services: true, // To show "included services" message
+            }
         },
-        'pool-villa': {
-            type: 'villa',
-            name: 'Pool Villa',
-            basePrice: 1800,
-            perNight: true,
-            services: { catering: 750, transport: 550, both: 1300 },
-            maxGuests: 4,
-            imageName: 'Pool Villa',
-            description: "Pool-side villa with direct deck access"
+        'external-host-retreat': {
+            type: 'retreat',
+            name: 'External Host Retreat',
+            basePrice: 30000,
+            perNight: false, // Package price
+            maxGuests: 20, // Max capacity of Estate St. Peter
+            imageName: 'Tower Villa.webp',
+            description: "Base Package for External Hosts. Includes St. Thomas Villa, Catering (1x Meal/Day).",
+            upgrades: [
+                { id: 'transportPackage', name: 'Transport Package (Car/Host Accommodations)', price: 3500, checked: false },
+                { id: 'conciergeLiaison', name: '1x Concierge, 1x Liaison', price: 5000, checked: false },
+                { id: 'additionalMeal', name: '1x Additional Meal/day', price: 3000, checked: false }
+            ],
+            uiSections: {
+                guestCount: true,
+                roomCount: false, 
+                services: true // To show upgrades
+            }
         },
-        'guest-villa': {
-            type: 'villa',
-            name: 'Guest Villa',
-            basePrice: 1500,
-            perNight: true,
-            services: { catering: 750, transport: 550, both: 1300 },
-            maxGuests: 4,
-            imageName: 'Guest Villa',
-            description: "Adjacent to second pool with outdoor bar"
-        },
-        'tower-villa': {
-            type: 'villa',
-            name: 'Tower Villa',
-            basePrice: 3300,
-            perNight: true,
-            services: { catering: 750, transport: 550, both: 1300 },
-            maxGuests: 4,
-            imageName: 'Tower Villa',
-            description: "Featuring 360° rooftop views"
-        },
-        'garden-villa': {
-            type: 'villa',
-            name: 'Garden Villa',
-            basePrice: 2800,
-            perNight: true,
-            services: { catering: 750, transport: 550, both: 1300 },
-            maxGuests: 2,
-            imageName: 'Garden Villa',
-            description: "Private cottage with garden views"
-        },
+        // Example Villa (if any were to remain or be re-added, ensure unique keys)
+        // 'estate-st-peter-booking': { // Represents booking the entire estate as a "villa"
+        //     type: 'villa',
+        //     name: 'Estate St. Peter (Full Property)',
+        //     basePrice: 7000, // Example daily rate for whole estate
+        //     perNight: true,
+        //     services: { catering: 750, transport: 550, both: 1300 },
+        //     maxGuests: 20,
+        //     imageName: 'Estate St Peter.webp', // General estate image
+        //     description: "Book the entire five-villa estate for an exclusive experience."
+        // },
         // Yachts
         'luxury-yacht': {
             type: 'yacht',
@@ -133,7 +124,7 @@ export const initializeBooking = () => {
             name: 'Private Chef & Catering',
             basePrice: 750, // Daily rate
             perNight: true, // Per day
-            imageName: 'catering.jpg', // Filename with extension
+            imageName: 'catering.webp', // Filename with extension
             description: "Personalized dining experience in your villa"
         },
         'transport-insurance': {
@@ -141,7 +132,7 @@ export const initializeBooking = () => {
             name: 'Airport Transfer & Insurance',
             basePrice: 550, // Flat rate
             perNight: false,
-            imageName: 'transport.jpg',
+            imageName: 'transport.webp',
             description: "Seamless travel experience with complete coverage"
         },
         'concierge-service': { // Added based on accommodations.html
@@ -149,7 +140,7 @@ export const initializeBooking = () => {
             name: 'Premium Concierge Service',
             basePrice: 200, // Daily rate
             perNight: true,
-            imageName: 'concierge.jpg',
+            imageName: 'concierge.webp',
             description: "Your personal assistant in paradise"
         },
         'complete-package': { // Added based on accommodations.html
@@ -157,7 +148,7 @@ export const initializeBooking = () => {
             name: 'Complete Service Package',
             basePrice: 1000, // Assuming flat rate, adjust if per day
             perNight: false,
-            imageName: 'premium.jpg',
+            imageName: 'premium.webp',
             description: "All-inclusive luxury experience"
         }
     };
@@ -184,28 +175,37 @@ export const initializeBooking = () => {
     };
 
     const isDateBooked = (date) => {
-        if (!currentPackage || !bookedDates[currentPackage]) return false;
+        // Retreats book the 'estate-st-peter'. Other types use their own package key.
+        const bookingKey = (currentPackageDetails && currentPackageDetails.type === 'retreat') ? 'estate-st-peter' : currentPackage;
 
-        return bookedDates[currentPackage].some(booking => {
+        if (!bookingKey || !bookedDates[bookingKey]) return false;
+
+        return bookedDates[bookingKey].some(booking => {
             const bookingStart = new Date(booking.start);
+            bookingStart.setHours(0,0,0,0);
             const bookingEnd = new Date(booking.end);
-            return date >= bookingStart && date <= bookingEnd;
+            bookingEnd.setHours(0,0,0,0);
+            const checkDate = new Date(date);
+            checkDate.setHours(0,0,0,0);
+            return checkDate >= bookingStart && checkDate <= bookingEnd;
         });
     };
 
     const getImagePath = (pkgId) => {
         const details = packageDetailsStore[pkgId];
-        if (!details || !details.imageName) return './public/Pictures/default.jpg'; // Fallback
+        if (!details || !details.imageName) return './public/Pictures/default.webp'; // Fallback
 
         switch (details.type) {
             case 'villa':
-                return `./public/Pictures/villas/${details.imageName}.jpg`;
+                return `./public/Pictures/villas/${details.imageName}`; // Assumes villas have .webp implicitly
+            case 'retreat':
+                return `./public/Pictures/villas/${details.imageName}`;
             case 'yacht':
                 return `./public/Pictures/yachts/${details.imageName}`;
             case 'service':
                 return `./public/Pictures/accommodations/${details.imageName}`;
             default:
-                return './public/Pictures/default.jpg';
+                return './public/Pictures/default.webp';
         }
     };
 
@@ -216,29 +216,38 @@ export const initializeBooking = () => {
         }
 
         let total = 0;
-        const nights = (checkOutDate && checkInDate) ? calculateNights(checkInDate, checkOutDate) : 1; // Default to 1 night/day if no checkout
+        const nights = (currentPackageDetails.fixedDurationNights)
+            ? currentPackageDetails.fixedDurationNights
+            : (checkOutDate && checkInDate) ? calculateNights(checkInDate, checkOutDate) : 1;
 
-        if (currentPackageDetails.perNight) {
-            total = currentPackageDetails.basePrice * (nights > 0 ? nights : 1);
+        if (currentPackageDetails.type === 'retreat') {
+            total = currentPackageDetails.basePrice;
+            if (currentPackageDetails.upgrades) {
+                currentPackageDetails.upgrades.forEach(upgrade => {
+                    if (upgrade.checked) {
+                        total += upgrade.price;
+                    }
+                });
+            }
+        } else if (currentPackageDetails.perNight) {
+            total = currentPackageDetails.basePrice * (nights > 0 ? nights : 1); // Villas, Yachts, per-day services
         } else {
             total = currentPackageDetails.basePrice; // Flat rate
         }
 
         // Add costs for modal-selected services (only for villas)
         let serviceCost = 0;
-        if (currentPackageDetails.type === 'villa' && currentPackageDetails.services) {
-            const hasCatering = cateringServiceCheckbox?.checked || false;
-            const hasTransport = transportServiceCheckbox?.checked || false;
+        if (currentPackageDetails.type === 'villa' && currentPackageDetails.services) { // Original villa services
+            if (cateringServiceCheckbox && transportServiceCheckbox) { // Ensure they exist
+                const hasCatering = cateringServiceCheckbox.checked;
+                const hasTransport = transportServiceCheckbox.checked;
 
-            if (hasCatering && hasTransport) {
-                // If 'both' is a combined rate for the duration, use it. Otherwise, sum daily rates.
-                // Assuming services.both is a combined flat addon, or services.catering/transport are daily
-                serviceCost += (currentPackageDetails.services.both || (currentPackageDetails.services.catering + currentPackageDetails.services.transport)) * (currentPackageDetails.services.catering ? nights : 1);
-            } else if (hasCatering) {
-                serviceCost += currentPackageDetails.services.catering * nights;
-            } else if (hasTransport) {
-                // Transport might be flat or per-stay, adjust if it's daily
-                serviceCost += currentPackageDetails.services.transport; // Assuming flat for transport if selected alone
+                if (hasCatering) {
+                    serviceCost += currentPackageDetails.services.catering * (nights > 0 ? nights : 1);
+                }
+                if (hasTransport) { // Assuming transport is flat rate addon for villas here
+                    serviceCost += currentPackageDetails.services.transport;
+                }
             }
         }
         total += serviceCost;
@@ -253,21 +262,31 @@ export const initializeBooking = () => {
 
     const updateDateDisplay = () => {
         if (checkInDisplay && checkOutDisplay) {
-            checkInDisplay.textContent = `Check-in: ${formatDate(checkInDate)}`;
-            checkOutDisplay.textContent = `Check-out: ${formatDate(checkOutDate)}`;
-            if (currentPackageDetails && (currentPackageDetails.type === 'service' && !currentPackageDetails.perNight)) {
-                 checkInDisplay.textContent = `Service Date: ${formatDate(checkInDate)}`;
-                 checkOutDisplay.textContent = `Ends: ${formatDate(checkInDate)}`; // For flat rate services, start and end are same
+            if (currentPackageDetails && currentPackageDetails.type === 'retreat' && currentPackageDetails.fixedDurationNights && checkInDate) {
+                const durationMillis = currentPackageDetails.fixedDurationNights * 24 * 60 * 60 * 1000;
+                const autoCheckoutDate = new Date(checkInDate.getTime() + durationMillis);
+                checkInDisplay.textContent = `Retreat Start: ${formatDate(checkInDate)}`;
+                checkOutDisplay.textContent = `Retreat End: ${formatDate(autoCheckoutDate)}`;
+            } else if (currentPackageDetails && (currentPackageDetails.type === 'service' && !currentPackageDetails.perNight)) {
+                checkInDisplay.textContent = `Service Date: ${formatDate(checkInDate)}`;
+                checkOutDisplay.textContent = `Ends: ${formatDate(checkInDate)}`; 
             } else if (currentPackageDetails && (currentPackageDetails.type === 'yacht' || currentPackageDetails.type === 'service')) {
                 checkInDisplay.textContent = `Start Date: ${formatDate(checkInDate)}`;
                 checkOutDisplay.textContent = `End Date: ${formatDate(checkOutDate)}`;
+            } else { // Default for villas or other flexible date items
+                checkInDisplay.textContent = `Check-in: ${formatDate(checkInDate)}`;
+                checkOutDisplay.textContent = `Check-out: ${formatDate(checkOutDate)}`;
             }
         }
         
         if (confirmButton) {
-            // For flat rate services, only checkInDate is needed. For others, both.
-            const needsCheckout = !(currentPackageDetails && currentPackageDetails.type === 'service' && !currentPackageDetails.perNight);
-            confirmButton.disabled = !(checkInDate && (needsCheckout ? checkOutDate : true));
+            let canConfirm = false;
+            if (currentPackageDetails && (currentPackageDetails.type === 'retreat' && currentPackageDetails.fixedDurationNights) || (currentPackageDetails.type === 'service' && !currentPackageDetails.perNight)) {
+                canConfirm = !!checkInDate;
+            } else {
+                canConfirm = !!(checkInDate && checkOutDate);
+            }
+            confirmButton.disabled = !canConfirm;
         }
         updateTotal();
     };
@@ -279,18 +298,45 @@ export const initializeBooking = () => {
 
         if (clickedDate < today || isDateBooked(clickedDate)) return;
 
-        // For flat-rate services, only one date selection is needed.
-        if (currentPackageDetails && currentPackageDetails.type === 'service' && !currentPackageDetails.perNight) {
+        if (currentPackageDetails && currentPackageDetails.type === 'retreat' && currentPackageDetails.fixedDurationNights) {
+            // For fixed duration retreats, selecting a start date determines the end date.
+            checkInDate = clickedDate;
+            const durationMillis = currentPackageDetails.fixedDurationNights * 24 * 60 * 60 * 1000;
+            checkOutDate = new Date(checkInDate.getTime() + durationMillis);
+
+            // Validate the entire range for fixed duration retreats
+            let tempDate = new Date(checkInDate);
+            let rangeIsClear = true;
+            // Check from checkInDate up to the day before checkOutDate
+            while (tempDate < checkOutDate) {
+                if (isDateBooked(tempDate)) {
+                    rangeIsClear = false;
+                    break;
+                }
+                tempDate.setDate(tempDate.getDate() + 1);
+            }
+            // Also check the calculated checkOutDate itself if it's part of the booked period (inclusive end)
+            // The isDateBooked logic should handle if booking.end is inclusive.
+            // For fixed duration, the checkout day itself should also be clear.
+
+            if (!rangeIsClear) {
+                alert(`The ${currentPackageDetails.fixedDurationNights}-night duration for this retreat is unavailable starting ${formatDate(clickedDate)} due to existing bookings in the range.`);
+                checkInDate = null;
+                checkOutDate = null;
+            } else {
+                console.log(`${currentPackageDetails.name} selected: ${formatDate(checkInDate)} to ${formatDate(checkOutDate)}`);
+            }
+        } else if (currentPackageDetails && currentPackageDetails.type === 'service' && !currentPackageDetails.perNight) {
             checkInDate = clickedDate;
             checkOutDate = clickedDate; // Set checkout same as checkin for single day/flat rate
             console.log('Service date selected:', formatDate(checkInDate));
         } else if (!checkInDate || (checkInDate && checkOutDate)) {
-            // First click (select check-in) or restarting selection
+            // First click (select check-in) or restarting selection for variable duration items
             checkInDate = clickedDate;
             checkOutDate = null;
             console.log('Check-in selected:', formatDate(checkInDate));
         } else if (checkInDate && !checkOutDate) {
-            // Second click (select check-out)
+            // Second click (select check-out) for variable duration items
             if (clickedDate > checkInDate) {
 
                 // Check for booked dates within the selected range
@@ -417,26 +463,37 @@ export const initializeBooking = () => {
                 checkOutDate = null;
 
                 // Update modal title
-                if (calendarTitle) {
-                    calendarTitle.textContent = `Book Your ${currentPackageDetails.type === 'villa' ? 'Stay' : currentPackageDetails.name}`;
+                 if (calendarTitle) {
+                    if (currentPackageDetails.type === 'retreat') {
+                        calendarTitle.textContent = `Book ${currentPackageDetails.name}`;
+                    } else {
+                        calendarTitle.textContent = `Book Your ${currentPackageDetails.type === 'villa' ? 'Stay' : currentPackageDetails.name}`;
+                    }
                 }
 
-                // Configure modal sections based on package type
+                // Reset and configure modal sections
                 if (modalGuestRoomSection) modalGuestRoomSection.style.display = 'none';
                 if (modalServicesSection) modalServicesSection.style.display = 'none';
                 if (modalGuestContainer) modalGuestContainer.style.display = 'none';
                 if (modalRoomContainer) modalRoomContainer.style.display = 'none';
 
+                const modalServicesOptionsContainer = document.getElementById('modalServicesOptions');
+                if (modalServicesOptionsContainer) modalServicesOptionsContainer.innerHTML = ''; // Clear previous dynamic options
+                const servicesSectionTitle = calendarModal.querySelector('.services-section h4');
+                const originalVillaServiceElements = calendarModal.querySelectorAll('.original-villa-service');
+                originalVillaServiceElements.forEach(el => el.style.display = 'none');
+
 
                 if (currentPackageDetails.type === 'villa') {
                     if (modalGuestRoomSection) modalGuestRoomSection.style.display = 'flex'; // Or 'block'
                     if (modalServicesSection) modalServicesSection.style.display = 'block';
+                    if (servicesSectionTitle) servicesSectionTitle.textContent = 'Additional Services';
+                    originalVillaServiceElements.forEach(el => el.style.display = 'block');
                     if (modalGuestContainer && modalGuestLabel) {
                         modalGuestContainer.style.display = 'block';
                         modalGuestLabel.textContent = 'Guests';
                     }
                     if (modalRoomContainer) modalRoomContainer.style.display = 'block';
-
                     if (guestCountInput) {
                         guestCountInput.max = currentPackageDetails.maxGuests || 6;
                         guestCountInput.value = 1;
@@ -444,10 +501,51 @@ export const initializeBooking = () => {
                     if (roomCountInput) roomCountInput.value = 1; // Default for villas
                     if (cateringServiceCheckbox) cateringServiceCheckbox.checked = false;
                     if (transportServiceCheckbox) transportServiceCheckbox.checked = false;
+                } else if (currentPackageDetails.type === 'retreat') {
+                    if (modalGuestRoomSection && currentPackageDetails.uiSections?.guestCount) modalGuestRoomSection.style.display = 'flex';
+                    if (modalGuestContainer && modalGuestLabel && currentPackageDetails.uiSections?.guestCount) {
+                        modalGuestContainer.style.display = 'block';
+                        modalGuestLabel.textContent = 'Guests';
+                    }
+                    if (guestCountInput) {
+                        guestCountInput.value = (currentPackageDetails.name === 'Artist Retreat' && currentPackageDetails.maxGuests) ? currentPackageDetails.maxGuests : 1;
+                        guestCountInput.max = currentPackageDetails.maxGuests || 20;
+                        // guestCountInput.disabled = currentPackageDetails.name === 'Artist Retreat'; // Optionally disable for fixed guest count
+                    }
 
+                    if (currentPackageDetails.uiSections?.services) {
+                        if (modalServicesSection) modalServicesSection.style.display = 'block';
+                        if (currentPackageDetails.upgrades) { // External Host Retreat
+                            if (servicesSectionTitle) servicesSectionTitle.textContent = 'Available Upgrades';
+                            currentPackageDetails.upgrades.forEach(upgrade => {
+                                upgrade.checked = false; // Reset on modal open
+                                const upgradeDiv = document.createElement('div');
+                                upgradeDiv.className = 'service-option';
+                                const checkbox = document.createElement('input');
+                                checkbox.type = 'checkbox';
+                                checkbox.id = `upgrade-${upgrade.id}`;
+                                checkbox.dataset.upgradeId = upgrade.id;
+                                checkbox.addEventListener('change', (e) => {
+                                    const uId = e.target.dataset.upgradeId;
+                                    const selectedUpgrade = currentPackageDetails.upgrades.find(up => up.id === uId);
+                                    if (selectedUpgrade) selectedUpgrade.checked = e.target.checked;
+                                    updateTotal();
+                                });
+                                const label = document.createElement('label');
+                                label.htmlFor = `upgrade-${upgrade.id}`;
+                                label.textContent = `${upgrade.name} ($${upgrade.price.toLocaleString()})`;
+                                upgradeDiv.appendChild(checkbox);
+                                upgradeDiv.appendChild(label);
+                                if (modalServicesOptionsContainer) modalServicesOptionsContainer.appendChild(upgradeDiv);
+                            });
+                        } else if (currentPackageDetails.name === 'Artist Retreat') { // Artist Retreat included services
+                            if (servicesSectionTitle) servicesSectionTitle.textContent = 'Included Services';
+                            if (modalServicesOptionsContainer) modalServicesOptionsContainer.innerHTML = `<p style="padding: 10px 0;">Yacht, Catering, Airport Transport/Insurance are included.</p>`;
+                        }
+                    }
                 } else if (currentPackageDetails.type === 'yacht') {
                     if (modalGuestRoomSection) modalGuestRoomSection.style.display = 'flex';
-                     if (modalGuestContainer && modalGuestLabel) {
+                    if (modalGuestContainer && modalGuestLabel) {
                         modalGuestContainer.style.display = 'block';
                         modalGuestLabel.textContent = 'Passengers';
                     }
@@ -456,9 +554,7 @@ export const initializeBooking = () => {
                         guestCountInput.value = 1;
                     }
                 } else if (currentPackageDetails.type === 'service') {
-                    // For services, guest/room/additional villa services are usually not applicable in this modal
-                    // The date selection (single or range) is primary.
-                    // If a service has a guest limit (e.g. group catering), it could be enabled here.
+                    // Basic services, guest/room/additional sections usually hidden unless specified by package
                 }
 
                 updateDateDisplay();
@@ -545,25 +641,41 @@ export const initializeBooking = () => {
 
             if (!currentPackageDetails || !checkInDate) return;
             // For items that require a date range, checkOutDate is also needed
-            if (currentPackageDetails.perNight && !checkOutDate) return;
+            // For fixed duration retreats, checkOutDate is derived, so only checkInDate is essential.
+            if (currentPackageDetails.perNight && !currentPackageDetails.fixedDurationNights && !checkOutDate) return;
 
             // Calculate booking total
             const totalPrice = updateTotal();
-            const nights = (checkInDate && checkOutDate) ? calculateNights(checkInDate, checkOutDate) : 1;
+            const nights = (currentPackageDetails && currentPackageDetails.fixedDurationNights)
+                ? currentPackageDetails.fixedDurationNights
+                : (checkInDate && checkOutDate) ? calculateNights(checkInDate, checkOutDate) : 1;
 
             // Get services
             let itemName = currentPackageDetails.name;
-            if (currentPackageDetails.type === 'villa') {
+            if (currentPackageDetails.type === 'retreat') {
+                if (currentPackageDetails.fixedDurationNights) {
+                    const days = currentPackageDetails.fixedDurationNights + 1;
+                    itemName += ` (${days} Days / ${nights} Nights)`;
+                }
+                if (currentPackageDetails.upgrades) {
+                    const selectedUpgrades = currentPackageDetails.upgrades
+                        .filter(up => up.checked)
+                        .map(up => up.name.split('(')[0].trim()); // Get cleaner name
+                    if (selectedUpgrades.length > 0) {
+                        itemName += ` with ${selectedUpgrades.join(', ')}`;
+                    }
+                }
+            } else if (currentPackageDetails.type === 'villa') {
                 const selectedServices = [];
                 if (cateringServiceCheckbox?.checked) selectedServices.push('Catering');
                 if (transportServiceCheckbox?.checked) selectedServices.push('Transport');
                 if (selectedServices.length > 0) {
-                    itemName += ` (${nights} nights, with ${selectedServices.join(' & ')})`;
+                    itemName += ` (${nights} night${nights > 1 ? 's' : ''}, with ${selectedServices.join(' & ')})`;
                 } else {
-                    itemName += ` (${nights} nights)`;
+                    itemName += ` (${nights} night${nights > 1 ? 's' : ''})`;
                 }
             } else if (currentPackageDetails.perNight) { // Yachts or per-day services
-                 itemName += ` (${nights} day${nights > 1 ? 's' : ''})`;
+                itemName += ` (${nights} day${nights > 1 ? 's' : ''})`;
             }
             // For flat rate services, itemName is just currentPackageDetails.name
 
@@ -577,7 +689,11 @@ export const initializeBooking = () => {
 
                 // Create a unique ID for the booking item, incorporating dates to allow re-booking same package for different dates
                 let itemIdSuffix = checkInDate.toISOString().split('T')[0];
-                if (checkOutDate && checkInDate.toISOString() !== checkOutDate.toISOString()) {
+                // For fixed duration retreats, checkOutDate is derived.
+                const effectiveCheckoutDate = (currentPackageDetails.type === 'retreat' && currentPackageDetails.fixedDurationNights && checkInDate)
+                    ? new Date(checkInDate.getTime() + currentPackageDetails.fixedDurationNights * 24 * 60 * 60 * 1000)
+                    : checkOutDate;
+                if (effectiveCheckoutDate && checkInDate.toISOString().split('T')[0] !== effectiveCheckoutDate.toISOString().split('T')[0]) {
                     itemIdSuffix += '_' + checkOutDate.toISOString().split('T')[0];
                 }
                 const itemId = `${currentPackage}-${itemIdSuffix}`;

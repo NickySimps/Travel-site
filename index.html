@@ -16,7 +16,10 @@
     <header>
         <div class="container">
             <div id="branding">
-                <a href="index.html" ><h1>USVI Retreats</h1> </a>
+                <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
+                    <img src="public/Pictures/USVI Retreats Logo_v2.webp" alt="USVI Retreats Logo" style="height: 50px; margin-right: 10px;">
+                    <h1 style="margin: 0;">USVI Retreats</h1>
+                </a>
             </div>
             <nav>
                 <div class="hamburger">
@@ -42,8 +45,9 @@
                             </div>
                         </div>
                     </li>
-                    <button class="custom-cart-toggle">Cart</button>
-                </ul>
+                    <li>
+                        <button class="custom-cart-toggle">Cart</button>
+                    </li>                </ul>
             </nav>
         </div>
     </header>
@@ -52,7 +56,7 @@
         <!-- Showcase Section -->
         <section id="showcase">
             <div class="container">
-                <img class="banner-image" src="./public/Pictures/beaches/bannerbeach1.jpg" alt="Beautiful beach banner">
+                <img class="banner-image" src="./public/Pictures/beaches/bannerbeach1.webp" alt="Beautiful beach banner">
                 <div class="showcase-content">
                     <h1>Visit Paradise</h1>
                     <p>Explore new adventures</p>
@@ -60,173 +64,92 @@
             </div>
         </section>
 
-
-
-        <!-- Packages Section Real Values-->
-        <section id="packages">
+        <!-- Retreat Experience Section -->
+        <section id="retreat-experience">
             <div class="container">
-                <!-- Opening Mission Statement -->
                 <div class="mission-statement">
-                    Find your own little slice of paradise at Estate St. Peter, where lush
-                    green hills meet turquoise waters, and five luxury villas await your perfect getaway.
+                    <h2>The Ultimate Caribbean Retreat Experience</h2>
+                    <p>Experience the perfect blend of luxury, creativity, and Caribbean hospitality at Estate St. Peter. Our comprehensive retreat packages are designed to provide an immersive experience that combines world-class accommodations with curated services, allowing you to focus on what matters most - whether that's artistic inspiration, business development, or personal renewal.</p>
+                    
+                    <p>Located on the pristine shores of St. Thomas, our exclusive estate offers a sanctuary where luxury meets authenticity. From private villa accommodations to personalized concierge services, every detail is crafted to exceed your expectations and create lasting memories in paradise.</p>
                 </div>
+            </div>
+        </section>
 
-
-
+        <!-- Retreat Packages Section -->
+        <section id="retreat-packages">
+            <div class="container">
+                <div class="mission-statement">
+                    <h2>Curated Retreat Packages</h2>
+                    <p>Choose from our specially designed retreat experiences, each offering a unique blend of luxury accommodation, personalized services, and authentic Caribbean experiences.</p>
+                </div>
 
                 <div class="package-grid">
-                    <!-- Villa Alhambra -->
+                    <!-- Artist Retreat Package -->
                     <div class="package-box">
-                        <img src="public/Pictures/villas/Villa Alhambra.jpg" alt="Villa Alhambra">
-                        <h3>Villa Alhambra</h3>
-                        <p>Main villa with great room and luxury suites</p>
-                        <p><strong>$2,500 per night</strong></p>
+                        <img src="public/Pictures/villas/Villa Alhambra.webp" alt="Artist Retreat at Estate St. Peter">
+                        <h3>Artist Retreat</h3>
+                        <p>4 Days, 3 Nights for 6 Guests</p>
+                        <p><strong>$27,000 Total Package</strong></p>
 
-                        <button class="btn btn-info" data-toggle="collapse" data-target="#alhambra-flavor">More
-                            Info</button>
+                        <button class="btn btn-info" data-toggle="collapse" data-target="#artist-retreat-flavor">More Info</button>
 
-                        <div id="alhambra-flavor" class="flavor-content">
-                            <p>Experience the grandeur of our flagship villa featuring a stunning great room.</p>
+                        <div id="artist-retreat-flavor" class="flavor-content">
+                            <p>An immersive creative experience designed for artists seeking inspiration in paradise.</p>
                             <ul class="flavor-textList">
-                                <li>Master King Suite with twin marble ensuites and sitting area</li>
-                                <li>Two King Guest Suites with garden access</li>
-                                <li>Limestone and marble mosaic great room</li>
-                                <li>Private entrances to gardens</li>
-                                <li>Luxury furnishings from around the world</li>
+                                <li>St. Thomas Villa accommodation for 6 guests</li>
+                                <li>Private yacht experience</li>
+                                <li>Daily catering with local cuisine</li>
+                                <li>Airport transport and insurance included</li>
+                                <li>Dedicated creative spaces and inspiring locations</li>
+                                <li>4 days, 3 nights of pure artistic immersion</li>
                             </ul>
                             <div class="booking-container">
-                                <button class="booking-btn" data-package="villa-alhambra">Check Availability</button>
+                                <button class="booking-btn" data-package="artist-retreat">Check Availability</button>
                             </div>
-                            <!-- Removed direct Add to Cart button, booking is now handled via "Check Availability" and modal -->
                         </div>
                     </div>
 
-                    <div class="mission-statement">
-                        Each villa offers its own unique charm while providing access to our estate's spectacular
-                        amenities.
-                    </div>
-
-                    <!-- Pool Villa -->
+                    <!-- External Host Package -->
                     <div class="package-box">
-                        <img src="public/Pictures/villas/Pool Villa.jpg" alt="Pool Villa">
-                        <h3>Pool Villa</h3>
-                        <p>Pool-side villa with direct deck access</p>
-                        <p><strong>$1,800 per night</strong></p>
+                        <img src="public/Pictures/villas/Tower Villa.webp" alt="External Host Retreat">
+                        <h3>External Host & Upgrades</h3>
+                        <p>Premium hosted retreat experience</p>
+                        <p><strong>$30,000 Base Package</strong></p>
 
-                        <button class="btn btn-info" data-toggle="collapse" data-target="#pool-flavor">More
-                            Info</button>
+                        <button class="btn btn-info" data-toggle="collapse" data-target="#external-host-flavor">More Info</button>
 
-                        <div id="pool-flavor" class="flavor-content">
-                            <p>Immerse yourself in luxury with direct access to our main pool area.</p>
+                        <div id="external-host-flavor" class="flavor-content">
+                            <p>A fully-hosted premium retreat experience with professional support and luxury upgrades.</p>
                             <ul class="flavor-textList">
-                                <li>Master King Suite with pool deck access</li>
-                                <li>Private living room</li>
-                                <li>Upstairs King Guest Suite with private terrace</li>
-                                <li>Both bedrooms with ensuite bathrooms</li>
-                                <li>Full kitchen</li>
+                                <li>St. Thomas Villa with premium accommodations</li>
+                                <li>Daily catering (1 meal per day included)</li>
+                                <li>Transport Package with dedicated driver (+$3,500)</li>
+                                <li>Concierge & Liaison services (+$5,000)</li>
+                                <li>Additional daily meal upgrade (+$3,000)</li>
+                                <li>Professional coordination and communication support</li>
+                                <li>Customizable experience based on your needs</li>
                             </ul>
                             <div class="booking-container">
-                                <button class="booking-btn" data-package="pool-villa">Check Availability</button>
+                                <button class="booking-btn" data-package="external-host-retreat">Check Availability</button>
                             </div>
-                            <!-- Removed direct Add to Cart button, booking is now handled via "Check Availability" and modal -->
-                        </div>
-                    </div>
-
-                    <div class="mission-statement">
-                        Experience the perfect blend of privacy and luxury in our thoughtfully designed villa compound.
-                    </div>
-
-                    <!-- Guest Villa -->
-                    <div class="package-box">
-                        <img src="public/Pictures/villas/Guest Villa.jpg" alt="Guest Villa">
-                        <h3>Guest Villa</h3>
-                        <p>Adjacent to second pool with outdoor bar</p>
-                        <p><strong>$1,500 per night</strong></p>
-
-                        <button class="btn btn-info" data-toggle="collapse" data-target="#guest-flavor">More
-                            Info</button>
-
-                        <div id="guest-flavor" class="flavor-content">
-                            <p>Perfect for families or friends seeking their own private space.</p>
-                            <ul class="flavor-textList">
-                                <li>King Guest Suite with ensuite bathroom</li>
-                                <li>Queen Guest Suite with ensuite bathroom</li>
-                                <li>Private living room and kitchen</li>
-                                <li>Access to second pool</li>
-                                <li>Outdoor bar and grill area</li>
-                            </ul>
-                            <div class="booking-container">
-                                <button class="booking-btn" data-package="guest-villa">Check Availability</button>
-                            </div>
-                            <!-- Removed direct Add to Cart button, booking is now handled via "Check Availability" and modal -->
-                        </div>
-                    </div>
-                    <div class="mission-statement">
-                        Experience the ultimate Caribbean getaway at Estate St. Peter, where luxury meets paradise.
-                    </div>
-
-                    <!-- Tower Villa -->
-                    <div class="package-box">
-                        <img src="public/Pictures/villas/Tower Villa.jpg" alt="Tower Villa">
-                        <h3>Tower Villa</h3>
-                        <p>Featuring 360° rooftop views</p>
-                        <p><strong>$3,300 per night</strong></p>
-
-                        <button class="btn btn-info" data-toggle="collapse" data-target="#tower-flavor">More
-                            Info</button>
-
-                        <div id="tower-flavor" class="flavor-content">
-                            <p>Enjoy breathtaking views of both the US and British Virgin Islands.</p>
-                            <ul class="flavor-textList">
-                                <li>King Guest Suite with ensuite bathroom</li>
-                                <li>Queen Guest Suite with ensuite bathroom</li>
-                                <li>Tallest rooftop deck on the island</li>
-                                <li>Private outdoor decks</li>
-                                <li>Private hot tub</li>
-                            </ul>
-                            <div class="booking-container">
-                                <button class="booking-btn" data-package="tower-villa">Check Availability</button>
-                            </div>
-                            <!-- Removed direct Add to Cart button, booking is now handled via "Check Availability" and modal -->
-                        </div>
-                    </div>
-                    <div class="mission-statement">
-                        Let us guide you through this adventure.
-                    </div>
-
-                    <!-- Garden Villa -->
-                    <div class="package-box">
-                        <img src="public/Pictures/villas/Garden Villa.jpg" alt="Garden Villa">
-                        <h3>Garden Villa</h3>
-                        <p>Private cottage with garden views</p>
-                        <p><strong>$2,800 per night</strong></p>
-
-                        <button class="btn btn-info" data-toggle="collapse" data-target="#garden-flavor">More
-                            Info</button>
-
-                        <div id="garden-flavor" class="flavor-content">
-                            <p>A charming retreat perfect for couples seeking privacy.</p>
-                            <ul class="flavor-textList">
-                                <li>King Guest Suite with ensuite bathroom</li>
-                                <li>Private living room</li>
-                                <li>Full kitchen</li>
-                                <li>Garden balcony</li>
-                                <li>Front door parking</li>
-                            </ul>
-                            <div class="booking-container">
-                                <button class="booking-btn" data-package="garden-villa">Check Availability</button>
-                            </div>
-                            <!-- Removed direct Add to Cart button, booking is now handled via "Check Availability" and modal -->
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
 
-
+        <!-- Estate St. Peter Section -->
+        <section id="packages">
+            <div class="container">
+                <div class="mission-statement">
+                    Find your own little slice of paradise at Estate St. Peter, where lush
+                    green hills meet turquoise waters, and luxury accommodations await your perfect getaway.
+                </div>
 
                 <div class="estate-header">
                     <h2>Estate St. Peter Villas</h2>
-                    <p class="estate-subtitle">Five-villa estate with 10 ensuite bedrooms, multiple pools and
-                        spectacular views</p>
+                    <p class="estate-subtitle">Five-villa estate with 10 ensuite bedrooms, multiple pools and spectacular views</p>
                     <div class="feature-tags">
                         <span>Sleeps 20</span>
                         <span>10 Bedrooms</span>
@@ -279,51 +202,103 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
 
     </main>
-    <section id="newsletter" class="bg-gradient">
-        <div class="container">
-            <div class="mission-statement">
-                Join our community to receive exclusive offers and updates about our luxury properties and services.
-            </div>
-            <form class="newsletter-form">
-                <div class="package-grid">
-                    <div class="package-box">
-                        <div class="flavor-content active">
-                            <h2>Stay Connected</h2>
-                            <div class="flavor-textList">
-                                <li>Special seasonal promotions</li>
-                                <li>Exclusive villa access</li>
-                                <li>Local event invitations</li>
-                                <li>Travel tips and guides</li>
-                            </div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                                <input type="text" name="firstName" id="firstName" placeholder="First Name" required>
-                                <input type="text" name="lastName" id="lastName" placeholder="Last Name" required>
-                            </div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
-                                <input type="tel" name="phone" id="newsletter-phone" placeholder="Phone Number"
-                                    required>
-                                <input type="email" name="email" id="newsletter-email" placeholder="Email Address"
-                                    required>
-                            </div>
-                            <div class="service-option" style="margin-top: 1rem;">
-                                <input type="checkbox" id="preferences" required>
-                                <label for="preferences">I agree to receive updates about USVI Retreats properties and
-                                    services</label>
-                            </div>
-                            <button type="submit" class="btn-book" style="margin-top: 1rem;">Subscribe to
-                                Updates</button>
-                        </div>
-                    </div>
+    
+            <!-- Creative Retreat Application Section -->
+        <section id="creative-retreat-application" class="container">
+            <h2>USVI Creative Retreat Application – 2026</h2>
+            <p class="mission-statement" style="text-align: left; margin-bottom: 2rem;">
+                This isn’t just a getaway. It’s a shared space for artistic exploration, creative rhythm, and honest presence. These retreats are for those ready to create not from pressure—but from stillness, trust, and deep collaboration. If you’re feeling called, begin here. Take your time. There’s no rush.
+            </p>
+            <form id="creativeRetreatForm" class="styled-form">
+                <div class="form-group">
+                    <label for="crFullName">Full Name (Required)</label>
+                    <input type="text" id="crFullName" name="fullName" required>
                 </div>
+
+                <div class="form-group">
+                    <label for="crEmail">Email (Required)</label>
+                    <input type="email" id="crEmail" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="crPhone">Phone (Optional)</label>
+                    <input type="tel" id="crPhone" name="phone">
+                </div>
+
+                <div class="form-group">
+                    <label for="crLocation">Where are you based? (Required)</label>
+                    <input type="text" id="crLocation" name="location" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="crRetreatDates">Which retreat dates are you interested in? (Required)</label>
+                    <select id="crRetreatDates" name="retreatDates" required>
+                        <option value="">Select dates...</option>
+                        <option value="2026-jun-05-08">June 5-8, 2026</option>
+                        <option value="2026-jul-10-13">July 10-13, 2026</option>
+                        <option value="2026-aug-14-17">August 14-17, 2026</option>
+                        <option value="other">Other/Flexible (Please specify below)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="crWhatYouCreate">What do you create, build or lead? (Required)</label>
+                    <p class="form-hint">“You don’t need to be a professional artist. But we are all creators. Tell me how you express yours.”</p>
+                    <textarea id="crWhatYouCreate" name="whatYouCreate" rows="5" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="crCraft">What do you consider your craft? (Required)</label>
+                    <textarea id="crCraft" name="craft" rows="5" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="crMostAlive">Where do you feel most alive in your work or practice? (Required)</label>
+                    <textarea id="crMostAlive" name="mostAlive" rows="5" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="crWhyDrawn">Why are you drawn to this retreat now? (Required)</label>
+                    <textarea id="crWhyDrawn" name="whyDrawn" rows="5" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="crConnection">What kind of connection or collaboration are you craving? (Required)</label>
+                    <textarea id="crConnection" name="connection" rows="5" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="crHopeToReturn">What do you hope to return with? (Required)</label>
+                    <textarea id="crHopeToReturn" name="hopeToReturn" rows="5" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="crAccessibility">Do you have any accessibility or accommodation needs? (Optional)</label>
+                    <textarea id="crAccessibility" name="accessibility" rows="3"></textarea>
+                </div>
+
+                <div class="form-group" id="paymentPreferenceGroup">
+                    <label>How do you prefer to invest in this kind of experience? (Required)</label>
+                    <div><input type="radio" id="payInFull" name="paymentPreference" value="pay_in_full" required><label for="payInFull">Ready to pay in full</label></div>
+                    <div><input type="radio" id="paymentPlan" name="paymentPreference" value="payment_plan"><label for="paymentPlan">Payment plan</label></div>
+                    <div><input type="radio" id="scholarship" name="paymentPreference" value="scholarship"><label for="scholarship">Explore partial scholarship</label></div>
+                    <div><input type="radio" id="notSure" name="paymentPreference" value="not_sure"><label for="notSure">Not sure yet</label></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="crAnythingElse">Anything else you want to share, ask, or leave here? (Optional)</label>
+                    <textarea id="crAnythingElse" name="anythingElse" rows="3"></textarea>
+                </div>
+
+                <button type="submit" class="btn-book">Submit Application</button>
             </form>
-        </div>
-    </section>
+        </section>
+
     <footer>
         <div class="container">
             <div class="package-grid" style="padding: 2rem 0;">
@@ -369,22 +344,28 @@
                         <li>Twitter</li>
                         <li>LinkedIn</li>
                     </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <button id="backToTop" title="Go to top">↑</button>
     <button class="cart-float">
         <i class="fa fa-shopping-cart"></i>
         <span class="cart-count">0</span>
-      </button>
+    </button>
       
-      <div class="cart-panel">
+    <div class="cart-panel">
         <div class="cart-items">
-          <!-- Cart items will be populated here via JavaScript -->
+            <!-- Cart items will be populated here via JavaScript -->
         </div>
         <div class="cart-total">
-          <span>Total:</span>
-          <span class="total-amount">$0.00</span>
+            <span>Total:</span>
+            <span class="total-amount">$0.00</span>
         </div>
         <button class="checkout-btn">Checkout</button>
-      </div>
+    </div>
+    
     <!-- Booking Calendar Modal -->
     <div id="calendarModal" class="calendar-modal">
         <div class="calendar-content">
@@ -449,9 +430,11 @@
             <button id="confirmDates" class="confirm-dates" disabled>Set Booking</button>
         </div>
     </div>
+    
     <div id="bookingOrb" class="booking-orb modal-btn">
         <span class="booking-orb-icon">📅</span>
     </div>
+    
     <div class="booking-details-panel">
         <div class="booking-detail-item">
             <span>Property:</span>
@@ -494,22 +477,21 @@
                     <input type="email" id="email" name="email" placeholder="Email Address" required>
                 </div>
                 <div class="form-group">
-                    <input type="tel" id="phone" name="phone" placeholder="Phone Number" required pattern="[0-9]{10}"
-                        title="Please enter a valid 10-digit phone number">
+                    <input type="tel" id="phone" name="phone" placeholder="Phone Number" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number">
                 </div>
                 <div class="form-group">
-                    <textarea id="specialRequests" name="specialRequests"
-                        placeholder="Special Requests or Questions"></textarea>
+                    <textarea id="specialRequests" name="specialRequests" placeholder="Special Requests or Questions"></textarea>
                 </div>
                 <button type="submit" class="submit-inquiry">Submit Booking Request</button>
             </form>
         </div>
     </div>
+    
     <!-- Auth Modal -->
     <div id="auth-modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="document.getElementById('auth-modal').style.display='none'">&times;</span>
-            <form id="modal-auth-form-content"> {/* Changed ID to avoid conflict */}
+            <form id="modal-auth-form-content">
                 <div id="login-section">
                     <h2>Login with Email Link</h2>
                     <div class="form-group">
@@ -518,12 +500,6 @@
                     <button type="submit">Send Login Link</button>
                 </div>
             </form>
-            <script>
-                // Basic modal close functionality if not already handled elsewhere
-                // document.querySelector('#auth-modal .close').addEventListener('click', () => {
-                // document.getElementById('auth-modal').style.display = 'none';
-                // });
-            </script>
         </div>
     </div>
 
@@ -532,6 +508,7 @@
         <div id="user-display"></div>
         <button id="logout-btn">Logout</button>
     </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js" defer></script>
     <!-- Firebase scripts - Load BEFORE your main module script -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js" defer></script>
@@ -539,4 +516,5 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js" defer></script>
     <script type="module" src="./src/components/index.js"></script>
 
+</body>
 </html>

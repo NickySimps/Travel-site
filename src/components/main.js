@@ -6,25 +6,15 @@ let lastScrollTop = 0;
 
 const initializeUI = () => {
   const header = document.querySelector(CONFIG.UI.header);
-  const backToTop = document.querySelector(CONFIG.UI.backToTop);
 
   window.addEventListener('scroll', debounce(() => {
     const scrollTop = window.pageYOffset;
-    if (backToTop) {
-      backToTop.style.display = scrollTop > 300 ? 'block' : 'none';
-    }
     if (header) {
       header.style.transform = scrollTop > lastScrollTop && scrollTop > 200 ?
         'translateY(-100%)' : 'translateY(0)';
     }
     lastScrollTop = scrollTop;
   }, 100));
-
-  if (backToTop) {
-    backToTop.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-  }
 
   // Single implementation for all "More Info" buttons
   document.querySelectorAll('.btn-info').forEach(btn => {

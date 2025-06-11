@@ -1,4 +1,5 @@
 import { CONFIG } from './config.js';
+import { debounce } from './utils.js';
 
 export const initializeNavigation = () => {
   const hamburger = document.querySelector(CONFIG.UI.hamburger);
@@ -15,4 +16,30 @@ export const initializeNavigation = () => {
       navMenu?.classList.remove('active');
     }
   });
+
+  setupBackToTopButton(); // Initialize the back to top button
 };
+
+function setupBackToTopButton() {
+  const backToTopButton = document.querySelector(CONFIG.UI.backToTop);
+
+  if (backToTopButton) {
+    const scrollHandler = () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      backToTopButton.style.display = scrollTop > 300 ? 'block' : 'none';
+    };
+
+    // Debounced scroll listener
+    window.addEventListener('scroll', debounce(scrollHandler, 100));
+
+    // Click listener for smooth scroll
+    backToTopButton.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Set initial visibility based on current scroll position
+    scrollHandler(); // Call once to set initial state
+  } else {
+    console.warn(`Back to Top button with selector '${CONFIG.UI.backToTop}' not found in the DOM.`);
+  }
+}
