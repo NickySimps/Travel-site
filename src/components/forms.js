@@ -67,6 +67,79 @@ export const initializeForms = () => {
     retreatForm.reset(); // Optionally reset the form
   });
 
+  // Helper to display errors - for a better UX, this would update the DOM near the field
+  const displayFormErrors = (formElement, errors) => {
+    // For now, using alert. Ideally, this would inject messages into the HTML.
+    // e.g., find a dedicated error container or create error messages next to inputs.
+    if (errors.length > 0) {
+      alert(
+        "Please correct the following errors:\n- " + errors.join("\n- ")
+      );
+      return false;
+    }
+    return true;
+  };
+
+  const initializeMultiStepForm = (formElement) => {
+    if (!formElement) return;
+
+    const steps = Array.from(formElement.querySelectorAll(".form-step"));
+    const nextButtons = formElement.querySelectorAll(".btn-next");
+    const prevButtons = formElement.querySelectorAll(".btn-prev");
+    let currentStep = 0;
+
+    const showStep = (stepIndex) => {
+      steps.forEach((step, index) => {
+        step.classList.toggle("active-step", index === stepIndex);
+      });
+      currentStep = stepIndex;
+      // Optional: Scroll to the top of the form when changing steps
+      formElement.scrollIntoView({ behavior: "smooth" });
+    };
+
+    const validateStep = (stepIndex) => {
+      const currentStepFields = steps[stepIndex].querySelectorAll("[required]");
+      let stepIsValid = true;
+      currentStepFields.forEach(field => {
+        if ((field.type === "radio" || field.type === "checkbox")) {
+          const groupName = field.name;
+          if (!formElement.querySelector(`input[name="${groupName}"]:checked`)) {
+            // Basic alert, ideally show error near field
+            // alert(`Please make a selection for ${field.closest('.form-group').querySelector('label').textContent.replace('(Required)','').trim()}`);
+            field.focus();
+            stepIsValid = false;
+          }
+        } else if (!field.value.trim()) {
+          // Basic alert, ideally show error near field
+          // alert(`${field.previousElementSibling.textContent.replace('(Required)','').trim()} is required.`);
+          field.focus();
+          stepIsValid = false;
+        }
+      });
+      return stepIsValid;
+    };
+
+    nextButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        // if (validateStep(currentStep)) { // Optional: validate before going to next step
+          if (currentStep < steps.length - 1) {
+            showStep(currentStep + 1);
+          }
+        // }
+      });
+    });
+
+    prevButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        if (currentStep > 0) {
+          showStep(currentStep - 1);
+        }
+      });
+    });
+
+    showStep(0); // Show the first step initially
+  };
+
   creativeRetreatApplicationForm?.addEventListener("submit", (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -87,74 +160,43 @@ export const initializeForms = () => {
       anythingElse: formData.get("anythingElse")?.trim(),
     };
 
-    let isValid = true;
     let errorMessages = [];
 
-    if (!applicationDetails.fullName) {
-      errorMessages.push("Full Name is required.");
-      isValid = false;
-    }
-    if (!applicationDetails.email || !validateEmail(applicationDetails.email)) {
-      errorMessages.push("A valid Email is required.");
-      isValid = false;
-    }
-    if (!applicationDetails.location) {
-      errorMessages.push("Location is required.");
-      isValid = false;
-    }
-    if (!applicationDetails.retreatDates) {
-      errorMessages.push("Retreat dates selection is required.");
-      isValid = false;
-    }
-    if (!applicationDetails.whatYouCreate) {
-      errorMessages.push(
-        'Response for "What do you create, build or lead?" is required.'
-      );
-      isValid = false;
-    }
-    if (!applicationDetails.craft) {
-      errorMessages.push(
-        'Response for "What do you consider your craft?" is required.'
-      );
-      isValid = false;
-    }
-    if (!applicationDetails.mostAlive) {
-      errorMessages.push(
-        'Response for "Where do you feel most alive?" is required.'
-      );
-      isValid = false;
-    }
-    if (!applicationDetails.whyDrawn) {
-      errorMessages.push(
-        'Response for "Why are you drawn to this retreat?" is required.'
-      );
-      isValid = false;
-    }
-    if (!applicationDetails.connection) {
-      errorMessages.push(
-        'Response for "What kind of connection are you craving?" is required.'
-      );
-      isValid = false;
-    }
-    if (!applicationDetails.hopeToReturn) {
-      errorMessages.push(
-        'Response for "What do you hope to return with?" is required.'
-      );
-      isValid = false;
-    }
-    if (!applicationDetails.paymentPreference) {
-      errorMessages.push("Payment preference is required.");
-      isValid = false;
+    // Define required fields and their user-friendly names
+    const requiredFields = {
+      fullName: "Full Name",
+      // email is handled separately due to specific validation
+      location: "Location",
+      retreatDates: "Retreat dates selection",
+      whatYouCreate: 'Response for "What do you create, build or lead?"',
+      craft: 'Response for "What do you consider your craft?"',
+      mostAlive: 'Response for "Where do you feel most alive?"',
+      whyDrawn: 'Response for "Why are you drawn to this retreat?"',
+      connection: 'Response for "What kind of connection are you craving?"',
+      hopeToReturn: 'Response for "What do you hope to return with?"',
+      paymentPreference: "Payment preference",
+    };
+
+    for (const field in requiredFields) {
+      if (!applicationDetails[field]) {
+        errorMessages.push(`${requiredFields[field]} is required.`);
+      }
     }
 
-    if (!isValid) {
-      alert(
-        "Please correct the following errors:\n- " + errorMessages.join("\n- ")
-      );
+    if (!applicationDetails.email || !validateEmail(applicationDetails.email)) {
+      errorMessages.push("A valid Email is required.");
+    }
+    // Optional: Validate phone if a value is provided
+    if (applicationDetails.phone && !validatePhone(applicationDetails.phone)) {
+      errorMessages.push("Please enter a valid phone number if you choose to provide one.");
+    }
+
+    if (!displayFormErrors(creativeRetreatApplicationForm, errorMessages)) {
       return;
     }
 
     console.log("Creative Retreat Application Submitted:", applicationDetails);
+
     // Here you would typically send the data to a backend service or email
     // For example, using EmailJS if configured:
     // emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', applicationDetails)
@@ -171,6 +213,9 @@ export const initializeForms = () => {
     );
     creativeRetreatApplicationForm.reset();
   });
+
+  // Initialize the multi-step functionality for the creative retreat form
+  initializeMultiStepForm(creativeRetreatApplicationForm);
 
   // Pre-fill form data if available
   if (creativeRetreatApplicationForm) {

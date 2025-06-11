@@ -1842,3 +1842,34 @@ button:hover,
   border: 0;
   border-top: 1px solid #eee;
 }
+
+.form-group .error-message {
+  color: var(--primary-orange); /* Or a dedicated error color */
+  font-size: var(--font-size-xs);
+  margin-top: var(--space-xxs);
+  display: block; /* Or inline-block depending on layout */
+}
+
+.form-group input.error,
+.form-group textarea.error,
+.form-group select.error {
+  border-color: var(--primary-orange); /* Highlight fields with errors */
+}
+
+/* Multi-step form styles */
+.multi-step-form .form-step {
+  display: none; /* Hide all steps by default */
+  animation: fadeIn 0.5s; /* Optional: fade in animation */
+}
+
+.multi-step-form .form-step.active-step {
+  display: block; /* Show active step */
+}
+
+.multi-step-form .form-navigation {
+  display: flex;
+  justify-content: space-between; /* Puts Prev on left, Next/Submit on right */
+  margin-top: var(--space-lg);
+}
+
+.multi-step-form .form-navigation button { /* General styling for nav buttons */ }
