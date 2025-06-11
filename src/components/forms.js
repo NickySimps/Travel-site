@@ -122,13 +122,15 @@ export const initializeForms = () => {
 
     const getCurrentStepIndex = () => parseInt(formElement.dataset.currentStep || "0");
 
-    const showStep = (stepIndex) => {
+    const showStep = (stepIndex, scroll = true) => {
       steps.forEach((step, index) => {
         step.classList.toggle("active-step", index === stepIndex);
       });
       formElement.dataset.currentStep = stepIndex;
-      // Optional: Scroll to the top of the form when changing steps
-      formElement.scrollIntoView({ behavior: "smooth" });
+      if (scroll) {
+        // Optional: Scroll to the top of the form when changing steps
+        formElement.scrollIntoView({ behavior: "smooth" });
+      }
     };
 
     const validateStep = (stepIndex) => {
@@ -200,7 +202,7 @@ export const initializeForms = () => {
       });
     });
 
-    showStep(0); // Show the first step initially
+    showStep(0, false); // Show the first step initially, without scrolling
   };
 
   // Initialize the multi-step functionality for the creative retreat form
