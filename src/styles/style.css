@@ -86,7 +86,7 @@ body {
 
 .container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 90vw;
   margin: 0 auto;
   padding: 0 var(--space-sm);
 }
@@ -232,6 +232,8 @@ nav a:hover {
   text-align: left;
   font-style: italic;
   font-size: var(--font-size-sm);
+  width: clamp(60vw, 800px, 95vw);
+  justify-self: center;
   /* Or consider --font-size-md if it needs to be more prominent */
 }
 
@@ -522,6 +524,12 @@ button:hover,
   display: flex;
   align-items: center;
   gap: var(--space-xs);
+}
+
+#auth-status {
+    display: flex;
+    justify-content: center;
+    align-content: center;
 }
 
 /* Retreat Section */
@@ -1141,6 +1149,29 @@ button:hover,
   }
 }
 
+@keyframes popUpFromBottomLeft {
+  from {
+    transform: scale(0.8) translateY(20px) translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0) translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Keyframes for modal sliding up from bottom */
+@keyframes slideUpFromBottomModal {
+  from {
+    transform: translateY(100%); /* Start off-screen at the bottom */
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0); /* End at its natural position */
+    opacity: 1;
+  }
+}
+
 /* Media Queries */
 @media screen and (max-width: 768px) {
   body {
@@ -1247,6 +1278,26 @@ button:hover,
 
   .service-booking-form {
     padding: var(--space-xs);
+  }
+
+  /* Position auth dropdown and user menu at bottom-left on mobile when active */
+  #auth-form.active,
+  .user-menu.active {
+    position: fixed;
+    bottom: var(--space-sm);
+    left: var(--space-sm);
+    top: auto; /* Override global top: 100% */
+    right: auto; /* Override global right: 0 */
+    transform: none; /* Clear any inherited transform */
+    width: calc(var(--space-unit) * 32); /* Consistent width like original auth-form */
+    z-index: 1050; /* Above other fixed items like booking orb or cart panel */
+
+    /* Animation for popping up from bottom-left */
+    animation: popUpFromBottomLeft 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform-origin: bottom left;
+
+    /* Inherits background, padding, border-radius, box-shadow from global styles.
+       Ensure these are suitable or add overrides if necessary. */
   }
 }
 
@@ -1572,7 +1623,14 @@ button:hover,
   .calendar-day {
     padding: var(--space-xxs);
   }
+ 
+  .custom-cart-toggle{
+  background-color: var(--white);
+  color: var(--black);
+  border: none;
 }
+}
+
 
 .cart-panel {
   /* Your existing styles for position, width, height, background, etc. */
@@ -1845,6 +1903,23 @@ button:hover,
   margin-bottom:var(--space-sm);
   border: 0;
   border-top: 1px solid #eee;
+}
+
+/* Specific styles for #auth-modal to pop up from bottom */
+#auth-modal.active {
+  align-items: flex-end; /* Align .modal-content to the bottom of the flex container */
+}
+
+#auth-modal .modal-content {
+  /* Override default modal centering and appearance for a bottom-sheet style */
+  width: 100%;
+  max-width: 100%; /* Take full width at the bottom */
+  margin-bottom: 0; /* Remove any bottom margin if flex-end is used */
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0; /* Rounded top corners */
+  max-height: 80vh; /* Adjust max-height as needed for a bottom sheet */
+
+  /* Apply the slide-up animation */
+  animation: slideUpFromBottomModal 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
 .form-group .error-message {
