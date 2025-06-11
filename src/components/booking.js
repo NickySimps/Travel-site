@@ -21,9 +21,9 @@ export const initializeBooking = () => {
     const guestCountInput = document.getElementById('guestCount');
     const modalGuestContainer = document.getElementById('modalGuestContainer');
     const modalGuestLabel = document.getElementById('modalGuestLabel');
-    const roomCountInput = document.getElementById('roomCount');
-    const modalRoomContainer = document.getElementById('modalRoomContainer');
-    const numberInputControls = calendarModal.querySelectorAll('.number-input button');
+    const roomCountInput = document.getElementById('roomCount'); // Assuming this and modalRoomContainer might also be modal-specific
+    const modalRoomContainer = document.getElementById('modalRoomContainer'); // Same assumption
+    const numberInputControls = calendarModal ? calendarModal.querySelectorAll('.number-input button') : null;
     let currentDate = new Date();
     let currentMonth = currentDate.getMonth();
     let currentYear = currentDate.getFullYear();
@@ -479,8 +479,8 @@ export const initializeBooking = () => {
 
                 const modalServicesOptionsContainer = document.getElementById('modalServicesOptions');
                 if (modalServicesOptionsContainer) modalServicesOptionsContainer.innerHTML = ''; // Clear previous dynamic options
-                const servicesSectionTitle = calendarModal.querySelector('.services-section h4');
-                const originalVillaServiceElements = calendarModal.querySelectorAll('.original-villa-service');
+                const servicesSectionTitle = calendarModal ? calendarModal.querySelector('.services-section h4') : null;
+                const originalVillaServiceElements = calendarModal ? calendarModal.querySelectorAll('.original-villa-service') : [];
                 originalVillaServiceElements.forEach(el => el.style.display = 'none');
 
 
