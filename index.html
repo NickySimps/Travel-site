@@ -32,25 +32,37 @@
                     <li><a href="yachts.html">Yachts</a></li>
                     <li><a href="accommodations.html">Accommodations</a></li>
                     <li><a href="about.html">About</a></li>
+                    <!-- Auth Toggle / User Menu -->
                     <li class="auth-container">
                         <div id="auth-status">
-                            <button id="auth-toggle" class="auth-toggle">Login</button>
+                            <!-- This button toggles the auth-form dropdown for email link login -->
+                            <button id="auth-toggle" class="auth-toggle" style="display: block;">Login</button>
+
+                            <!-- User Menu: Shown when logged in -->
+                            <div id="user-menu" class="user-menu" style="display: none;">
+                                <span id="user-display" class="user-email-display"></span>
+                                <button id="logout-btn" class="logout-button">Logout</button>
+                            </div>
+
+                            <!-- Auth Form Dropdown: Shown by auth-toggle when logged out -->
                             <div id="auth-form" class="auth-form">
                                 <form id="auth-form-content">
                                     <input type="email" name="email" placeholder="Enter your email" required>
-                                    <div class="auth-buttons">
-                                        <button type="submit" id="send-link-btn">Send Login Link</button>
-                                    </div>
+                                    <button type="submit" id="send-link-btn">Send Login Link</button>
                                 </form>
+                                <hr style="margin: 10px 0;">
+                                <button type="button" id="google-login-btn-header" class="google-login-button">Login with Google</button>
                             </div>
                         </div>
                     </li>
                     <li>
                         <button class="custom-cart-toggle">Cart</button>
-                    </li>                </ul>
+                    </li>
+                </ul>
             </nav>
         </div>
     </header>
+
 
     <main>
         <!-- Showcase Section -->
@@ -215,27 +227,31 @@
                 This isn’t just a getaway. It’s a shared space for artistic exploration, creative rhythm, and honest presence. These retreats are for those ready to create not from pressure—but from stillness, trust, and deep collaboration. If you’re feeling called, begin here. Take your time. There’s no rush.
             </p>
             <form id="creativeRetreatForm" class="styled-form">
-                <div class="form-group">
-                    <label for="crFullName">Full Name (Required)</label>
-                    <input type="text" id="crFullName" name="fullName" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="crFullName">Full Name (Required)</label>
+                        <input type="text" id="crFullName" name="fullName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="crEmail">Email (Required)</label>
+                        <input type="email" id="crEmail" name="email" required>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="crEmail">Email (Required)</label>
-                    <input type="email" id="crEmail" name="email" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="crPhone">Phone (Optional)</label>
+                        <input type="tel" id="crPhone" name="phone">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="crLocation">Where are you based? (Required)</label>
+                        <input type="text" id="crLocation" name="location" required>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="crPhone">Phone (Optional)</label>
-                    <input type="tel" id="crPhone" name="phone">
-                </div>
-
-                <div class="form-group">
-                    <label for="crLocation">Where are you based? (Required)</label>
-                    <input type="text" id="crLocation" name="location" required>
-                </div>
-
-                <div class="form-group">
+                <div class="form-group" id="retreatDatesGroup">
                     <label for="crRetreatDates">Which retreat dates are you interested in? (Required)</label>
                     <select id="crRetreatDates" name="retreatDates" required>
                         <option value="">Select dates...</option>
@@ -244,8 +260,9 @@
                         <option value="2026-aug-14-17">August 14-17, 2026</option>
                         <option value="other">Other/Flexible (Please specify below)</option>
                     </select>
+                    <p id="crSelectedDatesFromCart" style="display:none; margin-top: var(--space-xs); font-style: italic;"></p>
+                    <input type="hidden" id="crHiddenRetreatDates">
                 </div>
-
                 <div class="form-group">
                     <label for="crWhatYouCreate">What do you create, build or lead? (Required)</label>
                     <p class="form-hint">“You don’t need to be a professional artist. But we are all creators. Tell me how you express yours.”</p>

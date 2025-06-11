@@ -37,122 +37,125 @@
             <li><a href="yachts.html">Yachts</a></li>
             <li><a href="accommodations.html">Accommodations</a></li>
             <li><a href="about.html">About</a></li>
+            <!-- Auth Toggle / User Menu -->
             <li class="auth-container">
-              <button id="auth-toggle" class="auth-toggle">Login</button>
-              <div id="auth-form" class="auth-form">
-                <form id="auth-form-content">
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    required
-                  />
-                  <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    required
-                  />
-                  <div class="auth-buttons">
-                    <button type="submit" id="login-btn">Login</button>
-                    <button type="button" id="signup-btn">Sign Up</button>
-                  </div>
-                </form>
-              </div>
+                <div id="auth-status">
+                    <!-- This button toggles the auth-form dropdown for email link login -->
+                    <button id="auth-toggle" class="auth-toggle" style="display: block;">Login</button>
+
+                    <!-- User Menu: Shown when logged in -->
+                    <div id="user-menu" class="user-menu" style="display: none;">
+                        <span id="user-display" class="user-email-display"></span>
+                        <button id="logout-btn" class="logout-button">Logout</button>
+                    </div>
+
+                    <!-- Auth Form Dropdown: Shown by auth-toggle when logged out -->
+                    <div id="auth-form" class="auth-form">
+                        <form id="auth-form-content">
+                            <input type="email" name="email" placeholder="Enter your email" required>
+                            <button type="submit" id="send-link-btn">Send Login Link</button>
+                        </form>
+                        <hr style="margin: 10px 0;">
+                        <button type="button" id="google-login-btn-header" class="google-login-button">Login with Google</button>
+                    </div>
+                </div>
             </li>
             <li>
-              <button type="button" class="cart-checkout">Cart</button>
+                <button class="custom-cart-toggle">Cart</button>
             </li>
           </ul>
         </nav>
       </div>
     </header>
 
-    <section id="about">
-      <div class="container">
-        <h2>About Us</h2>
-        <p>
-          Discover the beauty and charm of the Virgin Islands, a tropical
-          paradise where crystal-clear waters, pristine beaches, and lush
-          landscapes come together to create an unforgettable experience.
-        </p>
-        <p>
-          Our travel website offers a comprehensive guide to exploring the
-          Virgin Islands, from popular attractions and hidden gems to local
-          culture, cuisine, and accommodations.
-        </p>
-        <p>
-          Whether you're seeking adventure, relaxation, or a cultural immersion,
-          we're here to help you plan the perfect Virgin Islands getaway.
-        </p>
-      </div>
-    </section>
-
-    <section id="newsletter" class="bg-gradient">
-      <div class="container">
-        <div class="mission-statement">
-          Join our community to receive exclusive offers and updates about our
-          luxury properties and services.
+    <main>
+      <section id="about">
+        <div class="container">
+          <h2>About Us</h2>
+          <p>
+            Discover the beauty and charm of the Virgin Islands, a tropical
+            paradise where crystal-clear waters, pristine beaches, and lush
+            landscapes come together to create an unforgettable experience.
+          </p>
+          <p>
+            Our travel website offers a comprehensive guide to exploring the
+            Virgin Islands, from popular attractions and hidden gems to local
+            culture, cuisine, and accommodations.
+          </p>
+          <p>
+            Whether you're seeking adventure, relaxation, or a cultural immersion,
+            we're here to help you plan the perfect Virgin Islands getaway.
+          </p>
         </div>
-        <form id="newsletter-form" class="newsletter-form">
-          <div class="package-grid">
-            <div class="package-box">
-              <div class="flavor-content active">
-                <h2>Stay Connected</h2>
-                <ul class="flavor-textList">
-                  <li>Special seasonal promotions</li>
-                  <li>Exclusive villa access</li>
-                  <li>Local event invitations</li>
-                  <li>Travel tips and guides</li>
-                </ul>
-                <div class="newsletter-grid-row">
-                  <input
-                    type="text"
-                    name="firstName"
-                    id="firstName"
-                    placeholder="First Name"
-                    required
-                  />
-                  <input
-                    type="text"
-                    name="lastName"
-                    id="lastName"
-                    placeholder="Last Name"
-                    required
-                  />
+      </section>
+
+      <section id="newsletter" class="bg-gradient">
+        <div class="container">
+          <div class="mission-statement">
+            Join our community to receive exclusive offers and updates about our
+            luxury properties and services.
+          </div>
+          <form id="newsletter-form" class="newsletter-form">
+            <div class="package-grid">
+              <div class="package-box">
+                <div class="flavor-content active">
+                  <h2>Stay Connected</h2>
+                  <ul class="flavor-textList">
+                    <li>Special seasonal promotions</li>
+                    <li>Exclusive villa access</li>
+                    <li>Local event invitations</li>
+                    <li>Travel tips and guides</li>
+                  </ul>
+                  <div class="newsletter-grid-row">
+                    <input
+                      type="text"
+                      name="firstName"
+                      id="firstName"
+                      placeholder="First Name"
+                      required
+                    />
+                    <input
+                      type="text"
+                      name="lastName"
+                      id="lastName"
+                      placeholder="Last Name"
+                      required
+                    />
+                  </div>
+                  <div class="newsletter-grid-row newsletter-contact-row">
+                    <input
+                      type="tel"
+                      name="phone"
+                      id="newsletter-phone"
+                      placeholder="Phone Number"
+                      required
+                    />
+                    <input
+                      type="email"
+                      name="email"
+                      id="newsletter-email"
+                      placeholder="Email Address"
+                      required
+                    />
+                  </div>
+                  <div class="service-option newsletter-agreement-row">
+                    <input type="checkbox" id="preferences" required />
+                    <label for="preferences"
+                      >I agree to receive updates about USVI Retreats properties
+                      and services</label
+                    >
+                  </div>
+                  <button type="submit" class="btn-book newsletter-submit-btn">
+                    Subscribe to Updates
+                  </button>
                 </div>
-                <div class="newsletter-grid-row newsletter-contact-row">
-                  <input
-                    type="tel"
-                    name="phone"
-                    id="newsletter-phone"
-                    placeholder="Phone Number"
-                    required
-                  />
-                  <input
-                    type="email"
-                    name="email"
-                    id="newsletter-email"
-                    placeholder="Email Address"
-                    required
-                  />
-                </div>
-                <div class="service-option newsletter-agreement-row">
-                  <input type="checkbox" id="preferences" required />
-                  <label for="preferences"
-                    >I agree to receive updates about USVI Retreats properties
-                    and services</label
-                  >
-                </div>
-                <button type="submit" class="btn-book newsletter-submit-btn">
-                  Subscribe to Updates
-                </button>
               </div>
             </div>
-          </div>
-        </form>
-      </div>
-    </section>
+          </form>
+        </div>
+      </section>
+    </main>
+
     <footer>
       <div class="container">
         <div class="package-grid footer-grid">

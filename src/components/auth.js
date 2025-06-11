@@ -60,6 +60,27 @@ async function sendSignInLinkToEmailHandler(formElement, emailInputElement, subm
   }
 }
 
+// Handler for Google Sign-In
+async function signInWithGoogleHandler() {
+  if (!firebaseAuth) {
+    console.error("Firebase Auth not initialized for Google Sign-In.");
+    alert("Authentication service is not ready. Please try again later.");
+    return;
+  }
+  const provider = new firebase.auth.GoogleAuthProvider();
+  try {
+    console.log("Attempting Google Sign-In...");
+    const result = await firebaseAuth.signInWithPopup(provider);
+    // This will trigger onAuthStateChanged, which will update the UI.
+    console.log("Google Sign-In successful:", result.user.email);
+    // Hide any open auth forms/modals
+    document.getElementById("auth-form")?.classList.remove("active");
+    document.getElementById("auth-modal")?.classList.remove("active"); // Or .style.display = 'none'
+  } catch (error) {
+    console.error("Error during Google Sign-In:", error);
+    alert(`Google Sign-In failed: ${error.message}`);
+  }
+}
 export const initializeAuth = (firebaseAlreadyInitialized = false) => {
   console.log("Starting authentication initialization...");
 
@@ -104,33 +125,37 @@ function setupAuthUI() {
   const authStatusElement = document.getElementById("auth-status");
   const authForm = document.getElementById("auth-form");
   const userEmailSpan = authStatusElement?.querySelector(".user-email"); // Assume you add this span
-  const loginButton = document.getElementById("auth-toggle"); // The initial login button
-  const logoutButton = document.getElementById("logout-btn"); // Might need to create/find this
+  const loginButton = document.getElementById("auth-toggle"); // The initial "Login" button in nav
+  const userMenu = document.getElementById("user-menu"); // Container for user info and logout
+  const userDisplay = document.getElementById('user-display'); // Displays user email
+  const logoutButton = document.getElementById("logout-btn"); // The logout button inside user-menu
   const authFormContent = document.getElementById("auth-form-content"); // The form itself
   const modalAuthFormContent = document.getElementById("modal-auth-form-content"); // The modal form
+  const googleLoginButtonHeader = document.getElementById("google-login-btn-header");
+  const googleLoginButtonModal = document.getElementById("google-login-btn-modal");
 
   // Set up auth state listener
   firebaseAuth.onAuthStateChanged((user) => {
     if (user) {
       // User is logged in
       console.log("Auth State Changed: User is signed in:", user.email);
-      if (userEmailSpan) userEmailSpan.textContent = user.email;
       if (loginButton) loginButton.style.display = "none"; // Hide the 'Login' button
       if (authForm) authForm.classList.remove("active"); // Hide the login form dropdown
-      if (logoutButton) logoutButton.style.display = "block"; // Show the 'Logout' button
-      // You might also want to show the user's email or name here
-      const userDisplay = document.getElementById('user-display');
-      if (userDisplay) userDisplay.textContent = `Welcome, ${user.email}`; // Or user.displayName
+      const authModal = document.getElementById('auth-modal');
+      if (authModal) authModal.classList.remove('active'); // Hide auth modal
 
+      if (userMenu) userMenu.style.display = "flex"; // Show user menu
+      if (userDisplay) userDisplay.textContent = user.displayName || user.email;
+      if (logoutButton) logoutButton.style.display = "block";
     } else {
       // User is logged out
       console.log("Auth State Changed: No user is signed in");
-      if (userEmailSpan) userEmailSpan.textContent = "";
       if (loginButton) loginButton.style.display = "block"; // Show the 'Login' button
-      if (logoutButton) logoutButton.style.display = "none"; // Hide the 'Logout' button
       if (authForm) authForm.classList.remove("active"); // Ensure form dropdown is hidden
-      const userDisplay = document.getElementById('user-display');
+      
+      if (userMenu) userMenu.style.display = "none"; // Hide user menu
       if (userDisplay) userDisplay.textContent = ''; // Clear user display
+      if (logoutButton) logoutButton.style.display = "none";
     }
   });
    // Listener for the modal form submission
@@ -147,18 +172,28 @@ function setupAuthUI() {
     });
   }
 
+  // Listener for Google Login button in header
+  if (googleLoginButtonHeader) {
+    googleLoginButtonHeader.addEventListener("click", signInWithGoogleHandler);
+  }
+  // Listener for Google Login button in modal
+  if (googleLoginButtonModal) {
+    googleLoginButtonModal.addEventListener("click", signInWithGoogleHandler);
+  }
+
   // Initial check to set UI state correctly on page load
   const initialUser = firebaseAuth.currentUser;
   if (initialUser) {
     console.log("Initial Auth State: User is signed in:", initialUser.email);
     if (loginButton) loginButton.style.display = "none";
-    if (logoutButton) logoutButton.style.display = "block";
-    const userDisplay = document.getElementById('user-display');
-    if (userDisplay) userDisplay.textContent = `Welcome, ${initialUser.email}`;
+    if (userMenu) userMenu.style.display = "flex";
+    if (userDisplay) userDisplay.textContent = initialUser.displayName || initialUser.email;
+    if (logoutButton) logoutButton.style.display = "block"; // Ensure it's visible if user is logged in
   } else {
     console.log("Initial Auth State: No user is signed in");
     if (loginButton) loginButton.style.display = "block";
-    if (logoutButton) logoutButton.style.display = "none";
+    if (userMenu) userMenu.style.display = "none";
+    if (logoutButton) logoutButton.style.display = "none"; // Ensure it's hidden if no user
   }
 }
 
@@ -167,6 +202,7 @@ function attachAuthListeners() {
   const loginButton = document.getElementById("auth-toggle"); // The initial login button
   const logoutButton = document.getElementById("logout-btn"); // The logout button
   const authFormContent = document.getElementById("auth-form-content"); // The form itself
+  const userMenu = document.getElementById("user-menu");
   
   console.log("attachAuthListeners: loginButton =", loginButton, ", authForm =", authForm); // For debugging
 
@@ -215,6 +251,8 @@ function attachAuthListeners() {
       try {
         await signOut();
         console.log("User signed out successfully");
+        if (userMenu) userMenu.style.display = "none"; // Explicitly hide user menu on logout click
+        if (loginButton) loginButton.style.display = "block"; // Explicitly show login button
         // UI will be updated by the onAuthStateChanged listener
       } catch (error) {
         console.error("Error signing out:", error);

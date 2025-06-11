@@ -45,21 +45,31 @@
                     <li><a href="yachts.html">Yachts</a></li>
                     <li><a href="accommodations.html">Accommodations</a></li>
                     <li><a href="about.html">About</a></li>
+                    <!-- Auth Toggle / User Menu -->
                     <li class="auth-container">
-                        <button id="auth-toggle" class="auth-toggle">Login</button>
-                        <div id="auth-form" class="auth-form">
-                            <form id="auth-form-content">
-                                <input type="email" name="email" placeholder="Email" required>
-                                <input type="password" name="password" placeholder="Password" required>
-                                <div class="auth-buttons">
-                                    <button type="submit" id="login-btn">Login</button>
-                                    <button type="button" id="signup-btn">Sign Up</button>
-                                </div>
-                            </form>
+                        <div id="auth-status">
+                            <!-- This button toggles the auth-form dropdown for email link login -->
+                            <button id="auth-toggle" class="auth-toggle" style="display: block;">Login</button>
+
+                            <!-- User Menu: Shown when logged in -->
+                            <div id="user-menu" class="user-menu" style="display: none;">
+                                <span id="user-display" class="user-email-display"></span>
+                                <button id="logout-btn" class="logout-button">Logout</button>
+                            </div>
+
+                            <!-- Auth Form Dropdown: Shown by auth-toggle when logged out -->
+                            <div id="auth-form" class="auth-form">
+                                <form id="auth-form-content">
+                                    <input type="email" name="email" placeholder="Enter your email" required>
+                                    <button type="submit" id="send-link-btn">Send Login Link</button>
+                                </form>
+                                <hr style="margin: 10px 0;">
+                                <button type="button" id="google-login-btn-header" class="google-login-button">Login with Google</button>
+                            </div>
                         </div>
                     </li>
                     <li>
-                        <button type="button" class="cart-checkout">Cart</button>
+                        <button class="custom-cart-toggle">Cart</button>
                     </li>
                 </ul>
             </nav>

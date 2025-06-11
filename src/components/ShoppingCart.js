@@ -213,6 +213,17 @@ class ShoppingCart {
         }
       }
     });
+
+    // --- Nav bar cart toggle functionality (moved from main.js) ---
+    // Ensure a specific selector if there are multiple such buttons, e.g., in header
+    const navCartToggleButton = document.querySelector('header nav ul button.custom-cart-toggle');
+    if (navCartToggleButton && this.cartPanel) {
+      navCartToggleButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        this.togglePanel(); // Use existing togglePanel method for consistent behavior
+      });
+    };
   
     // --- Checkout Button (inside the cart panel) ---
     if (this.checkoutBtn) {
