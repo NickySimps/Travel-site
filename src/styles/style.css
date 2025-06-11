@@ -301,7 +301,6 @@ nav a:hover {
 }
 
 .flavor-textList li::before {
-  content: "•";
   color: var(--primary-blue);
   position: absolute;
   left: 0;
