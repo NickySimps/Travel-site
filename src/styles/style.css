@@ -45,8 +45,8 @@
   --header-actual-height: 114px;
   /* Actual height: header padding (16px*2) + branding content (logo 50px + its padding 16px*2) = 32px + 82px = 114px */
   /* --- Border Radii --- */
-  --radius-sm:var(--space-xxs);
-  --radius-md:var(--space-xs);
+  --radius-sm: var(--space-xxs);
+  --radius-md: var(--space-xs);
   --radius-lg: 16px;
 
   /* --- Line Heights --- */
@@ -73,9 +73,12 @@ body {
 
 body {
   background-image: linear-gradient(to bottom left,
-      var(--primary-blue) 10%,
-      var(--secondary-blue) 50%,
-      var(--primary-orange) 100%);
+      rgba(107, 164, 171, 0.767) 10%,
+      /* --primary-blue at 50% opacity */
+      rgba(135, 207, 235, 0.297) 50%,
+      /* --secondary-blue at 50% opacity */
+      rgba(241, 136, 71, 0.685) 100%);
+
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -187,12 +190,15 @@ nav a:hover {
 #showcase .container {
   position: relative;
   display: flex;
+  min-width: 100%;
   flex-direction: column;
   align-items: center;
+  text-shadow: var(--white) 0px 0px 4px;
   justify-content: center;
   text-align: center;
-  color: var(--white);
+  color: var(--black);
   padding: var(--space-xxl) var(--space-sm);
+  background-image: linear-gradient(to bottom, var(--off-white), rgba(255, 255, 255, 0));
 }
 
 .banner-image {
@@ -220,8 +226,9 @@ nav a:hover {
 
 .showcase-content p {
   font-size: var(--font-size-md);
-  text-shadow: 1px 1px 2px var(--soft-shadow);
+  text-shadow: 0px 0px 4px var(--black);
   line-height: var(--line-height-base);
+  color: var(--white);
 }
 
 .mission-statement {
@@ -299,7 +306,7 @@ nav a:hover {
 
 /* Flavor Content */
 .flavor-textList li {
-  padding: var(--space-xs) 0 var(--space-xs) var(--space-md);
+  padding: var(--space-xs) 0 var(--space-md) var(--space-md);
   position: relative;
   color: #555;
   font-size: var(--font-size-sm);
@@ -309,7 +316,9 @@ nav a:hover {
   color: var(--primary-blue);
   position: absolute;
   left: 0;
-  font-size: var(--font-size-md);
+  font-size: 1.2em; /* Relative to li font-size for better scaling */
+  line-height: inherit; /* Align with list item text */
+  top: 0.05em; /* Fine-tune vertical alignment if needed */
 }
 
 .flavor-content {
@@ -323,11 +332,47 @@ nav a:hover {
 }
 
 .flavor-content.active {
-  max-height: calc(var(--space-unit) * 100);
+  /* max-height is now controlled by JavaScript for dynamic content */
   opacity: 1;
+   overflow: visible; 
+   overflow-y: auto; 
   padding: var(--space-md);
   margin: var(--space-sm);
   animation: fadeIn 0.3s ease-out;
+}
+
+/* Styles for inner collapsible sections */
+.collapsible-heading {
+  cursor: pointer;
+  padding: var(--space-xs) var(--space-sm);
+  background-color: rgba(135, 206, 235, 0.2); /* Light blue, adjust as needed */
+  margin-top: var(--space-sm);
+  border-radius: var(--radius-sm);
+  transition: background-color 0.3s ease;
+  font-weight: bold; /* Make headings stand out a bit */
+}
+
+.collapsible-heading:hover {
+  background-color: rgba(135, 206, 235, 0.4);
+}
+
+.collapsible-heading::after { /* Indicator for collapsed/expanded */
+  content: ' +';
+  float: right;
+  font-weight: bold;
+  color: var(--primary-blue);
+}
+
+.collapsible-heading.active::after {
+  content: ' –';
+}
+
+.collapsible-content {
+  overflow: hidden;
+  transition: max-height 0.4s ease-out, padding-top 0.4s ease-out, padding-bottom 0.4s ease-out;
+  /* Initial state (collapsed) padding is set by JS to 0px */
+  /* background-color: var(--off-white); /* Optional: if you want a slightly different bg for content */
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm); /* Match heading radius if desired */
 }
 
 /* Buttons */
@@ -447,7 +492,7 @@ button:hover,
   color: var(--primary-blue);
   text-decoration: underline;
   text-decoration-color: var(--primary-orange);
-  transition:all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .flavor-textList a:hover {
@@ -519,17 +564,18 @@ button:hover,
   background: none;
   border: none;
   color: var(--black);
-  padding: var(--space-xs) var(--space-sm);
+  padding: var(--space-xs) var(--space-sm) -1px;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: var(--space-xs);
+  margin: 0px var(--space-sm);
 }
 
 #auth-status {
-    display: flex;
-    justify-content: center;
-    align-content: center;
+  display: flex;
+  justify-content: center;
+  align-content: center;
 }
 
 /* Retreat Section */
@@ -985,12 +1031,11 @@ button:hover,
 
 /* Back to Top Button */
 #backToTop {
+  display: block;
   position: fixed;
   bottom: var(--space-lg);
   left: var(--space-lg);
   z-index: 1000;
-  display: none;
-  /* Initially hidden */
   background-color: var(--secondary-blue);
   color: var(--white);
   border: none;
@@ -1000,7 +1045,19 @@ button:hover,
   font-size: var(--font-size-sm);
   cursor: pointer;
   box-shadow: 0 var(--space-xxs) var(--space-xs) var(--soft-shadow);
-  transition: opacity 0.3s ease-in-out;
+  opacity: 0;
+  transform: translateY(30px);
+  /* Consistent transition for all states */
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, visibility 0s linear 0.3s;
+}
+
+#backToTop.active {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+  /* Override the visibility delay when becoming active */
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, visibility 0s linear 0s;
 }
 
 #backToTop:hover {
@@ -1115,11 +1172,11 @@ button:hover,
 }
 
 @keyframes vtPageFadeOut {
-  from{
+  from {
     opacity: 1;
     transform: translateY(0);
   }
-  
+
   to {
     opacity: 0;
     transform: translateY(var(--space-sm));
@@ -1143,6 +1200,7 @@ button:hover,
     opacity: 0;
     transform: translateY(var(--space-sm));
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1154,6 +1212,7 @@ button:hover,
     transform: scale(0.8) translateY(20px) translateX(-20px);
     opacity: 0;
   }
+
   to {
     transform: scale(1) translateY(0) translateX(0);
     opacity: 1;
@@ -1163,11 +1222,14 @@ button:hover,
 /* Keyframes for modal sliding up from bottom */
 @keyframes slideUpFromBottomModal {
   from {
-    transform: translateY(100%); /* Start off-screen at the bottom */
+    transform: translateY(100%);
+    /* Start off-screen at the bottom */
     opacity: 0;
   }
+
   to {
-    transform: translateY(0); /* End at its natural position */
+    transform: translateY(0);
+    /* End at its natural position */
     opacity: 1;
   }
 }
@@ -1198,32 +1260,40 @@ button:hover,
 
   nav ul {
     position: fixed;
-    left: -100%;
+    width: 62vw;
+    /* Golden ratio inspired width, adjust as desired (e.g., 70vw) */
+    right: -62vw;
+    /* Start off-screen to the right */
     top: var(--header-actual-height);
-    /* Position nav below the actual header height */
+    height: calc(100vh - var(--header-actual-height));
+    /* Fill remaining vertical space */
     gap: 0;
     flex-direction: column;
     background-color: var(--white);
-    width: 100vw;
-    text-align: center;
-    transition: 0.3s;
-    box-shadow: 0 var(--space-xxs) var(--space-xs) var(--soft-shadow);
-    padding: var(--space-md) 0;
+    text-align: left;
+    /* Better for side menus */
+    padding: var(--space-md) var(--space-md) calc(var(--space-unit) * 12) var(--space-md);
+    /* Top, LR, Bottom padding */
+    overflow-y: auto;
+    /* Allow scrolling for long menus */
     z-index: 999;
+    transition: right 0.3s ease-in-out;
+    /* Animate the 'right' property */
+    box-shadow: -2px 0 5px var(--soft-shadow);
+    /* Shadow on the left edge */
   }
 
   nav ul.active {
-    left: 0;
-    height: 100vh;
-    overflow-y: auto;
-    padding-bottom: calc(var(--space-unit) * 12);
+    right: 0;
+    /* Slide into view */
   }
 
   nav li {
     margin: var(--space-sm) 0;
-    /* 16px */
   }
-
+  #auth-status{
+    justify-content: left;
+}
   .package-box {
     flex-basis: 100%;
   }
@@ -1286,11 +1356,16 @@ button:hover,
     position: fixed;
     bottom: var(--space-sm);
     left: var(--space-sm);
-    top: auto; /* Override global top: 100% */
-    right: auto; /* Override global right: 0 */
-    transform: none; /* Clear any inherited transform */
-    width: calc(var(--space-unit) * 32); /* Consistent width like original auth-form */
-    z-index: 1050; /* Above other fixed items like booking orb or cart panel */
+    top: auto;
+    /* Override global top: 100% */
+    right: auto;
+    /* Override global right: 0 */
+    transform: none;
+    /* Clear any inherited transform */
+    width: calc(var(--space-unit) * 32);
+    /* Consistent width like original auth-form */
+    z-index: 1050;
+    /* Above other fixed items like booking orb or cart panel */
 
     /* Animation for popping up from bottom-left */
     animation: popUpFromBottomLeft 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -1537,7 +1612,16 @@ button:hover,
 .footer-grid {
   padding: var(--space-lg) 0;
 }
-
+/* Styles for static footer columns */
+.footer-info-column {
+  background: var(--off-white); /* Match flavor-content or choose desired footer bg */
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  /* margin: var(--space-sm); /* Only if not handled by parent grid's gap */
+  /* Add box-shadow if desired, e.g., box-shadow: 0 var(--space-xxs) var(--space-xs) var(--soft-shadow); */
+  height: auto; /* Ensure content dictates height */
+  opacity: 1; /* Ensure visible */
+}
 .flavor-textList {
   /* Standardized list appearance */
   list-style: disc;
@@ -1560,7 +1644,7 @@ button:hover,
   justify-content: center;
   padding: var(--space-xs);
   cursor: pointer;
-  border-radius:var(--space-xxs);
+  border-radius: var(--space-xxs);
   transition: all 0.2s ease;
 }
 
@@ -1570,7 +1654,7 @@ button:hover,
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius:var(--space-xxs);
+  border-radius: var(--space-xxs);
   transition: background-color 0.2s ease;
   font-size: var(--font-size-xs);
 }
@@ -1623,12 +1707,13 @@ button:hover,
   .calendar-day {
     padding: var(--space-xxs);
   }
- 
-  .custom-cart-toggle{
-  background-color: var(--white);
-  color: var(--black);
-  border: none;
-}
+
+  .custom-cart-toggle {
+    background-color: var(--white);
+    color: var(--black);
+    border: none;
+
+  }
 }
 
 
@@ -1780,6 +1865,20 @@ button:hover,
   font-size: var(--font-size-lg);
 }
 
+.custom-cart-toggle {
+  padding: var(--space-xs) var(--space-xs) -2px;
+  background-color: var(--off-white);
+  color: var(--black);
+  margin: 0px var(--space-sm);
+}
+
+.custom-cart-toggle:hover {
+  background-color: var(--primary-orange);
+  color: var(--white);
+}
+
+
+
 .auth-container .user-menu {
   /* display: none; /* This is controlled by auth.js (toggles between 'none' and 'flex') */
   align-items: center;
@@ -1799,13 +1898,13 @@ button:hover,
   /* A common 'danger' or 'logout' color */
   color: white;
   border: none;
-  padding:var(--space-xs) var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
   /* Adjust to match other navigation buttons if desired */
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 0.9em;
-  border-radius:var(--space-xxs);
+  border-radius: var(--space-xxs);
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
 }
@@ -1829,7 +1928,7 @@ button:hover,
   margin-bottom: var(--space-sm);
   box-sizing: border-box;
   border: 1px solid #ccc;
-  border-radius:var(--space-xxs);
+  border-radius: var(--space-xxs);
 }
 
 .auth-container .auth-form #auth-form-content #send-link-btn {
@@ -1838,7 +1937,7 @@ button:hover,
   background-color: #5cb85c;
   color: white;
   border: none;
-  border-radius:var(--space-xxs);
+  border-radius: var(--space-xxs);
   cursor: pointer;
   margin-bottom: var(--space-sm);
   /* Space before the HR */
@@ -1869,7 +1968,7 @@ button:hover,
   width: 100%;
   font-size: 1em;
   /* Adjust to match other form button text */
-  border-radius:var(--space-xxs);
+  border-radius: var(--space-xxs);
   cursor: pointer;
   box-sizing: border-box;
   /* Important if padding + width: 100% */
@@ -1883,7 +1982,7 @@ button:hover,
 /* Auth Modal Specifics */
 #auth-modal #email-login-section h2 {
   margin-top: 0;
-  margin-bottom:var(--space-md);
+  margin-bottom: var(--space-md);
   font-size: 1.5em;
   text-align: center;
 }
@@ -1894,71 +1993,86 @@ button:hover,
 
 #auth-modal #email-login-section .form-group button[type="submit"] {
   /* Assumes base styles from .auth-container ... #send-link-btn apply */
-  margin-bottom:var(--space-sm);
+  margin-bottom: var(--space-sm);
 }
 
 #auth-modal #email-login-section hr {
   /* margin:var(--space-sm) 0; /* From HTML inline style, can be defined here */
   margin-top: var(--space-sm);
-  margin-bottom:var(--space-sm);
+  margin-bottom: var(--space-sm);
   border: 0;
   border-top: 1px solid #eee;
 }
 
 /* Specific styles for #auth-modal to pop up from bottom */
 #auth-modal.active {
-  align-items: flex-end; /* Align .modal-content to the bottom of the flex container */
+  align-items: flex-end;
+  /* Align .modal-content to the bottom of the flex container */
 }
 
 #auth-modal .modal-content {
   /* Override default modal centering and appearance for a bottom-sheet style */
   width: 100%;
-  max-width: 100%; /* Take full width at the bottom */
-  margin-bottom: 0; /* Remove any bottom margin if flex-end is used */
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0; /* Rounded top corners */
-  max-height: 80vh; /* Adjust max-height as needed for a bottom sheet */
+  max-width: 100%;
+  /* Take full width at the bottom */
+  margin-bottom: 0;
+  /* Remove any bottom margin if flex-end is used */
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  /* Rounded top corners */
+  max-height: 80vh;
+  /* Adjust max-height as needed for a bottom sheet */
 
   /* Apply the slide-up animation */
   animation: slideUpFromBottomModal 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
 .form-group .error-message {
-  color: var(--primary-orange); /* Or a dedicated error color */
+  color: var(--primary-orange);
+  /* Or a dedicated error color */
   font-size: var(--font-size-xs);
   margin-top: var(--space-xxs);
-  display: block; /* Or inline-block depending on layout */
+  display: block;
+  /* Or inline-block depending on layout */
 }
 
 .form-group input.error,
 .form-group textarea.error,
 .form-group select.error {
-  border-color: var(--primary-orange); /* Highlight fields with errors */
+  border-color: var(--primary-orange);
+  /* Highlight fields with errors */
 }
 
 /* Multi-step form styles */
 .multi-step-form .form-step {
-  display: none; /* Hide all steps by default */
-  animation: fadeIn 0.5s; /* Optional: fade in animation */
+  display: none;
+  /* Hide all steps by default */
+  animation: fadeIn 0.5s;
+  /* Optional: fade in animation */
 }
 
 .multi-step-form .form-step.active-step {
-  display: block; /* Show active step */
+  display: block;
+  /* Show active step */
 }
 
 .multi-step-form .form-navigation {
   display: flex;
-  justify-content: space-between; /* Puts Prev on left, Next/Submit on right */
+  justify-content: space-between;
+  /* Puts Prev on left, Next/Submit on right */
   margin-top: var(--space-lg);
 }
 
-.multi-step-form .form-navigation button { /* General styling for nav buttons */ }
+.multi-step-form .form-navigation button {
+  /* General styling for nav buttons */
+}
 
 /* Form Error Styling */
 .error-message {
   color: var(--primary-orange);
   font-size: var(--font-size-xs);
   margin-top: var(--space-xxs);
-  display: block; /* Ensure it takes its own line */
+  display: block;
+  /* Ensure it takes its own line */
   font-weight: bold;
 }
 
@@ -1966,8 +2080,10 @@ button:hover,
 input.error,
 textarea.error,
 select.error {
-  border-color: var(--primary-orange) !important; /* Ensure this overrides other border styles */
-  box-shadow: 0 0 0 1px var(--primary-orange); /* Optional: add a subtle glow */
+  border-color: var(--primary-orange) !important;
+  /* Ensure this overrides other border styles */
+  box-shadow: 0 0 0 1px var(--primary-orange);
+  /* Optional: add a subtle glow */
 }
 
 /* Styling for a .form-group or other container that has an error */
@@ -1979,3 +2095,88 @@ select.error {
   /* border-radius: var(--radius-sm); */
   /* Note: The .error-message will still be styled as above */
 }
+
+/* Header branding styles */
+.logo-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit; /* Ensure the link color matches surrounding text or is styled as desired */
+}
+
+.logo-image {
+    height: 50px;
+    margin-right: 10px;
+}
+
+.site-title {
+    margin: 0;
+    font-size: 1.8em; /* Example size, adjust as needed */
+}
+
+/* Auth form styles */
+.auth-toggle {
+    /* display: block; */ /* This might be controlled by JS, if not, define initial state here */
+}
+
+.user-menu {
+    display: none; /* Initial state, JS will toggle to block/flex as needed */
+}
+#auth-status .user-menu.active { /* Example class JS might add */
+    display: block; /* or flex, depending on layout */
+}
+
+
+.auth-form-divider {
+    margin: 10px 0;
+    border: 0;
+    border-top: 1px solid #eee; /* Example style */
+}
+
+/* Section separator */
+.section-separator {
+    border: 0;
+    border-top: 1px solid #ccc; /* Example style */
+    margin: 2rem auto;
+    width: 50%;
+}
+
+/* Creative Retreat Form specific styles */
+.form-intro-text {
+    text-align: left;
+    margin-bottom: 2rem;
+}
+
+.selected-dates-cart-info {
+    display: none; /* Initial state */
+    margin-top: var(--space-xs);
+    font-style: italic;
+    color: #555; /* Example color */
+}
+
+/* Footer copyright text */
+.footer-copyright {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+/* Screen-reader only class for labels if inputs are visually clear by placeholders */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Example styling for the cart icon if not using Font Awesome */
+/*
+.cart-float .fa-shopping-cart::before {
+    content: "🛒"; // Or use an SVG background
+    font-style: normal;
+}
+*/
