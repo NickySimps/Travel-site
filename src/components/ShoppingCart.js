@@ -315,53 +315,66 @@ class ShoppingCart {
 
   updateCartDisplay() {
     // Update count
-    if (this.cartCount) {
+    if (this.cartCount) { // Ensure cartCount element exists
       this.cartCount.textContent = this.getTotalItems();
     }
     
     // Update total
-    if (this.totalAmount) {
+    if (this.totalAmount) { // Ensure totalAmount element exists
       this.totalAmount.textContent = '$' + this.getCartTotal().toFixed(2);
     }
     
     // Update items list
-    this.cartItems.innerHTML = '';
-    
-    if (this.items.length === 0) {
-      this.cartItems.innerHTML = '<p class="empty-cart">Your cart is empty</p>';
-      return;
+    if (this.cartItems) { // Ensure cartItems container exists
+      this.cartItems.innerHTML = ''; // Clear previous items
+      if (this.items.length === 0) {
+        this.cartItems.innerHTML = '<p class="empty-cart">Your cart is empty</p>';
+      } else {
+        this.items.forEach((item, index) => {
+          const itemElement = document.createElement('div');
+          itemElement.className = 'cart-item';
+          
+          const imgSrc = item.imgSrc || `./public/Pictures/villas/${item.name}.webp`;
+          
+          itemElement.innerHTML = `
+            <div style="width: 40px; height: 40px; margin-right: 10px;">
+              <img src="${imgSrc}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;">
+            </div>
+            <div class="cart-item-details">
+              <div class="cart-item-name">${item.name}</div>
+              <div class="cart-item-price">$${parseFloat(item.price).toFixed(2)} × ${item.quantity}</div>
+            </div>
+            <button class="remove-item" data-index="${index}">×</button>
+          `;
+          
+          this.cartItems.appendChild(itemElement);
+        });
+        
+        // Add event listeners to remove buttons, scoped to this.cartItems
+        this.cartItems.querySelectorAll('.remove-item').forEach(button => {
+          button.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const index = parseInt(button.dataset.index);
+            this.removeItem(index);
+          });
+        });
+      }
     }
-    
-    this.items.forEach((item, index) => {
-      const itemElement = document.createElement('div');
-      itemElement.className = 'cart-item';
-      
-      // Use a default image if none is provided
-const imgSrc = item.imgSrc || `./public/Pictures/villas/${item.name}.webp`;
-      
-      itemElement.innerHTML = `
-        <div style="width: 40px; height: 40px; margin-right: 10px;">
-          <img src="${imgSrc}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;">
-        </div>
-        <div class="cart-item-details">
-          <div class="cart-item-name">${item.name}</div>
-          <div class="cart-item-price">$${parseFloat(item.price).toFixed(2)} × ${item.quantity}</div>
-        </div>
-        <button class="remove-item" data-index="${index}">×</button>
-      `;
-      
-      this.cartItems.appendChild(itemElement);
-    });
-    
-    // Add event listeners to remove buttons
-    document.querySelectorAll('.remove-item').forEach(button => {
-      button.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const index = parseInt(button.dataset.index);
-        this.removeItem(index);
-      });
-    });
+
+    // Toggle visibility of the cart float button
+    if (this.cartFloat) {
+      if (this.items.length === 0) {
+        this.cartFloat.classList.add('cart-empty-hidden');
+        // If cart becomes empty and panel is open, close the panel.
+        if (this.cartPanel && this.cartPanel.classList.contains('open')) {
+            this.isMouseOverCart = false; // To ensure hidePanel works as expected
+            this.hidePanel(false); // Hide immediately
+        }
+      } else {
+        this.cartFloat.classList.remove('cart-empty-hidden');
+      }
+    }
   }
 
   removeItem(index) {

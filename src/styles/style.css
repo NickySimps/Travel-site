@@ -1352,12 +1352,25 @@ button:hover,
   font-size: var(--font-size-sm);
   cursor: pointer;
   box-shadow: 0 var(--space-xxs) var(--space-xs) rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease-in-out;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  /* Base state: visible */
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+  /* Mimic backToTop's active transition for opacity, transform, visibility */
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, visibility 0s linear 0s, background-color 0.3s ease-in-out;
 }
 
+.cart-float.cart-empty-hidden {
+  opacity: 0;
+  transform: translateY(30px); /* Same Y transform as backToTop */
+  visibility: hidden;
+  /* Mimic backToTop's hidden state transition (visibility delay) */
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, visibility 0s linear 0.3s, background-color 0.3s ease-in-out;
+}
 .cart-count {
   position: absolute;
   top: calc(-1 * var(--space-xxs));
