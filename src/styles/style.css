@@ -1,4 +1,3 @@
-/* Variables */
 :root {
   --primary-blue: #6ba4ab;
   --secondary-blue: #87ceeb;
@@ -7,7 +6,6 @@
   --off-white: #fbf3ea;
   --black: #272727;
   --soft-shadow: rgba(0, 0, 0, 0.1);
-  /* Generic soft shadow color */
   --main-font: "Oswald", Arial, Helvetica, sans-serif;
   --accent-font: "Playwrite Deutschland Grundschrift", Courier, monospace;
 
@@ -23,24 +21,15 @@
 
   /* --- Spacing System (8pt Grid) --- */
   --space-unit: 8px;
-  --space-xxs: calc(var(--space-unit) * 0.5);
-  /*var(--space-xxs) */
-  --space-xs: var(--space-unit);
-  /* 8px  */
-  --space-sm: calc(var(--space-unit) * 2);
-  /* 16px */
-  --space-md: calc(var(--space-unit) * 3);
-  /* 24px */
-  --space-lg: calc(var(--space-unit) * 4);
-  /* 32px */
-  --space-xl: calc(var(--space-unit) * 5);
-  /* 40px */
-  --space-xxl: calc(var(--space-unit) * 6);
-  /* 48px */
-  --space-xxxl: calc(var(--space-unit) * 8);
-  /* 64px */
-  --space-xxxxl: calc(var(--space-unit) * 10);
-  /* 80px */
+  --space-xxs: calc(var(--space-unit) * 0.5); /* 4px */
+  --space-xs: var(--space-unit); /* 8px */
+  --space-sm: calc(var(--space-unit) * 2); /* 16px */
+  --space-md: calc(var(--space-unit) * 3); /* 24px */
+  --space-lg: calc(var(--space-unit) * 4); /* 32px */
+  --space-xl: calc(var(--space-unit) * 5); /* 40px */
+  --space-xxl: calc(var(--space-unit) * 6); /* 48px */
+  --space-xxxl: calc(var(--space-unit) * 8); /* 64px */
+  --space-xxxxl: calc(var(--space-unit) * 10); /* 80px */
 
   --header-actual-height: 114px;
   /* Actual height: header padding (16px*2) + branding content (logo 50px + its padding 16px*2) = 32px + 82px = 114px */
@@ -55,8 +44,6 @@
   --line-height-heading: 1.3;
   /* Tighter for headings */
 }
-
-/* Base Styles */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -67,24 +54,19 @@ html,
 body {
   font-family: var(--main-font);
   font-size: var(--font-size-sm);
-  /* Base font size */
   line-height: var(--line-height-base);
 }
 
 body {
   background-image: linear-gradient(to bottom left,
-      rgba(107, 164, 171, 0.767) 10%,
-      /* --primary-blue at 50% opacity */
-      rgba(135, 207, 235, 0.297) 50%,
-      /* --secondary-blue at 50% opacity */
-      rgba(241, 136, 71, 0.685) 100%);
-
+      rgba(107, 164, 171, 0.767) 10%, /* --primary-blue with opacity */
+      rgba(135, 207, 235, 0.297) 50%, /* --secondary-blue with opacity */
+      rgba(241, 136, 71, 0.685) 100%); /* --primary-orange with opacity */
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   background-attachment: fixed;
   padding-top: var(--header-actual-height);
-  /* Space for fixed header */
 }
 
 .container {
@@ -94,7 +76,6 @@ body {
   padding: 0 var(--space-sm);
 }
 
-/* Header & Navigation */
 header {
   position: fixed;
   width: 100%;
@@ -167,8 +148,7 @@ nav a:hover {
 .hamburger {
   display: none;
   cursor: pointer;
-  padding: var(--space-xs);
-  /* For easier tap target */
+  padding: var(--space-xs); /* For easier tap target */
 }
 
 .bar {
@@ -180,7 +160,6 @@ nav a:hover {
   background-color: var(--black);
 }
 
-/* Showcase Section */
 #showcase {
   position: relative;
   margin-bottom: var(--space-lg);
@@ -241,10 +220,8 @@ nav a:hover {
   font-size: var(--font-size-sm);
   width: clamp(60vw, 800px, 95vw);
   justify-self: center;
-  /* Or consider --font-size-md if it needs to be more prominent */
 }
 
-/* Package Boxes */
 #packages .container {
   display: flex;
   flex-wrap: wrap;
@@ -304,7 +281,6 @@ nav a:hover {
   transform: translateY(calc(-1 * var(--space-xxs)));
 }
 
-/* Flavor Content */
 .flavor-textList li {
   padding: var(--space-xs) 0 var(--space-md) var(--space-md);
   position: relative;
@@ -316,7 +292,7 @@ nav a:hover {
   color: var(--primary-blue);
   position: absolute;
   left: 0;
-  font-size: 1.2em; /* Relative to li font-size for better scaling */
+  font-size: 1.2em; /* Relative to li font-size */
   line-height: inherit; /* Align with list item text */
   top: 0.05em; /* Fine-tune vertical alignment if needed */
 }
@@ -332,7 +308,7 @@ nav a:hover {
 }
 
 .flavor-content.active {
-  /* max-height is now controlled by JavaScript for dynamic content */
+  /* max-height is controlled by JavaScript for dynamic content */
   opacity: 1;
    overflow: visible; 
    overflow-y: auto; 
@@ -341,15 +317,14 @@ nav a:hover {
   animation: fadeIn 0.3s ease-out;
 }
 
-/* Styles for inner collapsible sections */
 .collapsible-heading {
   cursor: pointer;
   padding: var(--space-xs) var(--space-sm);
-  background-color: rgba(135, 206, 235, 0.2); /* Light blue, adjust as needed */
+  background-color: rgba(135, 206, 235, 0.2); /* Light blue */
   margin-top: var(--space-sm);
   border-radius: var(--radius-sm);
   transition: background-color 0.3s ease;
-  font-weight: bold; /* Make headings stand out a bit */
+  font-weight: bold;
 }
 
 .collapsible-heading:hover {
@@ -370,12 +345,10 @@ nav a:hover {
 .collapsible-content {
   overflow: hidden;
   transition: max-height 0.4s ease-out, padding-top 0.4s ease-out, padding-bottom 0.4s ease-out;
-  /* Initial state (collapsed) padding is set by JS to 0px */
-  /* background-color: var(--off-white); /* Optional: if you want a slightly different bg for content */
-  border-radius: 0 0 var(--radius-sm) var(--radius-sm); /* Match heading radius if desired */
+  /* Initial (collapsed) padding is set by JS to 0px */
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
 }
 
-/* Buttons */
 button,
 .checkout-btn,
 .service-btn,
@@ -394,6 +367,9 @@ button,
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
 }
 
 button:hover,
@@ -421,7 +397,6 @@ button:hover,
   font-size: var(--font-size-sm);
 }
 
-/* Services Sections */
 #services {
   padding: var(--space-xxl) 0;
   background: var(--white);
@@ -475,7 +450,6 @@ button:hover,
   color: #333;
 }
 
-/* Newsletter Section */
 #newsletter {
   background-color: var(--white);
   padding: var(--space-xxl) 0;
@@ -511,22 +485,20 @@ button:hover,
 .service-booking-form select,
 .inquiry-form input,
 .inquiry-form textarea,
-.form-group input {
-  /* This also affects inputs within .styled-form if they are in a .form-group */
+.form-group input { /* General styling for inputs in these contexts */
   flex-grow: 1;
   min-width: calc(var(--space-unit) * 25);
   padding: var(--space-xs);
-  /* Reduced from --space-sm (16px) to --space-xs (8px) */
   border: 2px solid var(--primary-blue);
   border-radius: var(--radius-sm);
   font-size: var(--font-size-sm);
-  /* Ensure consistent font size */
   line-height: var(--line-height-base);
 }
 
-/* Auth Forms */
 .auth-container {
   position: relative;
+  transform: translateY(-9px);
+
 }
 
 #auth-form {
@@ -536,7 +508,6 @@ button:hover,
   right: 0;
   background: var(--white);
   padding: var(--space-sm);
-  /* Reduced from --space-md (24px) to --space-sm (16px) */
   border-radius: var(--radius-md);
   box-shadow: 0 var(--space-xxs) var(--space-xs) var(--soft-shadow);
   width: calc(var(--space-unit) * 32);
@@ -545,7 +516,7 @@ button:hover,
 
 #auth-form.active {
   display: block;
-  animation: slideDown 0.3s ease-out;
+  animation: slidedDown 0.3s ease-out;
 }
 
 .auth-buttons {
@@ -564,7 +535,7 @@ button:hover,
   background: none;
   border: none;
   color: var(--black);
-  padding: var(--space-xs) var(--space-sm) -1px;
+  padding: var(--space-xs) var(--space-sm);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -578,7 +549,6 @@ button:hover,
   align-content: center;
 }
 
-/* Retreat Section */
 #retreats {
   background-color: var(--off-white);
   padding: var(--space-xxl) 0;
@@ -611,7 +581,6 @@ button:hover,
   align-items: center;
 }
 
-/* Calendar Styles */
 .calendar-modal {
   display: none;
   position: fixed;
@@ -656,18 +625,6 @@ button:hover,
   margin-bottom: var(--space-md);
 }
 
-.calendar-day {
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-xs);
-  cursor: pointer;
-  border-radius: var(--radius-sm);
-  /*var(--space-xxs) */
-  transition: all 0.2s ease;
-}
-
 .calendar-day.header {
   font-weight: bold;
   color: var(--primary-blue);
@@ -677,18 +634,6 @@ button:hover,
 .calendar-day.empty {
   cursor: default;
 }
-
-.calendar-day .day-number {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-sm);
-  /*var(--space-xxs) */
-  font-size: var(--font-size-xs);
-}
-
 .calendar-day:not(.empty):not(.header):hover .day-number {
   background-color: var(--primary-blue);
   color: var(--white);
@@ -718,7 +663,6 @@ button:hover,
   background-color: var(--primary-orange);
 }
 
-/* Booking Options */
 .booking-options {
   margin-top: var(--space-lg);
   border-top: 1px solid #eee;
@@ -752,8 +696,7 @@ button:hover,
   border: none;
   padding: var(--space-xs) var(--space-sm);
   cursor: pointer;
-  font-size: var(--font-size-md);
-  /* For +/- icons */
+  font-size: var(--font-size-md); /* For +/- icons */
 }
 
 .number-input input {
@@ -770,7 +713,6 @@ button:hover,
   margin: 0;
 }
 
-/* Service Options */
 .services-section {
   margin-bottom: var(--space-md);
 }
@@ -798,7 +740,6 @@ button:hover,
   accent-color: var(--primary-blue);
 }
 
-/* Estate Styles */
 .estate-header {
   text-align: center;
   padding: var(--space-lg) 0;
@@ -880,7 +821,6 @@ button:hover,
   left: 0;
 }
 
-/* Modal Styles */
 .modal,
 .inquiry-modal {
   display: none;
@@ -925,10 +865,8 @@ button:hover,
 
 .form-group {
   margin-bottom: var(--space-md);
-  /* More space for forms */
 }
 
-/* Booking UI Elements */
 .total-section {
   display: flex;
   justify-content: space-between;
@@ -961,8 +899,6 @@ button:hover,
 .submit-inquiry {
   flex: 1;
 }
-
-
 
 /* Booking Orb */
 .booking-orb {
@@ -1029,7 +965,6 @@ button:hover,
   font-weight: bold;
 }
 
-/* Back to Top Button */
 #backToTop {
   display: block;
   position: fixed;
@@ -1064,7 +999,6 @@ button:hover,
   background-color: var(--primary-orange);
 }
 
-/* User Menu */
 .user-menu {
   display: none;
   position: absolute;
@@ -1108,7 +1042,6 @@ button:hover,
   font-size: var(--font-size-xs);
 }
 
-/* Login UI */
 .login-complete-container {
   display: flex;
   flex-direction: column;
@@ -1126,7 +1059,6 @@ button:hover,
   margin-bottom: var(--space-sm);
 }
 
-/* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -1138,29 +1070,6 @@ button:hover,
     transform: translateY(0);
   }
 }
-
-/* Original Keyframes (can be removed or repurposed if no longer used elsewhere) */
-/* @keyframes pageFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(var(--space-sm));
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-} */
-
-/* @keyframes pageFadeOut {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(var(--space-sm));
-  }
-} */
 
 /* View Transition Animations */
 ::view-transition-old(root) {
@@ -1219,11 +1128,9 @@ button:hover,
   }
 }
 
-/* Keyframes for modal sliding up from bottom */
 @keyframes slideUpFromBottomModal {
   from {
-    transform: translateY(100%);
-    /* Start off-screen at the bottom */
+    transform: translateY(100%); /* Start off-screen at the bottom */
     opacity: 0;
   }
 
@@ -1234,11 +1141,9 @@ button:hover,
   }
 }
 
-/* Media Queries */
 @media screen and (max-width: 768px) {
   body {
-    padding-top: var(--header-actual-height);
-    /* Ensure correct padding for header */
+    padding-top: var(--header-actual-height); /* Ensure correct padding for header */
     padding-bottom: calc(var(--space-unit) * 12);
   }
 
@@ -1260,22 +1165,16 @@ button:hover,
 
   nav ul {
     position: fixed;
-    width: 62vw;
-    /* Golden ratio inspired width, adjust as desired (e.g., 70vw) */
-    right: -62vw;
-    /* Start off-screen to the right */
+    width: 62vw; /* Golden ratio inspired width */
+    right: -62vw; /* Start off-screen to the right */
     top: var(--header-actual-height);
-    height: calc(100vh - var(--header-actual-height));
-    /* Fill remaining vertical space */
+    height: calc(100vh - var(--header-actual-height)); /* Fill remaining vertical space */
     gap: 0;
     flex-direction: column;
     background-color: var(--white);
-    text-align: left;
-    /* Better for side menus */
-    padding: var(--space-md) var(--space-md) calc(var(--space-unit) * 12) var(--space-md);
-    /* Top, LR, Bottom padding */
-    overflow-y: auto;
-    /* Allow scrolling for long menus */
+    text-align: left; /* Better for side menus */
+    padding: var(--space-md) var(--space-md) calc(var(--space-unit) * 12) var(--space-md); /* Top, LR, Bottom padding */
+    overflow-y: auto; /* Allow scrolling for long menus */
     z-index: 999;
     transition: right 0.3s ease-in-out;
     /* Animate the 'right' property */
@@ -1284,8 +1183,7 @@ button:hover,
   }
 
   nav ul.active {
-    right: 0;
-    /* Slide into view */
+    right: 0; /* Slide into view */
   }
 
   nav li {
@@ -1356,21 +1254,14 @@ button:hover,
     position: fixed;
     bottom: var(--space-sm);
     left: var(--space-sm);
-    top: auto;
-    /* Override global top: 100% */
-    right: auto;
-    /* Override global right: 0 */
-    transform: none;
-    /* Clear any inherited transform */
-    width: calc(var(--space-unit) * 32);
-    /* Consistent width like original auth-form */
-    z-index: 1050;
-    /* Above other fixed items like booking orb or cart panel */
+    top: auto; /* Override global top: 100% */
+    right: auto; /* Override global right: 0 */
+    transform: none; /* Clear any inherited transform */
+    width: calc(var(--space-unit) * 32); /* Consistent width */
+    z-index: 1050; /* Above other fixed items */
 
-    /* Animation for popping up from bottom-left */
     animation: popUpFromBottomLeft 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     transform-origin: bottom left;
-
     /* Inherits background, padding, border-radius, box-shadow from global styles.
        Ensure these are suitable or add overrides if necessary. */
   }
@@ -1393,7 +1284,6 @@ button:hover,
   }
 }
 
-/* Animation for cart */
 @keyframes pulse {
   0% {
     transform: scale(1);
@@ -1425,19 +1315,16 @@ button:hover,
   transition: opacity 0.3s ease;
 }
 
-/* Mobile adjustments */
 @media (max-width: 768px) {
   .cart-panel {
     width: calc(var(--space-unit) * 31);
-    height: calc(var(--space-unit) * 31);
-    /* Make it square on mobile too */
+    height: calc(var(--space-unit) * 31); /* Square on mobile */
     right: var(--space-sm);
-    bottom: var(--space-sm);
-    /* Position consistently in bottom-right */
-    /* transform-origin will be inherited from base */
+    bottom: var(--space-sm); /* Position in bottom-right */
   }
 
   .cart-float {
+    /* Ensure cart float button is also consistently positioned */
     right: var(--space-sm);
     bottom: var(--space-sm);
   }
@@ -1450,8 +1337,6 @@ button:hover,
   }
 }
 
-/* Updated Cart Styles */
-/* Fixed cart positioning */
 .cart-float {
   position: fixed;
   bottom: var(--space-md);
@@ -1473,7 +1358,6 @@ button:hover,
   justify-content: center;
 }
 
-/* Fixed cart panel styling */
 .cart-count {
   position: absolute;
   top: calc(-1 * var(--space-xxs));
@@ -1490,7 +1374,6 @@ button:hover,
   font-weight: bold;
 }
 
-/* Cart item styling improvements */
 .cart-item {
   display: flex;
   align-items: center;
@@ -1556,13 +1439,11 @@ button:hover,
   font-size: var(--font-size-xs);
 }
 
-/* Improved remove button styling */
 .remove-item {
   background: none;
   border: none;
   color: #ff6b6b;
-  font-size: var(--font-size-md);
-  /* For a larger click target/icon */
+  font-size: var(--font-size-md); /* Larger click target/icon */
   cursor: pointer;
   padding: var(--space-xs);
   font-weight: bold;
@@ -1584,15 +1465,10 @@ button:hover,
 }
 
 .checkout-btn {
-  /* This is a general button, cart specific overrides might exist or be needed */
-  width: 100%;
-  /* Example cart-specific override */
-  margin-top: var(--space-sm);
-  /* Example cart-specific override */
-}
-
-.pulse {
-  animation: pulse 0.5s ease-in-out;
+  /* This is a general button, cart specific overrides might exist or be needed.
+     Example cart-specific overrides (if different from general button): */
+  /* width: 100%; */
+  /* margin-top: var(--space-sm); */
 }
 
 /* Cart checkout form modal */
@@ -1612,23 +1488,20 @@ button:hover,
 .footer-grid {
   padding: var(--space-lg) 0;
 }
-/* Styles for static footer columns */
+
 .footer-info-column {
-  background: var(--off-white); /* Match flavor-content or choose desired footer bg */
+  background: var(--off-white); /* Footer background */
   padding: var(--space-md);
   border-radius: var(--radius-md);
-  /* margin: var(--space-sm); /* Only if not handled by parent grid's gap */
-  /* Add box-shadow if desired, e.g., box-shadow: 0 var(--space-xxs) var(--space-xs) var(--soft-shadow); */
-  height: auto; /* Ensure content dictates height */
-  opacity: 1; /* Ensure visible */
+  height: auto;
+  opacity: 1;
 }
+
 .flavor-textList {
-  /* Standardized list appearance */
   list-style: disc;
   padding-left: var(--space-md);
 }
 
-/* Empty cart message styling */
 .empty-cart {
   color: #999;
   text-align: center;
@@ -1636,7 +1509,6 @@ button:hover,
   font-style: italic;
 }
 
-/* Make sure the day number container fills the calendar day cell */
 .calendar-day {
   aspect-ratio: 1;
   display: flex;
@@ -1644,7 +1516,7 @@ button:hover,
   justify-content: center;
   padding: var(--space-xs);
   cursor: pointer;
-  border-radius: var(--space-xxs);
+  border-radius: var(--radius-sm); /* Consistent radius */
   transition: all 0.2s ease;
 }
 
@@ -1654,42 +1526,30 @@ button:hover,
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--space-xxs);
+  border-radius: var(--radius-sm); /* Consistent radius */
   transition: background-color 0.2s ease;
   font-size: var(--font-size-xs);
 }
 
-/* Distinct styling for check-in date */
 .calendar-day .day-number.selected-checkin {
-  background-color: #87ceeb;
-  /* Primary blue */
+  background-color: var(--secondary-blue); /* Using secondary-blue as per original visual */
   color: white;
   font-weight: bold;
 }
 
-/* Distinct styling for check-out date */
 .calendar-day .day-number.selected-checkout {
   background-color: var(--primary-orange);
-  /* Primary orange */
   color: black;
   font-weight: bold;
 }
 
-/* Styling for dates in the range */
 .calendar-day .day-number.in-range {
   background-color: rgba(11, 204, 252, 0.637);
 }
 
-/* Hover effect for available dates */
 .calendar-day:not(.empty):not(.header):not(.past):not(.booked):hover .day-number {
   background-color: rgba(135, 206, 235, 0.5);
   transform: scale(1.1);
-}
-
-/* Styling for past dates */
-.calendar-day.past .day-number {
-  color: #ccc;
-  cursor: not-allowed;
 }
 
 /* Styling for booked dates */
@@ -1698,7 +1558,6 @@ button:hover,
   cursor: not-allowed;
 }
 
-/* Make the calendar cells responsive */
 @media screen and (max-width: 768px) {
   .calendar-grid {
     gap: var(--space-xxs);
@@ -1712,46 +1571,32 @@ button:hover,
     background-color: var(--white);
     color: var(--black);
     border: none;
-
   }
 }
 
 
 .cart-panel {
-  /* Your existing styles for position, width, height, background, etc. */
   position: fixed;
-  bottom: var(--space-md);
-  /* Position in bottom right corner */
+  bottom: var(--space-md); /* Position in bottom right corner */
   right: var(--space-md);
-  width: calc(var(--space-unit) * 40);
-  /* Define square dimensions (e.g., 320px) */
-  height: calc(var(--space-unit) * 40);
+  width: calc(var(--space-unit) * 40); /* Square dimensions */
+  height: calc(var(--space-unit) * 40); /* Square dimensions */
   background-color: var(--off-white);
-  box-shadow: 0 var(--space-xs) var(--space-xl) rgba(0, 0, 0, 0.15);
-  /* Softer, all-around shadow */
-  z-index: 1000;
-  /* Ensure it's above other content */
-  padding: var(--space-md);
-  /* Padding for content inside */
-  overflow-y: auto;
-  /* Allow scrolling for content */
-  border-radius: var(--radius-md);
-  /* Add rounded corners */
+  box-shadow: 0 var(--space-xs) var(--space-xl) rgba(0, 0, 0, 0.15); /* Softer shadow */
+  z-index: 1000; /* Above other content */
+  padding: var(--space-md); /* Padding for content */
+  overflow-y: auto; /* Allow scrolling */
+  border-radius: var(--radius-md); /* Rounded corners */
 
-  /* Pop-up animation */
-  transform-origin: bottom right;
-  /* Animate from the bottom right corner */
-  transform: scale(0.8) translateY(20px);
-  /* Initial state: smaller and slightly offset */
+  transform-origin: bottom right; /* Animate from bottom right */
+  transform: scale(0.8) translateY(20px); /* Initial state: smaller, offset */
   opacity: 0;
-  visibility: hidden;
-  /* Hide from accessibility tree and prevent interaction when closed */
+  visibility: hidden; /* Hide when closed */
   transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease-out, visibility 0s linear 0.3s;
 }
 
 .cart-panel.open {
-  transform: scale(1) translateY(0);
-  /* Final state: full size and in position */
+  transform: scale(1) translateY(0); /* Final state: full size, in position */
   opacity: 1;
   visibility: visible;
   transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease-out;
@@ -1760,7 +1605,6 @@ button:hover,
 .styled-form {
   background-color: #f9f9f9;
   padding: var(--space-md);
-  /* Reduced from --space-lg (32px) to --space-md (24px) */
   border-radius: var(--radius-md);
   box-shadow: 0 0 var(--space-sm) rgba(0, 0, 0, 0.1);
 }
@@ -1782,10 +1626,8 @@ button:hover,
 .styled-form input[type="tel"],
 .styled-form select,
 .styled-form textarea {
-  width: 100%;
-  /* Ensure padding change below doesn't break layout */
+  width: 100%; /* Ensure padding doesn't break layout */
   padding: var(--space-xs);
-  /* Reduced from --space-sm (16px) to --space-xs (8px) */
   border: 1px solid #ccc;
   border-radius: var(--radius-sm);
   box-sizing: border-box;
@@ -1825,9 +1667,8 @@ button:hover,
 .styled-form button.btn-book {
   display: block;
   width: auto;
-  padding: var(--space-sm) var(--space-md);
+  padding: var(--space-sm) var(--space-md); /* More space after form fields */
   margin-top: var(--space-md);
-  /* More space after form fields */
 }
 
 .styled-form .form-row {
@@ -1838,30 +1679,24 @@ button:hover,
 }
 
 .styled-form .form-row .form-group {
-  flex: 1;
-  /* Distribute space equally */
-  margin-bottom: 0;
-  /* Handled by form-row */
+  flex: 1; /* Distribute space equally */
+  margin-bottom: 0; /* Handled by form-row */
 }
 
-/* Responsive stacking for form rows */
 @media screen and (max-width: 600px) {
   .styled-form .form-row {
     flex-direction: column;
-    gap: 0;
-    /* Reset gap, form-group margin will handle spacing */
+    gap: 0; /* Reset gap, form-group margin handles spacing */
   }
 
   .styled-form .form-row .form-group {
-    margin-bottom: var(--space-md);
-    /* Add back margin for stacked items */
+    margin-bottom: var(--space-md); /* Add back margin for stacked items */
   }
 }
 
 #creative-retreat-application.container>h2 {
   text-align: center;
-  margin-bottom: var(--space-lg);
-  /* For a main title */
+  margin-bottom: var(--space-lg); /* For a main title */
   font-size: var(--font-size-lg);
 }
 
@@ -1869,7 +1704,7 @@ button:hover,
   padding: var(--space-xs) var(--space-xs) -2px;
   background-color: var(--off-white);
   color: var(--black);
-  margin: 0px var(--space-sm);
+  margin: 0 var(--space-sm);
 }
 
 .custom-cart-toggle:hover {
@@ -1877,14 +1712,10 @@ button:hover,
   color: var(--white);
 }
 
-
-
 .auth-container .user-menu {
-  /* display: none; /* This is controlled by auth.js (toggles between 'none' and 'flex') */
-  align-items: center;
-  /* Vertically align items if user-menu is flex */
-  gap: var(--space-sm);
-  /* Space between user display text and logout button */
+  /* display is controlled by JS */
+  align-items: center; /* Vertically align items */
+  gap: var(--space-sm); /* Space between user display and logout button */
   /* If your #auth-toggle button has specific padding, you might want to mirror some of it here for visual consistency */
 }
 
@@ -1894,12 +1725,10 @@ button:hover,
 }
 
 .auth-container .logout-button {
-  background-color: #d9534f;
-  /* A common 'danger' or 'logout' color */
+  background-color: #d9534f; /* 'Danger' or 'logout' color */
   color: white;
   border: none;
-  padding: var(--space-xs) var(--space-sm);
-  /* Adjust to match other navigation buttons if desired */
+  padding: var(--space-xs) var(--space-sm); /* Adjust to match other nav buttons if desired */
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -1913,11 +1742,8 @@ button:hover,
   background-color: #c9302c;
 }
 
-/* Auth Form Dropdown (for email link & Google login in header) */
-/* Styles for content within the .auth-form dropdown. */
-/* .auth-form itself should have positioning and display toggle (.active class) defined elsewhere. */
+/* Styles for content within the .auth-form dropdown (email link & Google login in header) */
 .auth-container .auth-form {
-  /* Example: if you need to adjust padding for the new content: */
   /* padding:var(--space-sm); */
   /* min-width: 250px; /* Ensure it's wide enough for new content */
 }
@@ -1939,8 +1765,7 @@ button:hover,
   border: none;
   border-radius: var(--space-xxs);
   cursor: pointer;
-  margin-bottom: var(--space-sm);
-  /* Space before the HR */
+  margin-bottom: var(--space-sm); /* Space before HR */
   transition: background-color 0.2s ease-in-out;
 }
 
@@ -1955,7 +1780,6 @@ button:hover,
   border-top: 1px solid #eee;
 }
 
-/* Google Login Button (common style for header and modal) */
 .google-login-button {
   background-color: #4285F4;
   color: white;
@@ -1963,11 +1787,9 @@ button:hover,
   padding: var(--space-sm)var(--space-sm);
   text-align: center;
   text-decoration: none;
-  display: block;
-  /* Takes full width of its parent by default */
+  display: block; /* Takes full width of parent */
   width: 100%;
-  font-size: 1em;
-  /* Adjust to match other form button text */
+  font-size: 1em; /* Adjust to match other form button text */
   border-radius: var(--space-xxs);
   cursor: pointer;
   box-sizing: border-box;
@@ -1979,7 +1801,6 @@ button:hover,
   background-color: #357ae8;
 }
 
-/* Auth Modal Specifics */
 #auth-modal #email-login-section h2 {
   margin-top: 0;
   margin-bottom: var(--space-md);
@@ -1992,12 +1813,10 @@ button:hover,
 }
 
 #auth-modal #email-login-section .form-group button[type="submit"] {
-  /* Assumes base styles from .auth-container ... #send-link-btn apply */
   margin-bottom: var(--space-sm);
 }
 
 #auth-modal #email-login-section hr {
-  /* margin:var(--space-sm) 0; /* From HTML inline style, can be defined here */
   margin-top: var(--space-sm);
   margin-bottom: var(--space-sm);
   border: 0;
@@ -2006,59 +1825,43 @@ button:hover,
 
 /* Specific styles for #auth-modal to pop up from bottom */
 #auth-modal.active {
-  align-items: flex-end;
-  /* Align .modal-content to the bottom of the flex container */
+  align-items: flex-end; /* Align .modal-content to bottom */
 }
 
 #auth-modal .modal-content {
-  /* Override default modal centering and appearance for a bottom-sheet style */
   width: 100%;
-  max-width: 100%;
-  /* Take full width at the bottom */
-  margin-bottom: 0;
-  /* Remove any bottom margin if flex-end is used */
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  /* Rounded top corners */
-  max-height: 80vh;
-  /* Adjust max-height as needed for a bottom sheet */
-
-  /* Apply the slide-up animation */
+  max-width: 100%; /* Full width at bottom */
+  margin-bottom: 0; /* Remove bottom margin */
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0; /* Rounded top corners */
+  max-height: 80vh; /* Max height for bottom sheet */
   animation: slideUpFromBottomModal 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
 .form-group .error-message {
-  color: var(--primary-orange);
-  /* Or a dedicated error color */
+  color: var(--primary-orange); /* Or a dedicated error color */
   font-size: var(--font-size-xs);
   margin-top: var(--space-xxs);
-  display: block;
-  /* Or inline-block depending on layout */
+  display: block; /* Or inline-block */
 }
 
 .form-group input.error,
 .form-group textarea.error,
 .form-group select.error {
-  border-color: var(--primary-orange);
-  /* Highlight fields with errors */
+  border-color: var(--primary-orange); /* Highlight error fields */
 }
 
-/* Multi-step form styles */
 .multi-step-form .form-step {
-  display: none;
-  /* Hide all steps by default */
-  animation: fadeIn 0.5s;
-  /* Optional: fade in animation */
+  display: none; /* Hide steps by default */
+  animation: fadeIn 0.5s; /* Optional fade in */
 }
 
 .multi-step-form .form-step.active-step {
-  display: block;
-  /* Show active step */
+  display: block; /* Show active step */
 }
 
 .multi-step-form .form-navigation {
   display: flex;
-  justify-content: space-between;
-  /* Puts Prev on left, Next/Submit on right */
+  justify-content: space-between; /* Prev on left, Next/Submit on right */
   margin-top: var(--space-lg);
 }
 
@@ -2066,42 +1869,33 @@ button:hover,
   /* General styling for nav buttons */
 }
 
-/* Form Error Styling */
 .error-message {
   color: var(--primary-orange);
   font-size: var(--font-size-xs);
   margin-top: var(--space-xxs);
-  display: block;
-  /* Ensure it takes its own line */
+  display: block; /* Ensure it takes its own line */
   font-weight: bold;
 }
 
-/* Styling for input fields, textareas, and selects with an error */
 input.error,
 textarea.error,
 select.error {
-  border-color: var(--primary-orange) !important;
-  /* Ensure this overrides other border styles */
-  box-shadow: 0 0 0 1px var(--primary-orange);
-  /* Optional: add a subtle glow */
+  border-color: var(--primary-orange) !important; /* Ensure override */
+  box-shadow: 0 0 0 1px var(--primary-orange); /* Optional glow */
 }
 
-/* Styling for a .form-group or other container that has an error */
-/* This is useful if the .error class is added to the container (e.g., for radio/checkbox groups) */
+/* Styling for a .form-group with an error (useful if error class is on container) */
 .form-group.error {
-  /* Example: Add a border to the group itself if it has the error class */
   /* border: 1px solid var(--primary-orange); */
   /* padding: var(--space-xs); */
   /* border-radius: var(--radius-sm); */
-  /* Note: The .error-message will still be styled as above */
 }
 
-/* Header branding styles */
 .logo-link {
     display: flex;
     align-items: center;
     text-decoration: none;
-    color: inherit; /* Ensure the link color matches surrounding text or is styled as desired */
+    color: inherit; /* Link color matches surrounding text or is styled as desired */
 }
 
 .logo-image {
@@ -2111,21 +1905,19 @@ select.error {
 
 .site-title {
     margin: 0;
-    font-size: 1.8em; /* Example size, adjust as needed */
+    font-size: 1.8em; /* Example size */
 }
 
-/* Auth form styles */
 .auth-toggle {
-    /* display: block; */ /* This might be controlled by JS, if not, define initial state here */
+    /* display is controlled by JS */
 }
 
 .user-menu {
-    display: none; /* Initial state, JS will toggle to block/flex as needed */
+    display: none; /* Initial state, JS toggles as needed */
 }
-#auth-status .user-menu.active { /* Example class JS might add */
-    display: block; /* or flex, depending on layout */
+#auth-status .user-menu.active { /* JS might add .active */
+    display: block; /* or flex */
 }
-
 
 .auth-form-divider {
     margin: 10px 0;
@@ -2133,7 +1925,6 @@ select.error {
     border-top: 1px solid #eee; /* Example style */
 }
 
-/* Section separator */
 .section-separator {
     border: 0;
     border-top: 1px solid #ccc; /* Example style */
@@ -2141,20 +1932,18 @@ select.error {
     width: 50%;
 }
 
-/* Creative Retreat Form specific styles */
 .form-intro-text {
     text-align: left;
     margin-bottom: 2rem;
 }
 
 .selected-dates-cart-info {
-    display: none; /* Initial state */
+    display: none; /* Initial state, shown by JS */
     margin-top: var(--space-xs);
     font-style: italic;
     color: #555; /* Example color */
 }
 
-/* Footer copyright text */
 .footer-copyright {
     text-align: center;
     margin-top: 2rem;
@@ -2172,11 +1961,3 @@ select.error {
     white-space: nowrap;
     border-width: 0;
 }
-
-/* Example styling for the cart icon if not using Font Awesome */
-/*
-.cart-float .fa-shopping-cart::before {
-    content: "🛒"; // Or use an SVG background
-    font-style: normal;
-}
-*/
