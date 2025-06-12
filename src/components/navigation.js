@@ -17,7 +17,7 @@ export const initializeNavigation = () => {
     }
   });
 
-  setupBackToTopButton(); // Initialize the back to top button
+  setupBackToTopButton(); // Initialize the back to top button here
 };
 
 function setupBackToTopButton() {
@@ -26,7 +26,7 @@ function setupBackToTopButton() {
   if (backToTopButton) {
     const scrollHandler = () => {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-      backToTopButton.style.display = scrollTop > 300 ? 'block' : 'none';
+      backToTopButton.classList.toggle('active', scrollTop > 300); // Use class for visibility
     };
 
     // Debounced scroll listener

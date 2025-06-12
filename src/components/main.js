@@ -5,29 +5,14 @@ import { debounce } from './utils.js';
 let lastScrollTop = 0;
 
 const initializeUI = () => {
-  const header = document.querySelector(CONFIG.UI.header);
-  const backToTopButton = document.getElementById('backToTop');
-
+  const header = document.querySelector(CONFIG.UI.header); // Keep header logic here
   window.addEventListener('scroll', debounce(() => {
     const scrollTop = window.pageYOffset;
-    // Header hide/show logic
-    if (header) {
-      header.style.transform = scrollTop > lastScrollTop && scrollTop > 200 ?
-        'translateY(-100%)' : 'translateY(0)';
+    if (header) { // Header hide/show logic
+ header.style.transform = scrollTop > lastScrollTop && scrollTop > 200 ? 'translateY(-100%)' : 'translateY(0)';
     }
-
-    // Back to Top button visibility
-    if (backToTopButton) {
-      if (scrollTop > 300) {
-        backToTopButton.classList.add('active');
-      } else {
-        backToTopButton.classList.remove('active');
-      }
-    }
-
     lastScrollTop = scrollTop;
   }, 100));
-
 };
 
 export { initializeUI };
